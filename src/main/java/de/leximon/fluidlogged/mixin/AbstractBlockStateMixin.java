@@ -15,23 +15,36 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(AbstractBlock.AbstractBlockState.class)
-public class AbstractBlockStateMixin {
+@Mixin(value = AbstractBlock.AbstractBlockState.class, priority = 1010)
+public abstract class AbstractBlockStateMixin {
 
-    @Redirect(method = "getFluidState", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getFluidState(Lnet/minecraft/block/BlockState;)Lnet/minecraft/fluid/FluidState;"))
-    private FluidState injectFluidState(Block instance, BlockState state) {
-        if(state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
-            return instance.getFluidState(state);
+    @Shadow protected abstract BlockState asBlockState();
+
+    @Shadow public abstract Block getBlock();
+
+    /**
+     * @author Leximon (fluidlogged)
+     * @reason to allow waterloggable blocks to be loggable with any fluid
+     */
+    @Overwrite
+    public FluidState getFluidState() {
+        Block block = this.getBlock();
+        BlockState state = this.asBlockState();
+        if (state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
+            return block.getFluidState(state);
         if (state.contains(FluidloggedMod.PROPERTY_FLUID)) {
             Fluid f = FluidloggedMod.getFluid(state);
-            if(f != null)
+            if (f != null)
                 return f.getDefaultState();
         }
-        return instance.getFluidState(state);
+        return block.getFluidState(state);
     }
+
 
     @Redirect(method = "getStateForNeighborUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"))
     private BlockState injectFlowingFluid(Block instance, BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {

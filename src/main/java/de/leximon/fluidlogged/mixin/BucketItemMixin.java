@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 
-@Mixin(BucketItem.class)
+@Mixin(value = BucketItem.class)
 public class BucketItemMixin {
 
     // allow any fluid to fluidlog a block
