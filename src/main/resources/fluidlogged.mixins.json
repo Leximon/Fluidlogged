@@ -4,7 +4,6 @@
   "package": "de.leximon.fluidlogged.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "AbstractBlockMixin",
     "AbstractBlockStateMixin",
     "BlockItemMixin",
     "BlockMixin",
