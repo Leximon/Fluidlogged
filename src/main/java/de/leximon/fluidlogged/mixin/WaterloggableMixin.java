@@ -8,10 +8,9 @@ import net.minecraft.block.Waterloggable;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MilkBucketItem;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
@@ -19,16 +18,15 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
 
 @Mixin(Waterloggable.class)
 public interface WaterloggableMixin {
 
     /**
      * @author Leximon (fluidlogged)
-     * @reason loggable fluids
+     * @reason to allow waterloggable blocks to be loggable with any fluid
      */
     @Overwrite
     default boolean canFillWithFluid(BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
@@ -39,7 +37,7 @@ public interface WaterloggableMixin {
 
     /**
      * @author Leximon (fluidlogged)
-     * @reason loggable fluids
+     * @reason to allow waterloggable blocks to be loggable with any fluid
      */
     @Overwrite
     default boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
@@ -64,23 +62,35 @@ public interface WaterloggableMixin {
         }
     }
 
-    @Inject(method = "tryDrainFluid", at = @At("HEAD"), cancellable = true)
-    default void injectDrainFluid(WorldAccess world, BlockPos pos, BlockState state, CallbackInfoReturnable<ItemStack> cir) {
+    /**
+     * @author Leximon (fluidlogged)
+     * @reason to allow waterloggable blocks to be loggable with any fluid
+     */
+    @Overwrite
+    default ItemStack tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
         if(state.get(Properties.WATERLOGGED) || state.get(FluidloggedMod.PROPERTY_FLUID) > 0) {
             Fluid fluid = FluidloggedMod.getFluid(state);
+            if(state.get(Properties.WATERLOGGED))
+                fluid = Fluids.WATER;
             world.setBlockState(pos, state.with(Properties.WATERLOGGED, false).with(FluidloggedMod.PROPERTY_FLUID, 0), Block.NOTIFY_ALL);
             if (!state.canPlaceAt(world, pos)) {
                 world.breakBlock(pos, true);
             }
             Item item = FluidloggedMod.fluidBuckets.get(fluid);
-            if(item == null) {
-                cir.setReturnValue(ItemStack.EMPTY);
-                cir.cancel();
-                return;
-            }
-            cir.setReturnValue(new ItemStack(item));
-            cir.cancel();
+            if(item == null)
+                return ItemStack.EMPTY;
+            return new ItemStack(item);
         }
+        return ItemStack.EMPTY;
+    }
+
+    /**
+     * @author Leximon (fluidlogged)
+     * @reason to allow waterloggable blocks to be loggable with any fluid
+     */
+    @Overwrite
+    default Optional<SoundEvent> getBucketFillSound() {
+        return Optional.empty();
     }
 
 }

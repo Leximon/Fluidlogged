@@ -12,7 +12,6 @@ public class FluidloggedConfig {
     @MidnightConfig.Entry public static List<String> fluids = new ArrayList<>();
 
     static {
-        fluids.add("minecraft:water");
         fluids.add("minecraft:lava");
     }
 

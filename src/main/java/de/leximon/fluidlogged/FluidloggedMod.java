@@ -13,12 +13,16 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.MilkBucketItem;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class FluidloggedMod implements ModInitializer {
 
@@ -35,25 +39,21 @@ public class FluidloggedMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ServerLifecycleEvents.SERVER_STARTED.register(s -> initFluidBuckets());
-		ClientLifecycleEvents.CLIENT_STARTED.register(c -> {
-			initFluidBuckets();
-
-			if (FluidloggedConfig.printFluidIds) {
-				LOGGER.info("----- FLUID IDS -----");
-				for (Identifier id : Registry.FLUID.getIds())
-					LOGGER.info(id.toString());
-				LOGGER.info("---------------------");
-			}
-		});
 	}
 
-	private void initFluidBuckets() {
+	public static void initFluidBuckets() {
 		for (Item item : Registry.ITEM)
 			if (item instanceof BucketItem bucketItem)
-				fluidBuckets.put(((BucketItemAccessor) bucketItem).fluidlogged_getFluid(), item);
+				fluidBuckets.putIfAbsent(((BucketItemAccessor) bucketItem).fluidlogged_getFluid(), item);
+
+		// half milk lib compatibility (at least smt)
+		Optional<Fluid> milkFluid = Registry.FLUID.getOrEmpty(new Identifier("milk:still_milk"));
+		milkFluid.ifPresent(fluid -> fluidBuckets.put(fluid, Items.MILK_BUCKET));
 	}
 
 	public static Fluid getFluid(BlockState state) {
+		if(state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
+			return Fluids.WATER;
 		if (!state.contains(FluidloggedMod.PROPERTY_FLUID))
 			return null;
 		int index = state.get(FluidloggedMod.PROPERTY_FLUID) - 1;

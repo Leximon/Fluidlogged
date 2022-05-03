@@ -21,6 +21,9 @@
     "main": [
       "de.leximon.fluidlogged.FluidloggedMod"
     ],
+    "client": [
+      "de.leximon.fluidlogged.FluidloggedModClient"
+    ],
     "modmenu": [
       "de.leximon.fluidlogged.FluidloggedModMenu"
     ]

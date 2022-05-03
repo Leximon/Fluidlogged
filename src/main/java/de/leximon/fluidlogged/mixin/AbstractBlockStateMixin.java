@@ -8,6 +8,7 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -22,6 +23,8 @@ public class AbstractBlockStateMixin {
 
     @Redirect(method = "getFluidState", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getFluidState(Lnet/minecraft/block/BlockState;)Lnet/minecraft/fluid/FluidState;"))
     private FluidState injectFluidState(Block instance, BlockState state) {
+        if(state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
+            return instance.getFluidState(state);
         if (state.contains(FluidloggedMod.PROPERTY_FLUID)) {
             Fluid f = FluidloggedMod.getFluid(state);
             if(f != null)
