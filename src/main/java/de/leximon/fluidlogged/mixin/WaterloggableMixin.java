@@ -76,10 +76,9 @@ public interface WaterloggableMixin {
             if (!state.canPlaceAt(world, pos)) {
                 world.breakBlock(pos, true);
             }
-            Item item = FluidloggedMod.fluidBuckets.get(fluid);
-            if(item == null)
+            if (fluid == null)
                 return ItemStack.EMPTY;
-            return new ItemStack(item);
+            return new ItemStack(fluid.getBucketItem());
         }
         return ItemStack.EMPTY;
     }

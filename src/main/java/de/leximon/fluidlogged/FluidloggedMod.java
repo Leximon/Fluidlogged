@@ -11,6 +11,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.LavaFluid;
+import net.minecraft.fluid.WaterFluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -34,22 +36,9 @@ public class FluidloggedMod implements ModInitializer {
 	}
 
 	public static final FluidProperty PROPERTY_FLUID = FluidProperty.of("fluidlogged");
-	public static HashMap<Fluid, Item> fluidBuckets = new HashMap<>();
 
 	@Override
-	public void onInitialize() {
-		ServerLifecycleEvents.SERVER_STARTED.register(s -> initFluidBuckets());
-	}
-
-	public static void initFluidBuckets() {
-		for (Item item : Registry.ITEM)
-			if (item instanceof BucketItem bucketItem)
-				fluidBuckets.putIfAbsent(((BucketItemAccessor) bucketItem).fluidlogged_getFluid(), item);
-
-		// half milk lib compatibility (at least smt)
-		Optional<Fluid> milkFluid = Registry.FLUID.getOrEmpty(new Identifier("milk:still_milk"));
-		milkFluid.ifPresent(fluid -> fluidBuckets.put(fluid, Items.MILK_BUCKET));
-	}
+	public void onInitialize() {}
 
 	public static Fluid getFluid(BlockState state) {
 		if(state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
