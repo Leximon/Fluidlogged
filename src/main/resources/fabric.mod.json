@@ -4,13 +4,13 @@
   "version": "${version}",
 
   "name": "Fluidlogged",
-  "description": "Allows waterloggable blocks to shit...",
+  "description": "Allows waterlogging for any fluids",
   "authors": [
     "Leximon"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/Leximon/Fluidlogged",
+    "issues": "https://github.com/Leximon/Fluidlogged/issues"
   },
 
   "license": "CC0-1.0",
@@ -40,6 +40,5 @@
     "midnightlib": ">=0.4.0"
   },
   "suggests": {
-    "another-mod": "*"
   }
 }
