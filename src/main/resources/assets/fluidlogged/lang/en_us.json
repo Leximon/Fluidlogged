@@ -1,0 +1,7 @@
+{
+  "fluidlogged.midnightconfig.title": "Fluidlogged",
+  "fluidlogged.midnightconfig.restart": "All of the options below requires a restart",
+  "fluidlogged.midnightconfig.printFluidIds": "Print Fluid IDs",
+  "fluidlogged.midnightconfig.printFluidIds.tooltip": "Prints all fluid ids in the output log. Useful if you don't know the fluid id of a specific mod.",
+  "fluidlogged.midnightconfig.fluids": "Fluids"
+}
