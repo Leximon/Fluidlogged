@@ -30,9 +30,12 @@ public interface WaterloggableMixin {
      */
     @Overwrite
     default boolean canFillWithFluid(BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
-        return state.get(FluidloggedMod.PROPERTY_FLUID) == 0
-                && !state.get(Properties.WATERLOGGED)
-                && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluids.contains(Registry.FLUID.getId(fluid).toString()));
+        if(state.contains(FluidloggedMod.PROPERTY_FLUID))
+            return state.get(FluidloggedMod.PROPERTY_FLUID) == 0
+                    && !state.get(Properties.WATERLOGGED)
+                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluids.contains(Registry.FLUID.getId(fluid).toString()));
+        else
+            return !state.get(Properties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }
 
     /**
@@ -42,8 +45,7 @@ public interface WaterloggableMixin {
     @Overwrite
     default boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
         Fluid fluid = fluidState.getFluid();
-        if (!state.get(Properties.WATERLOGGED)
-                && state.get(FluidloggedMod.PROPERTY_FLUID) == 0) {
+        if(state.contains(FluidloggedMod.PROPERTY_FLUID) && !state.get(Properties.WATERLOGGED) && state.get(FluidloggedMod.PROPERTY_FLUID) == 0) {
             if (!world.isClient()) {
                 BlockState newState = state;
                 if (fluid.equals(Fluids.WATER))
@@ -54,6 +56,12 @@ public interface WaterloggableMixin {
                     return false;
                 }
                 world.setBlockState(pos, newState.with(FluidloggedMod.PROPERTY_FLUID, index), Block.NOTIFY_ALL);
+                world.createAndScheduleFluidTick(pos, fluid, fluid.getTickRate(world));
+            }
+            return true;
+        } else if(!state.get(Properties.WATERLOGGED)) {
+            if (!world.isClient()) {
+                world.setBlockState(pos, state.with(Properties.WATERLOGGED, true), Block.NOTIFY_ALL);
                 world.createAndScheduleFluidTick(pos, fluid, fluid.getTickRate(world));
             }
             return true;
@@ -68,11 +76,13 @@ public interface WaterloggableMixin {
      */
     @Overwrite
     default ItemStack tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
-        if(state.get(Properties.WATERLOGGED) || state.get(FluidloggedMod.PROPERTY_FLUID) > 0) {
+        if(state.get(Properties.WATERLOGGED) || (state.contains(FluidloggedMod.PROPERTY_FLUID) && state.get(FluidloggedMod.PROPERTY_FLUID) > 0)) {
             Fluid fluid = FluidloggedMod.getFluid(state);
             if(state.get(Properties.WATERLOGGED))
                 fluid = Fluids.WATER;
-            world.setBlockState(pos, state.with(Properties.WATERLOGGED, false).with(FluidloggedMod.PROPERTY_FLUID, 0), Block.NOTIFY_ALL);
+            if(state.contains(FluidloggedMod.PROPERTY_FLUID))
+                state = state.with(FluidloggedMod.PROPERTY_FLUID, 0);
+            world.setBlockState(pos, state.with(Properties.WATERLOGGED, false), Block.NOTIFY_ALL);
             if (!state.canPlaceAt(world, pos)) {
                 world.breakBlock(pos, true);
             }

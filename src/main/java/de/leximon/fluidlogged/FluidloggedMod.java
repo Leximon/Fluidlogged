@@ -2,44 +2,33 @@ package de.leximon.fluidlogged;
 
 import de.leximon.fluidlogged.core.FluidProperty;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import de.leximon.fluidlogged.mixin.BucketItemAccessor;
 import eu.midnightdust.lib.config.MidnightConfig;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.StairsBlock;
+import net.minecraft.block.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.LavaFluid;
-import net.minecraft.fluid.WaterFluid;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.MilkBucketItem;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.HashSet;
 
 public class FluidloggedMod implements ModInitializer {
 
 	public static final String MOD_ID = "fluidlogged";
 	public static final Logger LOGGER = LoggerFactory.getLogger("fluidlogged");
 
-	static {
-		MidnightConfig.init(MOD_ID, FluidloggedConfig.class);
-	}
-
+	public static final HashSet<Class<? extends Block>> VANILLA_WATERLOGGABLES = new HashSet<>();
 	public static final FluidProperty PROPERTY_FLUID = FluidProperty.of("fluidlogged");
 
 	@Override
 	public void onInitialize() {}
 
+	/**
+	 * @return the fluid of the block state by its property
+	 */
 	public static Fluid getFluid(BlockState state) {
 		if(state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
 			return Fluids.WATER;
@@ -56,10 +45,61 @@ public class FluidloggedMod implements ModInitializer {
 		return Registry.FLUID.get(id);
 	}
 
+	/**
+	 * @return the index of the fluid in the config
+	 */
 	public static int getFluidIndex(Fluid fluid) {
 		if(fluid.equals(Fluids.EMPTY))
 			return 0;
 		Identifier id = Registry.FLUID.getId(fluid);
 		return FluidloggedConfig.fluids.indexOf(id.toString()) + 1;
+	}
+
+	public static boolean isVanillaWaterloggable(Block block) {
+		return VANILLA_WATERLOGGABLES.contains(block.getClass());
+	}
+
+	static { // pain
+		VANILLA_WATERLOGGABLES.add(PoweredRailBlock.class);
+		VANILLA_WATERLOGGABLES.add(DetectorRailBlock.class);
+		VANILLA_WATERLOGGABLES.add(StairsBlock.class);
+		VANILLA_WATERLOGGABLES.add(ChestBlock.class);
+		VANILLA_WATERLOGGABLES.add(SignBlock.class);
+		VANILLA_WATERLOGGABLES.add(LadderBlock.class);
+		VANILLA_WATERLOGGABLES.add(RailBlock.class);
+		VANILLA_WATERLOGGABLES.add(WallSignBlock.class);
+		VANILLA_WATERLOGGABLES.add(FenceBlock.class);
+		VANILLA_WATERLOGGABLES.add(TrapdoorBlock.class);
+		VANILLA_WATERLOGGABLES.add(PaneBlock.class);
+		VANILLA_WATERLOGGABLES.add(ChainBlock.class);
+		VANILLA_WATERLOGGABLES.add(GlowLichenBlock.class);
+		VANILLA_WATERLOGGABLES.add(EnderChestBlock.class);
+		VANILLA_WATERLOGGABLES.add(WallBlock.class);
+		VANILLA_WATERLOGGABLES.add(TrappedChestBlock.class);
+		VANILLA_WATERLOGGABLES.add(StainedGlassPaneBlock.class);
+		VANILLA_WATERLOGGABLES.add(LightBlock.class);
+		VANILLA_WATERLOGGABLES.add(SlabBlock.class);
+		VANILLA_WATERLOGGABLES.add(DeadCoralBlock.class);
+		VANILLA_WATERLOGGABLES.add(CoralBlock.class);
+		VANILLA_WATERLOGGABLES.add(DeadCoralFanBlock.class);
+		VANILLA_WATERLOGGABLES.add(CoralFanBlock.class);
+		VANILLA_WATERLOGGABLES.add(DeadCoralWallFanBlock.class);
+		VANILLA_WATERLOGGABLES.add(CoralWallFanBlock.class);
+		VANILLA_WATERLOGGABLES.add(SeaPickleBlock.class);
+		VANILLA_WATERLOGGABLES.add(ConduitBlock.class);
+		VANILLA_WATERLOGGABLES.add(ScaffoldingBlock.class);
+		VANILLA_WATERLOGGABLES.add(LanternBlock.class);
+		VANILLA_WATERLOGGABLES.add(CampfireBlock.class);
+		VANILLA_WATERLOGGABLES.add(CandleBlock.class);
+		VANILLA_WATERLOGGABLES.add(AmethystClusterBlock.class);
+		VANILLA_WATERLOGGABLES.add(SculkSensorBlock.class);
+		VANILLA_WATERLOGGABLES.add(OxidizableStairsBlock.class);
+		VANILLA_WATERLOGGABLES.add(OxidizableSlabBlock.class);
+		VANILLA_WATERLOGGABLES.add(LightningRodBlock.class);
+		VANILLA_WATERLOGGABLES.add(PointedDripstoneBlock.class);
+		VANILLA_WATERLOGGABLES.add(BigDripleafBlock.class);
+		VANILLA_WATERLOGGABLES.add(BigDripleafStemBlock.class);
+		VANILLA_WATERLOGGABLES.add(SmallDripleafBlock.class);
+		VANILLA_WATERLOGGABLES.add(HangingRootsBlock.class);
 	}
 }
