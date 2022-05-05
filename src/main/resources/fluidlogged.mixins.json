@@ -8,10 +8,14 @@
     "BlockItemMixin",
     "BlockMixin",
     "BucketItemMixin",
+    "FluidBlockMixin",
     "ShapeCacheMixin",
     "StateManagerBuilderMixin",
     "WallBlockMixin",
-    "WaterloggableMixin"
+    "WaterloggableMixin",
+    "accessor.AbstractBlockAccessor",
+    "accessor.AbstractBlockSettingsAccessor",
+    "accessor.StateAccessor"
   ],
   "client": [
   ],

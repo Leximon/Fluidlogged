@@ -7,12 +7,14 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.LavaFluid;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class FluidloggedMod implements ModInitializer {
@@ -22,6 +24,8 @@ public class FluidloggedMod implements ModInitializer {
 
 	public static final HashSet<Class<? extends Block>> VANILLA_WATERLOGGABLES = new HashSet<>();
 	public static final FluidProperty PROPERTY_FLUID = FluidProperty.of("fluidlogged");
+
+	public static final HashMap<Fluid, FluidBlock> fluidBlocks = new HashMap<>();
 
 	@Override
 	public void onInitialize() {}

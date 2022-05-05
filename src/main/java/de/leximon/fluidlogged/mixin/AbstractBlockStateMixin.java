@@ -1,9 +1,14 @@
 package de.leximon.fluidlogged.mixin;
 
 import de.leximon.fluidlogged.FluidloggedMod;
+import de.leximon.fluidlogged.mixin.accessor.AbstractBlockAccessor;
+import de.leximon.fluidlogged.mixin.accessor.AbstractBlockSettingsAccessor;
+import de.leximon.fluidlogged.mixin.accessor.StateAccessor;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -20,12 +25,30 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(value = AbstractBlock.AbstractBlockState.class)
+import java.util.function.ToIntFunction;
+
+@Mixin(value = AbstractBlock.AbstractBlockState.class, priority = 1010)
 public abstract class AbstractBlockStateMixin {
 
     @Shadow protected abstract BlockState asBlockState();
 
     @Shadow public abstract Block getBlock();
+
+    // luminance for example lavalogged blocks
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/util/function/ToIntFunction;applyAsInt(Ljava/lang/Object;)I"))
+    private <T> int injectLuminance(ToIntFunction<T> instance, T t) {
+        if(t instanceof BlockState state
+                && ((StateAccessor) state).fluidlogged_getEntries() != null
+                && state.contains(FluidloggedMod.PROPERTY_FLUID)) {
+            Fluid fluid = FluidloggedMod.getFluid(state);
+            FluidBlock block = FluidloggedMod.fluidBlocks.get(fluid);
+            if(block != null) {
+                AbstractBlock.Settings settings = ((AbstractBlockAccessor) block).fluidlogged_getSettings();
+                return ((AbstractBlockSettingsAccessor) settings).fluidlogged_getLuminance().applyAsInt((BlockState) t);
+            }
+        }
+        return instance.applyAsInt(t);
+    }
 
     /**
      * @author Leximon (fluidlogged)
@@ -73,16 +96,6 @@ public abstract class AbstractBlockStateMixin {
                 world, pos, context
         );
     }
-//
-//    @Redirect(method = "getCullingShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getCullingShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/shape/VoxelShape;"))
-//    private VoxelShape injectCullingeShape(Block instance, BlockState state, BlockView world, BlockPos pos) {
-//        return instance.getCullingShape(
-//                state.contains(FluidloggedMod.PROPERTY_FLUID)
-//                        ? state.with(FluidloggedMod.PROPERTY_FLUID, 0)
-//                        : state,
-//                world, pos
-//        );
-//    }
 
     @Redirect(method = "getSidesShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSidesShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/shape/VoxelShape;"))
     private VoxelShape injected(Block instance, BlockState state, BlockView world, BlockPos pos) {
