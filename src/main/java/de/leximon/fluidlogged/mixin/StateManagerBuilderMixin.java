@@ -22,9 +22,7 @@ public abstract class StateManagerBuilderMixin<O, S extends State<O, S>> {
 
     @Inject(method = "add", at = @At("HEAD"))
     private void injectFluidloggedProperty(Property<?>[] properties, CallbackInfoReturnable<StateManager.Builder<O, S>> cir) {
-        if(!(owner instanceof Block block))
-            return;
-        if(!FluidloggedConfig.compatibilityMode || FluidloggedMod.isVanillaWaterloggable(block)) {
+        if(!FluidloggedConfig.compatibilityMode || FluidloggedMod.isVanillaWaterloggable(owner)) {
             for (Property<?> property : properties) {
                 if (property.getName().equals("waterlogged")) {
                     add(FluidloggedMod.PROPERTY_FLUID);

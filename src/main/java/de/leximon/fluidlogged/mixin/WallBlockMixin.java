@@ -15,11 +15,13 @@ public class WallBlockMixin {
 
     @Redirect(method = "getShapeMap", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap$Builder;put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap$Builder;"))
     private <S, V> ImmutableMap.Builder<BlockState, VoxelShape> injected(ImmutableMap.Builder<BlockState, VoxelShape> instance, S key, V value) {
+
         if(FluidloggedConfig.compatibilityMode) {
             for (int i = 0; i < FluidloggedConfig.fluids.size() + 1; i++)
                 instance.put(((BlockState) key).with(FluidloggedMod.PROPERTY_FLUID, i), (VoxelShape) value);
+            return instance;
         }
-        return instance;
+        return instance.put((BlockState) key, (VoxelShape) value);
     }
 
 }

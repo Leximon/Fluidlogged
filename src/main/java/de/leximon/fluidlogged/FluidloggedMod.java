@@ -55,7 +55,7 @@ public class FluidloggedMod implements ModInitializer {
 		return FluidloggedConfig.fluids.indexOf(id.toString()) + 1;
 	}
 
-	public static boolean isVanillaWaterloggable(Block block) {
+	public static boolean isVanillaWaterloggable(Object block) {
 		return VANILLA_WATERLOGGABLES.contains(block.getClass());
 	}
 
