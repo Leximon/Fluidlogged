@@ -18,9 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = AbstractBlock.AbstractBlockState.class)
 public abstract class AbstractBlockStateMixin {
@@ -56,11 +54,6 @@ public abstract class AbstractBlockStateMixin {
         return instance.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    @Inject(method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At("HEAD"))
-    private void injected(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-
-    }
-
     @Redirect(method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getCollisionShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;"))
     private VoxelShape injectCollisionShape(Block instance, BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return instance.getCollisionShape(
@@ -80,6 +73,16 @@ public abstract class AbstractBlockStateMixin {
                 world, pos, context
         );
     }
+//
+//    @Redirect(method = "getCullingShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getCullingShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/shape/VoxelShape;"))
+//    private VoxelShape injectCullingeShape(Block instance, BlockState state, BlockView world, BlockPos pos) {
+//        return instance.getCullingShape(
+//                state.contains(FluidloggedMod.PROPERTY_FLUID)
+//                        ? state.with(FluidloggedMod.PROPERTY_FLUID, 0)
+//                        : state,
+//                world, pos
+//        );
+//    }
 
     @Redirect(method = "getSidesShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSidesShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/shape/VoxelShape;"))
     private VoxelShape injected(Block instance, BlockState state, BlockView world, BlockPos pos) {
