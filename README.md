@@ -1,9 +1,44 @@
-# Fabric Example Mod
+<img src="https://i.imgur.com/40cLW6Q.png" alt="Icon" width="64" height="64" />
 
-## Setup
+## Fluidlogged
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+**REQUIRES:** [Fabric Loader](https://fabricmc.net/), [Fabric API](https://modrinth.com/mod/fabric-api) and [MidnightLib](https://modrinth.com/mod/midnightlib)
 
-## License
+Allows all waterloggable blocks to be lavalogged and also logged by any other fluids from other mods.
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+**IMPORTANT:**
+
+This mod can cause issues with other mods. If you experience any crashes or other issues after installing this mod, try enabling compatibility mode in the config. This should fix most issues but will disallow waterloggables from other mods to be logged with any other fluid.
+
+<details><summary>Known incompatibilities</summary>
+
+- Origins
+
+</details>
+<details><summary>Adding fluids to the config</summary>
+
+Due to the mod loading order, fluids from other mods have to be defined inside the config.
+In there you find a section named fluids. Simply add the fluid id to this list but consider using still fluids instead of flowing fluids.
+
+If you don't know the ids of the those fluids, you can enable "printFluidIds". This will print the ids into the output log after the game has finished loading.
+
+#### Example with the Create mod
+
+![example](https://i.imgur.com/vM6q0gf.png)
+
+</details>
+<details><summary>FAQ</summary>
+
+#### Will this corrupt my previous worlds?
+
+No, but let me know if there is one. Keep in mind that changing the config afterward or removing the mod will cause fluids inside blocks may disappear or get mixed up with other ones.
+
+#### Will there be a forge version?
+
+Nope.
+
+#### Can I use it for my modpack?
+
+Sure.
+
+</summary>
