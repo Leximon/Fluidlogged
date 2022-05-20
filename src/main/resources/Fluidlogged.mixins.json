@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "darth.fluidlogged.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "fluidlogged.refmap.json",
+  "mixins": [
+    "IWaterLoggableMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
