@@ -1,9 +1,0 @@
-{
-  "fluidlogged.midnightconfig.title": "Fluidlogged",
-  "fluidlogged.midnightconfig.restart": "§c§lAll of the options below requires a restart",
-  "fluidlogged.midnightconfig.printFluidIds": "Print Fluid IDs",
-  "fluidlogged.midnightconfig.printFluidIds.tooltip": "Prints all fluid ids in the output log. Useful if you don't know the fluid id of a specific mod.",
-  "fluidlogged.midnightconfig.fluids": "Fluids",
-  "fluidlogged.midnightconfig.compatibilityMode": "Compatibility Mode",
-  "fluidlogged.midnightconfig.compatibilityMode.tooltip": "Some mods may cause incompatibilities with this mod.\nEnabling this option will fix most issues \nand will only allow vanilla blocks to be waterloggable with any fluid."
-}
