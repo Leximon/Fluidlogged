@@ -1,17 +1,15 @@
-package darth.fluidlogged;
+package de.leximon.fluidlogged;
 
-import net.minecraft.world.level.block.state.properties.Property;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
+/*
 public class StringProperty extends Property<String>
 {
     List<String> possibleValues;
     public StringProperty(String name)
     {
         super(name, String.class);
-        possibleValues.addAll(Config.fluids.get());
+        possibleValues = new ArrayList<>(Config.getFluidList());
+        possibleValues.add("");
+        Fluidlogged.LOGGER.info("Fluidloggable fluids: " + possibleValues.toString());
     }
 
     public static StringProperty create(String name)
@@ -27,8 +25,7 @@ public class StringProperty extends Property<String>
         }
         else if (property instanceof StringProperty && super.equals(property))
         {
-            StringProperty stringproperty = (StringProperty)property;
-            return this.possibleValues.equals(stringproperty.possibleValues);
+            return this.possibleValues.equals(((StringProperty)property).possibleValues);
         }
         else
         {
@@ -45,12 +42,14 @@ public class StringProperty extends Property<String>
     @Override
     public String getName(String name)
     {
-        return name;
+        String retName = (name.length() == 0) ? "_" : name;
+        return retName.replaceAll(":", "_").replaceAll(" ", "_");
     }
 
     @Override
-    public Optional<String> getValue(String p_61701_)
+    public Optional<String> getValue(String value)
     {
-        return Optional.empty();
+        return possibleValues.contains(value) ? Optional.of(value) : Optional.empty();
     }
 }
+ */

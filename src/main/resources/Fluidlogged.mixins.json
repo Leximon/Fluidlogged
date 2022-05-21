@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.leximon.fluidlogged.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractBlockStateMixin",
+    "BlockItemMixin",
+    "BlockMixin",
+    "FluidBlockMixin",
+    "ShapeCacheMixin",
+    "SimpleWaterLoggedBlockMixin",
+    "StateDefinitionBuilderMixin",
+    "WallBlockMixin",
+    "accessor.AbstractBlockAccessor",
+    "accessor.AbstractBlockSettingsAccessor",
+    "accessor.StateAccessor"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
