@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "de.leximon.fluidlogged.mixin",
   "compatibilityLevel": "JAVA_17",
+  "refmap": "Fluidlogged.refmap.json",
   "mixins": [
     "AbstractBlockStateMixin",
     "BlockItemMixin",
