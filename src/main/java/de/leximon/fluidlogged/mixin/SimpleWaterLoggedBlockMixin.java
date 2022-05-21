@@ -34,7 +34,7 @@ public interface SimpleWaterLoggedBlockMixin
         if(blockState.hasProperty(Fluidlogged.PROPERTY_FLUID))
             return blockState.getValue(Fluidlogged.PROPERTY_FLUID).equals(0)
                 && !blockState.getValue(BlockStateProperties.WATERLOGGED)
-                && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluids.get().contains(fluid.getRegistryName().toString()));
+                && (fluid.equals(Fluids.WATER) || FluidloggedConfig.getFluidList().contains(fluid.getRegistryName().toString()));
         else
             return !blockState.getValue(BlockStateProperties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }
@@ -46,20 +46,6 @@ public interface SimpleWaterLoggedBlockMixin
     @Overwrite
     default boolean placeLiquid(LevelAccessor world, BlockPos pos, BlockState state, FluidState fluidState)
     {
-//        Fluidlogged.LOGGER.info("TEST " + fluidState.getType().getRegistryName());
-//        if (!blockState.getValue(BlockStateProperties.WATERLOGGED))
-//        {
-//            if (!levelAccessor.isClientSide())
-//            {
-//                levelAccessor.setBlock(blockPos, blockState.setValue(BlockStateProperties.WATERLOGGED, Boolean.TRUE).setValue(Fluidlogged.PROPERTY_FLUID, fluidState.getType().getRegistryName().toString()), 3);
-//                levelAccessor.scheduleTick(blockPos, fluidState.getType(), fluidState.getType().getTickDelay(levelAccessor));
-//            }
-//            return true;
-//        }
-//        else
-//        {
-//            return false;
-//        }
         Fluid fluid = fluidState.getType();
         if(state.hasProperty(Fluidlogged.PROPERTY_FLUID) && !state.getValue(BlockStateProperties.WATERLOGGED) && state.getValue(Fluidlogged.PROPERTY_FLUID) == 0) {
             if (!world.isClientSide()) {

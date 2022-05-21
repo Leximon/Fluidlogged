@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class FluidBlockMixin
 {
     @Inject(method = "<init>(Lnet/minecraft/world/level/material/FlowingFluid;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V",
-            //at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;<init>(Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)V", shift = At.Shift.AFTER))
             at = @At(value = "TAIL"))
     private void inject(FlowingFluid fluid, BlockBehaviour.Properties settings, CallbackInfo ci) {
         Fluidlogged.fluidBlocks.put(fluid, (LiquidBlock) (Object) this);

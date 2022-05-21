@@ -39,7 +39,7 @@ public abstract class AbstractBlockStateMixin
     private <T> int injectLuminance(ToIntFunction<T> instance, T t) {
         if(t instanceof BlockState state
                 && ((StateAccessor) state).fluidlogged_getEntries() != null
-                && state.hasProperty(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID)) {
+                && state.hasProperty(Fluidlogged.PROPERTY_FLUID)) {
             Fluid fluid = Fluidlogged.getFluid(state);
             LiquidBlock block = Fluidlogged.fluidBlocks.get(fluid);
             if(block != null) {

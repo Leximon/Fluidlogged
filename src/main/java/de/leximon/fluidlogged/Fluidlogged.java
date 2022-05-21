@@ -28,7 +28,6 @@ public class Fluidlogged
     public static final FluidProperty PROPERTY_FLUID = FluidProperty.Create("fluidlogged");
 
     public static final HashMap<Fluid, LiquidBlock> fluidBlocks = new HashMap<>();
-
     public Fluidlogged()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, FluidloggedConfig.CONFIG_SPEC);
@@ -45,9 +44,9 @@ public class Fluidlogged
         int index = state.getValue(Fluidlogged.PROPERTY_FLUID) - 1;
         if(index < 0)
             return Fluids.EMPTY;
-        if (index >= FluidloggedConfig.fluids.get().size())
+        if (index >= FluidloggedConfig.getFluidList().size())
             return null;
-        ResourceLocation id = ResourceLocation.tryParse(FluidloggedConfig.fluids.get().get(index));
+        ResourceLocation id = ResourceLocation.tryParse(FluidloggedConfig.getFluidList().get(index));
         if (id == null)
             return null;
         return ForgeRegistries.FLUIDS.getValue(id);
@@ -60,7 +59,7 @@ public class Fluidlogged
         if(fluid.equals(Fluids.EMPTY))
             return 0;
         ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
-        return FluidloggedConfig.fluids.get().indexOf(id.toString()) + 1;
+        return FluidloggedConfig.getFluidList().indexOf(id.toString()) + 1;
     }
 
     public static boolean isVanillaWaterloggable(Object block) {

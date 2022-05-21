@@ -1,5 +1,6 @@
 package de.leximon.fluidlogged.mixin;
 import de.leximon.fluidlogged.Fluidlogged;
+import de.leximon.fluidlogged.core.FluidloggedConfig;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.StateHolder;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -22,12 +23,15 @@ public abstract class StateDefinitionBuilderMixin <O, S extends StateHolder<O, S
     @Inject(method = "add", at = @At("HEAD"))
     private void injectFluidloggedProperty(Property<?>[] properties, CallbackInfoReturnable<StateDefinition.Builder<O, S>> cir)
     {
-        for (Property<?> property : properties)
+        if(!FluidloggedConfig.getCompatibilityMode() || Fluidlogged.isVanillaWaterloggable(owner))
         {
-            if (property.getName().equals("waterlogged"))
+            for (Property<?> property : properties)
             {
-                add(Fluidlogged.PROPERTY_FLUID);
-                break;
+                if (property.getName().equals("waterlogged"))
+                {
+                    add(Fluidlogged.PROPERTY_FLUID);
+                    break;
+                }
             }
         }
     }

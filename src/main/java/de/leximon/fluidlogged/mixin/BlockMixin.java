@@ -18,7 +18,7 @@ public class BlockMixin
 
     @Redirect(method = "registerDefaultState", at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Block;defaultBlockState:Lnet/minecraft/world/level/block/state/BlockState;", opcode = Opcodes.PUTFIELD))
     private void injectDefaultState(Block instance, BlockState value) {
-        if(FluidloggedConfig.compatibilityMode.get())
+        if(FluidloggedConfig.getCompatibilityMode())
             defaultBlockState = Fluidlogged.isVanillaWaterloggable(instance) && value.hasProperty(BlockStateProperties.WATERLOGGED)
                     ? value.setValue(Fluidlogged.PROPERTY_FLUID, 0)
                     : value;
