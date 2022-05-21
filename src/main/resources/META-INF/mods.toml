@@ -33,9 +33,7 @@ displayName = "Fluidlogged" #mandatory
 # A text field displayed in the mod UI
 authors = "Leximon, Darth_Pikachu, Jaquobia" #optional
 # The description text for the mod (multi line!) (#mandatory)
-description = '''
-Allows waterlogging for any fluids
-'''
+description = '''Allows waterlogging for any fluids'''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.fluidlogged]] #optional
 # the modid of the dependency

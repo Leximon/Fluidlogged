@@ -1,7 +1,7 @@
 package de.leximon.fluidlogged.mixin;
 
 import de.leximon.fluidlogged.Fluidlogged;
-import de.leximon.fluidlogged.core.Config;
+import de.leximon.fluidlogged.core.FluidloggedConfig;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -18,7 +18,7 @@ public class BlockMixin
 
     @Redirect(method = "registerDefaultState", at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Block;defaultBlockState:Lnet/minecraft/world/level/block/state/BlockState;", opcode = Opcodes.PUTFIELD))
     private void injectDefaultState(Block instance, BlockState value) {
-        if(Config.compatibilityMode.get())
+        if(FluidloggedConfig.compatibilityMode.get())
             defaultBlockState = Fluidlogged.isVanillaWaterloggable(instance) && value.hasProperty(BlockStateProperties.WATERLOGGED)
                     ? value.setValue(Fluidlogged.PROPERTY_FLUID, 0)
                     : value;

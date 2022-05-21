@@ -1,6 +1,6 @@
 package de.leximon.fluidlogged;
 
-import de.leximon.fluidlogged.core.Config;
+import de.leximon.fluidlogged.core.FluidloggedConfig;
 import de.leximon.fluidlogged.core.FluidProperty;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
@@ -28,11 +28,10 @@ public class Fluidlogged
     public static final FluidProperty PROPERTY_FLUID = FluidProperty.Create("fluidlogged");
 
     public static final HashMap<Fluid, LiquidBlock> fluidBlocks = new HashMap<>();
-    //public static Set<String> FLUIDS;
 
     public Fluidlogged()
     {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.CONFIG_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, FluidloggedConfig.CONFIG_SPEC);
     }
 
     /**
@@ -46,9 +45,9 @@ public class Fluidlogged
         int index = state.getValue(Fluidlogged.PROPERTY_FLUID) - 1;
         if(index < 0)
             return Fluids.EMPTY;
-        if (index >= Config.fluids.get().size())
+        if (index >= FluidloggedConfig.fluids.get().size())
             return null;
-        ResourceLocation id = ResourceLocation.tryParse(Config.fluids.get().get(index));
+        ResourceLocation id = ResourceLocation.tryParse(FluidloggedConfig.fluids.get().get(index));
         if (id == null)
             return null;
         return ForgeRegistries.FLUIDS.getValue(id);
@@ -61,7 +60,7 @@ public class Fluidlogged
         if(fluid.equals(Fluids.EMPTY))
             return 0;
         ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
-        return Config.fluids.get().indexOf(id.toString()) + 1;
+        return FluidloggedConfig.fluids.get().indexOf(id.toString()) + 1;
     }
 
     public static boolean isVanillaWaterloggable(Object block) {
@@ -112,24 +111,4 @@ public class Fluidlogged
         VANILLA_WATERLOGGABLES.add(SmallDripleafBlock.class);
         VANILLA_WATERLOGGABLES.add(HangingRootsBlock.class);
     }
-
-    /*
-    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents
-    {
-        @SubscribeEvent
-        public static void onCommonSetup(final RegistryEvent.Register<Block> blockRegistryEvent)
-        {
-            Set<String> fluids = ForgeRegistries.FLUIDS.getEntries()
-                    .stream()
-                    .filter(c -> c.getValue().isSource(c.getValue().defaultFluidState()))
-                    .map(Map.Entry::getKey)
-                    .map(ResourceKey::location)
-                    .map(ResourceLocation::toString)
-                    .collect(Collectors.toSet());
-            Fluidlogged.LOGGER.info(fluids.toString());
-            FLUIDS = fluids;
-        }
-    }
-    */
 }

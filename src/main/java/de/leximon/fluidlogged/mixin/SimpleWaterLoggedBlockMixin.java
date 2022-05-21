@@ -1,7 +1,7 @@
 package de.leximon.fluidlogged.mixin;
 
 
-import de.leximon.fluidlogged.core.Config;
+import de.leximon.fluidlogged.core.FluidloggedConfig;
 import de.leximon.fluidlogged.Fluidlogged;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
@@ -34,7 +34,7 @@ public interface SimpleWaterLoggedBlockMixin
         if(blockState.hasProperty(Fluidlogged.PROPERTY_FLUID))
             return blockState.getValue(Fluidlogged.PROPERTY_FLUID).equals(0)
                 && !blockState.getValue(BlockStateProperties.WATERLOGGED)
-                && (fluid.equals(Fluids.WATER) || Config.fluids.get().contains(fluid.getRegistryName().toString()));
+                && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluids.get().contains(fluid.getRegistryName().toString()));
         else
             return !blockState.getValue(BlockStateProperties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }

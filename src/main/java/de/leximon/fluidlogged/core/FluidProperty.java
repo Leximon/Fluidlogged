@@ -6,7 +6,7 @@ public class FluidProperty extends IntegerProperty
 {
     protected FluidProperty(String name)
     {
-        super(name, 0, Config.getFluidList().size());
+        super(name, 0, FluidloggedConfig.getFluidList().size()+1);
     }
 
     public static FluidProperty Create(String name)
