@@ -4,9 +4,7 @@ package de.leximon.fluidlogged.mixin;
 import de.leximon.fluidlogged.core.Config;
 import de.leximon.fluidlogged.Fluidlogged;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -27,7 +25,8 @@ public interface SimpleWaterLoggedBlockMixin
 {
 
     /**
-     * @author
+     * @author Leximon (fluidlogged)
+     * @reason to allow waterloggable blocks to be loggable with any fluid
      */
     @Overwrite
     default boolean canPlaceLiquid(BlockGetter world, BlockPos blockPos, BlockState blockState, Fluid fluid)
@@ -41,10 +40,11 @@ public interface SimpleWaterLoggedBlockMixin
     }
 
     /**
-     * @author
+     * @author Leximon (fluidlogged)
+     * @reason to allow waterloggable blocks to be loggable with any fluid
      */
     @Overwrite
-    default boolean placeLiquid(LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState, FluidState fluidState)
+    default boolean placeLiquid(LevelAccessor world, BlockPos pos, BlockState state, FluidState fluidState)
     {
 //        Fluidlogged.LOGGER.info("TEST " + fluidState.getType().getRegistryName());
 //        if (!blockState.getValue(BlockStateProperties.WATERLOGGED))
@@ -110,7 +110,8 @@ public interface SimpleWaterLoggedBlockMixin
 
 
     /**
-     * @author
+     * @author Leximon (fluidlogged)
+     * @reason to allow waterloggable blocks to be loggable with any fluid
      */
     @Overwrite
     default Optional<SoundEvent> getPickupSound() {
