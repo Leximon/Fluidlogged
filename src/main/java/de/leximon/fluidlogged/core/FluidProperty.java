@@ -11,7 +11,6 @@ public class FluidProperty extends IntegerProperty
 
     public static FluidProperty Create(String name)
     {
-        FluidloggedConfig.readConfig();
         return new FluidProperty(name);
     }
 }

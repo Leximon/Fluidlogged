@@ -40,6 +40,8 @@ public class FluidloggedConfig
 
     static
     {
+        FluidloggedConfig.readConfig();
+
         final Pair<FluidloggedConfig, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(FluidloggedConfig::new);
         CONFIG_SPEC = specPair.getRight();
         CONFIG = specPair.getLeft();
@@ -70,7 +72,7 @@ public class FluidloggedConfig
         {
             return config.getRaw(compatibilityMode.getPath());
         }
-        return compatibilityMode.get();
+        return false;
     }
 
     static class Action implements FileNotFoundAction
