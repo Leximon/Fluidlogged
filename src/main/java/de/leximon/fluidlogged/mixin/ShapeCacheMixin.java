@@ -18,8 +18,8 @@ public class ShapeCacheMixin
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getCollisionShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     private VoxelShape injected(Block instance, BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return instance.getCollisionShape(
-                state.hasProperty(Fluidlogged.PROPERTY_FLUID)
-                        ? state.setValue(Fluidlogged.PROPERTY_FLUID, 0)
+                state.hasProperty(Fluidlogged.FLUIDLOGGED)
+                        ? state.setValue(Fluidlogged.FLUIDLOGGED, "")
                         : state,
                 world, pos, context
         );

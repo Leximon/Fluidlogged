@@ -1,10 +1,12 @@
 package de.leximon.fluidlogged.mixin;
 
 import de.leximon.fluidlogged.Fluidlogged;
+import de.leximon.fluidlogged.core.FluidloggedConfig;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -21,14 +23,14 @@ public class BlockItemMixin
         if(placementState == null)
             return null;
 
-        if(!placementState.hasProperty(Fluidlogged.PROPERTY_FLUID))
+        if(!placementState.hasProperty(Fluidlogged.FLUIDLOGGED))
             return placementState;
 
         FluidState fluidState = ctx.getLevel().getFluidState(ctx.getClickedPos());
-        int index = Fluidlogged.getFluidIndex(fluidState.getType());
+        String value = Fluidlogged.getFluidString(fluidState.getType());
 
-        if(index != -1)
-            return placementState.setValue(Fluidlogged.PROPERTY_FLUID, index);
+        if(FluidloggedConfig.getFluidList().contains(value))
+            return placementState.setValue(Fluidlogged.FLUIDLOGGED, value);
 
         return placementState;
     }

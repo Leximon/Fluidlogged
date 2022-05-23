@@ -20,9 +20,9 @@ public class BlockMixin
     private void injectDefaultState(Block instance, BlockState value) {
         if(FluidloggedConfig.getCompatibilityMode())
             defaultBlockState = Fluidlogged.isVanillaWaterloggable(instance) && value.hasProperty(BlockStateProperties.WATERLOGGED)
-                    ? value.setValue(Fluidlogged.PROPERTY_FLUID, 0)
+                    ? value.setValue(Fluidlogged.FLUIDLOGGED, "")
                     : value;
         else
-        defaultBlockState = value.hasProperty(BlockStateProperties.WATERLOGGED) ? value.setValue(Fluidlogged.PROPERTY_FLUID, 0) : value;
+        defaultBlockState = value.hasProperty(BlockStateProperties.WATERLOGGED) ? value.setValue(Fluidlogged.FLUIDLOGGED, "") : value;
     }
 }

@@ -3,6 +3,7 @@ package de.leximon.fluidlogged.mixin;
 import com.google.common.collect.ImmutableMap;
 import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
+import de.leximon.fluidlogged.core.StringProperty;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -18,8 +19,8 @@ public class WallBlockMixin
     {
         if(FluidloggedConfig.getCompatibilityMode() && Fluidlogged.isVanillaWaterloggable(this))
         {
-            for (int i = 0; i < FluidloggedConfig.getFluidList().size() + 1; i++)
-                instance.put(((BlockState) key).setValue(Fluidlogged.PROPERTY_FLUID, i), (VoxelShape) value);
+            for(String id : FluidloggedConfig.getFluidList())
+                instance.put(((BlockState) key).setValue(Fluidlogged.FLUIDLOGGED, id), (VoxelShape) value);
             return instance;
         }
         return instance.put((BlockState) key, (VoxelShape) value);

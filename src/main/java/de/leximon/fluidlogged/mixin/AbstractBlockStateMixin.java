@@ -39,7 +39,7 @@ public abstract class AbstractBlockStateMixin
     private <T> int injectLuminance(ToIntFunction<T> instance, T t) {
         if(t instanceof BlockState state
                 && ((StateAccessor) state).fluidlogged_getEntries() != null
-                && state.hasProperty(Fluidlogged.PROPERTY_FLUID)) {
+                && state.hasProperty(Fluidlogged.FLUIDLOGGED)) {
             Fluid fluid = Fluidlogged.getFluid(state);
             LiquidBlock block = Fluidlogged.fluidBlocks.get(fluid);
             if(block != null) {
@@ -60,7 +60,8 @@ public abstract class AbstractBlockStateMixin
         BlockState state = this.asState();
         if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED))
             return block.getFluidState(state);
-        if (state.hasProperty(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID)) {
+        if (state.hasProperty(Fluidlogged.FLUIDLOGGED))
+        {
             Fluid f = Fluidlogged.getFluid(state);
             if (f != null)
                 return f.defaultFluidState();
@@ -82,8 +83,8 @@ public abstract class AbstractBlockStateMixin
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getCollisionShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     private VoxelShape injectCollisionShape(Block instance, BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return instance.getCollisionShape(
-                state.hasProperty(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID)
-                        ? state.setValue(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID, 0)
+                state.hasProperty(Fluidlogged.FLUIDLOGGED)
+                        ? state.setValue(Fluidlogged.FLUIDLOGGED, "")
                         : state,
                 world, pos, context
         );
@@ -93,8 +94,8 @@ public abstract class AbstractBlockStateMixin
     @Redirect(method = "getShape(" + "Lnet/minecraft/world/level/BlockGetter;" + "Lnet/minecraft/core/BlockPos;" + "Lnet/minecraft/world/phys/shapes/CollisionContext;)" + "Lnet/minecraft/world/phys/shapes/VoxelShape;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;" + "getShape(" + "Lnet/minecraft/world/level/block/state/BlockState;" + "Lnet/minecraft/world/level/BlockGetter;" + "Lnet/minecraft/core/BlockPos;" + "Lnet/minecraft/world/phys/shapes/CollisionContext;)" + "Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     private VoxelShape injectOutlineShape(Block instance, BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return instance.getShape(
-                state.hasProperty(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID)
-                        ? state.setValue(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID, 0)
+                state.hasProperty(Fluidlogged.FLUIDLOGGED)
+                        ? state.setValue(Fluidlogged.FLUIDLOGGED, "")
                         : state,
                 world, pos, context
         );
@@ -104,8 +105,8 @@ public abstract class AbstractBlockStateMixin
     private VoxelShape injected(Block instance, BlockState state, BlockGetter world, BlockPos pos) {
         CollisionContext context = CollisionContext.empty();
         return instance.getCollisionShape(
-                state.hasProperty(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID)
-                        ? state.setValue(/*FluidLoggedProperties.FLUIDLOGGED*/ Fluidlogged.PROPERTY_FLUID, 0)
+                state.hasProperty(Fluidlogged.FLUIDLOGGED)
+                        ? state.setValue(Fluidlogged.FLUIDLOGGED, "")
                         : state,
                 world, pos, context
         );

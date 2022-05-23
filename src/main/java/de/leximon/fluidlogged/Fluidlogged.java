@@ -1,7 +1,7 @@
 package de.leximon.fluidlogged;
 
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import de.leximon.fluidlogged.core.FluidProperty;
+import de.leximon.fluidlogged.core.StringProperty;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,7 +25,7 @@ public class Fluidlogged
     public static final Logger LOGGER = LogManager.getLogger();
 
     public static final HashSet<Class<? extends Block>> VANILLA_WATERLOGGABLES = new HashSet<>();
-    public static final FluidProperty PROPERTY_FLUID = FluidProperty.Create("fluidlogged");
+    public static final StringProperty FLUIDLOGGED = StringProperty.create("fluidlogged");
 
     public static final HashMap<Fluid, LiquidBlock> fluidBlocks = new HashMap<>();
     public Fluidlogged()
@@ -36,17 +36,18 @@ public class Fluidlogged
     /**
      * @return the fluid of the block state by its property
      */
-    public static Fluid getFluid(BlockState state) {
+    public static Fluid getFluid(BlockState state)
+    {
         if(state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED))
             return Fluids.WATER;
-        if (!state.hasProperty(Fluidlogged.PROPERTY_FLUID))
+        if (!state.hasProperty(Fluidlogged.FLUIDLOGGED))
             return null;
-        int index = state.getValue(Fluidlogged.PROPERTY_FLUID) - 1;
-        if(index < 0)
+        String value = state.getValue(Fluidlogged.FLUIDLOGGED);
+        if(value.equals(""))
             return Fluids.EMPTY;
-        if (index >= FluidloggedConfig.getFluidList().size())
+        if (!FluidloggedConfig.getFluidList().contains(value))
             return null;
-        ResourceLocation id = ResourceLocation.tryParse(FluidloggedConfig.getFluidList().get(index));
+        ResourceLocation id = ResourceLocation.tryParse(value);
         if (id == null)
             return null;
         return ForgeRegistries.FLUIDS.getValue(id);
@@ -64,6 +65,13 @@ public class Fluidlogged
 
     public static boolean isVanillaWaterloggable(Object block) {
         return VANILLA_WATERLOGGABLES.contains(block.getClass());
+    }
+
+    public static String getFluidString(Fluid fluid)
+    {
+        if(fluid.equals(Fluids.EMPTY))
+            return "";
+        return fluid.getRegistryName().toString();
     }
 
     static

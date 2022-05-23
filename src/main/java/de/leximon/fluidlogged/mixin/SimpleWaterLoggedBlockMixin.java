@@ -31,10 +31,14 @@ public interface SimpleWaterLoggedBlockMixin
     @Overwrite
     default boolean canPlaceLiquid(BlockGetter world, BlockPos blockPos, BlockState blockState, Fluid fluid)
     {
-        if(blockState.hasProperty(Fluidlogged.PROPERTY_FLUID))
-            return blockState.getValue(Fluidlogged.PROPERTY_FLUID).equals(0)
-                && !blockState.getValue(BlockStateProperties.WATERLOGGED)
-                && (fluid.equals(Fluids.WATER) || FluidloggedConfig.getFluidList().contains(fluid.getRegistryName().toString()));
+        if(blockState.hasProperty(Fluidlogged.FLUIDLOGGED))
+        {
+            return (blockState.getValue(Fluidlogged.FLUIDLOGGED).equals("")
+                    && !blockState.getValue(BlockStateProperties.WATERLOGGED)
+                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.getFluidList().contains(fluid.getRegistryName().toString())));
+        }
+
+
         else
             return !blockState.getValue(BlockStateProperties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }
@@ -47,7 +51,45 @@ public interface SimpleWaterLoggedBlockMixin
     default boolean placeLiquid(LevelAccessor world, BlockPos pos, BlockState state, FluidState fluidState)
     {
         Fluid fluid = fluidState.getType();
+        if(state.hasProperty(Fluidlogged.FLUIDLOGGED) && !state.getValue(BlockStateProperties.WATERLOGGED) && state.getValue(Fluidlogged.FLUIDLOGGED).equals(""))
+        {
+            if (!world.isClientSide())
+            {
+                BlockState newState = state;
+                String value = "";
+
+                if (fluid.equals(Fluids.WATER))
+                {
+                    newState = newState.setValue(BlockStateProperties.WATERLOGGED, true);
+                }
+                else
+                {
+                    value = Fluidlogged.getFluidString(fluid);
+                    if (value.equals(""))
+                    {
+                        Fluidlogged.LOGGER.warn("Tried to fill a block with a not loggable fluid!");
+                        return false;
+                    }
+                }
+                world.setBlock(pos, newState.setValue(Fluidlogged.FLUIDLOGGED, value), Block.UPDATE_ALL);
+                world.scheduleTick(pos, fluid, fluid.getTickDelay(world));
+            }
+            return true;
+        }
+        else if(!state.getValue(BlockStateProperties.WATERLOGGED))
+        {
+            if (!world.isClientSide())
+            {
+                world.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, true), Block.UPDATE_ALL);
+                world.scheduleTick(pos, fluid, fluid.getTickDelay(world));
+            }
+            return true;
+        }
+        return false;
+
+        /*Fluid fluid = fluidState.getType();
         if(state.hasProperty(Fluidlogged.PROPERTY_FLUID) && !state.getValue(BlockStateProperties.WATERLOGGED) && state.getValue(Fluidlogged.PROPERTY_FLUID) == 0) {
+
             if (!world.isClientSide()) {
                 BlockState newState = state;
                 if (fluid.equals(Fluids.WATER))
@@ -69,7 +111,7 @@ public interface SimpleWaterLoggedBlockMixin
             return true;
         } else {
             return false;
-        }
+        }*/
     }
     /**
      * @author Leximon (fluidlogged)
@@ -77,7 +119,29 @@ public interface SimpleWaterLoggedBlockMixin
      */
     @Overwrite
     default ItemStack pickupBlock(LevelAccessor world, BlockPos pos, BlockState state) {
-        if(state.getValue(BlockStateProperties.WATERLOGGED) || (state.hasProperty(Fluidlogged.PROPERTY_FLUID) && state.getValue(Fluidlogged.PROPERTY_FLUID) > 0)) {
+        if(state.getValue(BlockStateProperties.WATERLOGGED) || (state.hasProperty(Fluidlogged.FLUIDLOGGED) && !state.getValue(Fluidlogged.FLUIDLOGGED).equals("")))
+        {
+            Fluid fluid = Fluidlogged.getFluid(state);
+            if(state.getValue(BlockStateProperties.WATERLOGGED))
+            {
+                fluid = Fluids.WATER;
+            }
+            if(state.hasProperty(Fluidlogged.FLUIDLOGGED))
+            {
+                state = state.setValue(Fluidlogged.FLUIDLOGGED, "");
+            }
+            world.setBlock(pos, state.setValue(BlockStateProperties.WATERLOGGED, false), Block.UPDATE_ALL);
+            if (!state.canSurvive(world, pos))
+            {
+                world.destroyBlock(pos, true);
+            }
+            if (fluid == null)
+                return ItemStack.EMPTY;
+            return new ItemStack(fluid.getBucket());
+        }
+        return ItemStack.EMPTY;
+
+        /*if(state.getValue(BlockStateProperties.WATERLOGGED) || (state.hasProperty(Fluidlogged.PROPERTY_FLUID) && state.getValue(Fluidlogged.PROPERTY_FLUID) > 0)) {
             Fluid fluid = Fluidlogged.getFluid(state);
             if(state.getValue(BlockStateProperties.WATERLOGGED))
                 fluid = Fluids.WATER;
@@ -91,7 +155,7 @@ public interface SimpleWaterLoggedBlockMixin
                 return ItemStack.EMPTY;
             return new ItemStack(fluid.getBucket());
         }
-        return ItemStack.EMPTY;
+        return ItemStack.EMPTY;*/
     }
 
 
@@ -101,6 +165,6 @@ public interface SimpleWaterLoggedBlockMixin
      */
     @Overwrite
     default Optional<SoundEvent> getPickupSound() {
-        return Fluids.EMPTY.getPickupSound();
+        return Optional.empty();
     }
 }

@@ -29,7 +29,7 @@ public abstract class StateDefinitionBuilderMixin <O, S extends StateHolder<O, S
             {
                 if (property.getName().equals("waterlogged"))
                 {
-                    add(Fluidlogged.PROPERTY_FLUID);
+                    add(Fluidlogged.FLUIDLOGGED);
                     break;
                 }
             }
