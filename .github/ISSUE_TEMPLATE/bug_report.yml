@@ -1,6 +1,5 @@
 name: "Bug Report"
 title: "[Bug]: "
-about: "Report a bug/crash to fix this issue"
 labels: [bug]
 assignees: []
 body:
