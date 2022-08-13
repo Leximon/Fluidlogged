@@ -1,7 +1,9 @@
 name: "Bug Report"
 title: "[Bug]: "
-labels: [bug]
-assignees: []
+about: "Report a bug/crash to fix this issue"
+labels: bug
+assignees:
+  - Leximon
 body:
   - type: markdown
     attributes:
