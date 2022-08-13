@@ -1,6 +1,7 @@
 name: Bug Report
 title: "[Bug]: "
-labels: bug
+labels: 
+  - bug
 assignees:
   - Leximon
 body:
