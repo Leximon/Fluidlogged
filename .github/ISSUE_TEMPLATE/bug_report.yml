@@ -1,0 +1,19 @@
+name: Bug Report
+title: "[Bug]: "
+labels: 
+  - bug
+assignees:
+  - Leximon
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: dropdown
+    id: mc_version
+    attributes:
+      label: Minecraft version
+      description:  "On what Minecraft version did you experience this issue?"
+      multiple: false
+      options:
+        - 1.18.2
