@@ -22,8 +22,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 @Mixin(value = BlockBehaviour.BlockStateBase.class, priority = 1010)
@@ -74,33 +77,33 @@ public abstract class BlockStateBaseMixin {
 
     @Redirect(method = "getCollisionShape(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getCollisionShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     private VoxelShape injectCollisionShape(Block instance, BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return instance.getCollisionShape(
+        return Objects.requireNonNull(instance.getCollisionShape(
                 blockState.hasProperty(FluidloggedMod.PROPERTY_FLUID)
                         ? blockState.setValue(FluidloggedMod.PROPERTY_FLUID, 0)
                         : blockState,
                 blockGetter, blockPos, collisionContext
-        );
+        ), "bRuh");
     }
 
     @Redirect(method = "getVisualShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getVisualShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     private VoxelShape injectOutlineShape(Block instance, BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return instance.getShape(
+        return Objects.requireNonNull(instance.getShape(
                 blockState.hasProperty(FluidloggedMod.PROPERTY_FLUID)
                         ? blockState.setValue(FluidloggedMod.PROPERTY_FLUID, 0)
                         : blockState,
                 blockGetter, blockPos, collisionContext
-        );
+        ), "bRuh");
     }
 
     @Redirect(method = "getInteractionShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getInteractionShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
     private VoxelShape injected(Block instance, BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
         CollisionContext context = CollisionContext.empty();
-        return instance.getCollisionShape(
+        return Objects.requireNonNull(instance.getCollisionShape(
                 blockState.hasProperty(FluidloggedMod.PROPERTY_FLUID)
                         ? blockState.setValue(FluidloggedMod.PROPERTY_FLUID, 0)
                         : blockState,
                 blockGetter, blockPos, context
-        );
+        ), "bRuh");
     }
 
     @Shadow public abstract Block getBlock();

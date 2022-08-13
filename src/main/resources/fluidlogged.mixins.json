@@ -4,17 +4,18 @@
   "package": "de.leximon.fluidlogged.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockBehaviourMixin",
     "BlockItemMixin",
     "BlockMixin",
+    "BlockStateBaseCacheMixin",
     "BlockStateBaseMixin",
     "BucketItemMixin",
-    "BlockStateBaseCacheMixin",
     "LiquidBlockMixin",
+    "SimpleWaterloggedBlockMixin",
     "StateDefinitionBuilderMixin",
     "WallBlockMixin",
-    "SimpleWaterloggedBlockMixin",
-    "accessor.BlockBehaviourPropertiesAccessor",
     "accessor.BlockBehaviourAccessor",
+    "accessor.BlockBehaviourPropertiesAccessor",
     "accessor.StateHolderAccessor"
   ],
   "client": [
