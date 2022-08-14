@@ -33,9 +33,9 @@ If you don't know the ids of the those fluids, you can enable "printFluidIds". T
 
 No, but let me know if there is one. Keep in mind that changing the config afterward or removing the mod will cause fluids inside blocks may disappear or get mixed up with other ones.
 
-#### Will there be a forge version?
+#### Forge?
 
-Nope.
+[click here.](https://www.curseforge.com/minecraft/mc-mods/fluidlogged-forge)
 
 #### Can I use it for my modpack?
 
