@@ -8,7 +8,6 @@ import net.minecraft.block.Waterloggable;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
@@ -34,8 +33,7 @@ public interface WaterloggableMixin {
             return state.get(FluidloggedMod.PROPERTY_FLUID) == 0
                     && !state.get(Properties.WATERLOGGED)
                     && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluids.contains(Registry.FLUID.getId(fluid).toString()));
-        else
-            return !state.get(Properties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
+        else return !state.get(Properties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }
 
     /**

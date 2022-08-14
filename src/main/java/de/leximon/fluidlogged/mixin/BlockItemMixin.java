@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class BlockItemMixin {
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
-    private void fl_injectFluidPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
+    private void injectCustomFluidPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
         BlockState placementState = this.getBlock().getPlacementState(ctx);
         if (placementState == null) {
             cir.setReturnValue(null);

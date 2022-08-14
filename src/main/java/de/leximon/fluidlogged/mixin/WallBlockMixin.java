@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class WallBlockMixin {
 
     @Redirect(method = "getShapeMap", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap$Builder;put(Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap$Builder;"))
-    private <S, V> ImmutableMap.Builder<BlockState, VoxelShape> injected(ImmutableMap.Builder<BlockState, VoxelShape> instance, S key, V value) {
-
+    private <S, V> ImmutableMap.Builder<BlockState, VoxelShape> injectCustomFluidShapes(ImmutableMap.Builder<BlockState, VoxelShape> instance, S key, V value) {
         if(FluidloggedConfig.compatibilityMode && FluidloggedMod.isVanillaWaterloggable(this)) {
             for (int i = 0; i < FluidloggedConfig.fluids.size() + 1; i++)
                 instance.put(((BlockState) key).with(FluidloggedMod.PROPERTY_FLUID, i), (VoxelShape) value);

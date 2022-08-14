@@ -2,12 +2,10 @@ package de.leximon.fluidlogged;
 
 import de.leximon.fluidlogged.core.FluidProperty;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import eu.midnightdust.lib.config.MidnightConfig;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.LavaFluid;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -55,8 +53,7 @@ public class FluidloggedMod implements ModInitializer {
 	public static int getFluidIndex(Fluid fluid) {
 		if(fluid.equals(Fluids.EMPTY))
 			return 0;
-		Identifier id = Registry.FLUID.getId(fluid);
-		return FluidloggedConfig.fluids.indexOf(id.toString()) + 1;
+		return FluidloggedConfig.fluids.indexOf(Registry.FLUID.getId(fluid).toString()) + 1;
 	}
 
 	public static boolean isVanillaWaterloggable(Object block) {

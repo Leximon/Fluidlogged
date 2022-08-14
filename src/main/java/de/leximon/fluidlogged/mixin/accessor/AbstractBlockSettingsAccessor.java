@@ -11,6 +11,6 @@ import java.util.function.ToIntFunction;
 public interface AbstractBlockSettingsAccessor {
 
     @Accessor("luminance")
-    ToIntFunction<BlockState> fluidlogged_getLuminance();
+    ToIntFunction<BlockState> fl_getLuminance();
 
 }

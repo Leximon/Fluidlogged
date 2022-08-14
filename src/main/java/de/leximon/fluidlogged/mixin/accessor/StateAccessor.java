@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface StateAccessor {
 
     @Accessor("entries")
-    ImmutableMap<Property<?>, Comparable<?>> fluidlogged_getEntries();
+    ImmutableMap<Property<?>, Comparable<?>> fl_getEntries();
 
 }

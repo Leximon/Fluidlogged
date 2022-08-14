@@ -8,6 +8,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AbstractBlockAccessor {
 
     @Accessor("settings")
-    AbstractBlock.Settings fluidlogged_getSettings();
+    AbstractBlock.Settings fl_getSettings();
 
 }

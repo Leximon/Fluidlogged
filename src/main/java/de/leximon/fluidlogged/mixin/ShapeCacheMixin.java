@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class ShapeCacheMixin {
 
     @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getCollisionShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;"))
-    private VoxelShape injected(Block instance, BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    private VoxelShape injectCustomFluidCollisionShape(Block instance, BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return instance.getCollisionShape(
                 state.contains(FluidloggedMod.PROPERTY_FLUID)
                         ? state.with(FluidloggedMod.PROPERTY_FLUID, 0)

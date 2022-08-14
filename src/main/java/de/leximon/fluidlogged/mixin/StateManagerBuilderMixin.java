@@ -2,7 +2,6 @@ package de.leximon.fluidlogged.mixin;
 
 import de.leximon.fluidlogged.FluidloggedMod;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import net.minecraft.block.Block;
 import net.minecraft.state.State;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Property;
@@ -15,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(StateManager.Builder.class)
 public abstract class StateManagerBuilderMixin<O, S extends State<O, S>> {
-
-    @Shadow public abstract StateManager.Builder<O, S> add(Property<?>... properties);
 
     @Shadow @Final private O owner;
 
@@ -31,4 +28,6 @@ public abstract class StateManagerBuilderMixin<O, S extends State<O, S>> {
             }
         }
     }
+
+    @Shadow public abstract StateManager.Builder<O, S> add(Property<?>... properties);
 }

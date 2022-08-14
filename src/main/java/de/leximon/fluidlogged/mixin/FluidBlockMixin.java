@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class FluidBlockMixin {
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;<init>(Lnet/minecraft/block/AbstractBlock$Settings;)V", shift = At.Shift.AFTER))
-    private void inject(FlowableFluid fluid, AbstractBlock.Settings settings, CallbackInfo ci) {
+    private void getFluidBlocks(FlowableFluid fluid, AbstractBlock.Settings settings, CallbackInfo ci) {
         FluidloggedMod.fluidBlocks.put(fluid, (FluidBlock) (Object) this);
     }
 

@@ -22,8 +22,7 @@ public class BlockMixin {
             defaultState = FluidloggedMod.isVanillaWaterloggable(instance) && value.contains(Properties.WATERLOGGED)
                     ? value.with(FluidloggedMod.PROPERTY_FLUID, 0)
                     : value;
-        else
-            defaultState = value.contains(Properties.WATERLOGGED) ? value.with(FluidloggedMod.PROPERTY_FLUID, 0) : value;
+        else defaultState = value.contains(Properties.WATERLOGGED) ? value.with(FluidloggedMod.PROPERTY_FLUID, 0) : value;
     }
 
 }

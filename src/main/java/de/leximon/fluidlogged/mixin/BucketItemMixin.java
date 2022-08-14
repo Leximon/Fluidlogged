@@ -29,7 +29,7 @@ public class BucketItemMixin {
 
     // allow any fluid to fluidlog a block
     @Redirect(method = "use", at = @At(value = "FIELD", target = "Lnet/minecraft/item/BucketItem;fluid:Lnet/minecraft/fluid/Fluid;", opcode = Opcodes.GETFIELD, ordinal = 2))
-    private Fluid injectUnblock(BucketItem instance) {
+    private Fluid unblock(BucketItem instance) {
         return Fluids.WATER;
     }
 
@@ -41,14 +41,14 @@ public class BucketItemMixin {
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/block/FluidFillable;tryFillWithFluid(Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/fluid/FluidState;)Z")
             )
     )
-    private Fluid injectedUnblock2(BucketItem instance) {
+    private Fluid unblock2(BucketItem instance) {
         return Fluids.WATER;
     }
 
 
     // play the right sound when draining a fluidlogged block
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/FluidDrainable;getBucketFillSound()Ljava/util/Optional;", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private void injectSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, ItemStack itemStack, BlockHitResult blockHitResult, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState, FluidDrainable fluidDrainable, ItemStack itemStack2) {
+    private void playRightSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, ItemStack itemStack, BlockHitResult blockHitResult, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState, FluidDrainable fluidDrainable, ItemStack itemStack2) {
         Fluid fluid = FluidloggedMod.getFluid(blockState);
         if(fluid != null) {
             fluid.getBucketFillSound().ifPresentOrElse(
