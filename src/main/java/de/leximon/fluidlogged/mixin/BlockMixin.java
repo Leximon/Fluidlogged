@@ -2,9 +2,9 @@ package de.leximon.fluidlogged.mixin;
 
 import de.leximon.fluidlogged.FluidloggedMod;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.state.property.Properties;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,16 +14,16 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Block.class)
 public class BlockMixin {
 
-    @Shadow private BlockState defaultBlockState;
+    @Shadow private BlockState defaultState;
 
-    @Redirect(method = "registerDefaultState", at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Block;defaultBlockState:Lnet/minecraft/world/level/block/state/BlockState;", opcode = Opcodes.PUTFIELD))
-    private void fl_injectDefaultState(Block instance, BlockState value) {
+    @Redirect(method = "setDefaultState", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Block;defaultState:Lnet/minecraft/block/BlockState;", opcode = Opcodes.PUTFIELD))
+    private void injectDefaultState(Block instance, BlockState value) {
         if(FluidloggedConfig.compatibilityMode)
-            defaultBlockState = FluidloggedMod.isVanillaWaterloggable(instance) && value.hasProperty(BlockStateProperties.WATERLOGGED)
-                    ? value.setValue(FluidloggedMod.PROPERTY_FLUID, 0)
+            defaultState = FluidloggedMod.isVanillaWaterloggable(instance) && value.contains(Properties.WATERLOGGED)
+                    ? value.with(FluidloggedMod.PROPERTY_FLUID, 0)
                     : value;
         else
-            defaultBlockState = value.hasProperty(BlockStateProperties.WATERLOGGED) ? value.setValue(FluidloggedMod.PROPERTY_FLUID, 0) : value;
+            defaultState = value.contains(Properties.WATERLOGGED) ? value.with(FluidloggedMod.PROPERTY_FLUID, 0) : value;
     }
 
 }

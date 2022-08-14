@@ -1,8 +1,8 @@
 package de.leximon.fluidlogged.core;
 
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.state.property.IntProperty;
 
-public class FluidProperty extends IntegerProperty {
+public class FluidProperty extends IntProperty {
 
     protected FluidProperty(String name) {
         super(name, 0, FluidloggedConfig.fluids.size());

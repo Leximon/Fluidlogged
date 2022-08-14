@@ -3,8 +3,8 @@ package de.leximon.fluidlogged;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import static de.leximon.fluidlogged.FluidloggedMod.LOGGER;
 
@@ -14,8 +14,8 @@ public class FluidloggedModClient implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(c -> {
             if (FluidloggedConfig.printFluidIds) {
                 LOGGER.info("----- FLUID IDS -----");
-                for (ResourceLocation key : Registry.FLUID.keySet())
-                    LOGGER.info(key.toString());
+                for (Identifier id : Registry.FLUID.getIds())
+                    LOGGER.info(id.toString());
                 LOGGER.info("---------------------");
             }
         });
