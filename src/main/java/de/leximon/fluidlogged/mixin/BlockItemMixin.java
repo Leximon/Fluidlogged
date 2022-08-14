@@ -1,10 +1,11 @@
 package de.leximon.fluidlogged.mixin;
 
 import de.leximon.fluidlogged.FluidloggedMod;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemPlacementContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
