@@ -7,24 +7,34 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockItem.class)
-public class BlockItemMixin {
+public abstract class BlockItemMixin {
 
-    @Redirect(method = "getPlacementState", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getPlacementState(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/block/BlockState;"))
-    private BlockState injectFluidPlacementState(Block instance, ItemPlacementContext ctx) {
-        BlockState placementState = instance.getPlacementState(ctx);
-        if(placementState == null)
-            return null;
-        if(!placementState.contains(FluidloggedMod.PROPERTY_FLUID))
-            return placementState;
+    @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)
+    private void fl_injectFluidPlacementState(ItemPlacementContext ctx, CallbackInfoReturnable<BlockState> cir) {
+        BlockState placementState = this.getBlock().getPlacementState(ctx);
+        if (placementState == null) {
+            cir.setReturnValue(null);
+            return;
+        }
+        if (!placementState.contains(FluidloggedMod.PROPERTY_FLUID)) {
+            cir.setReturnValue(placementState);
+            return;
+        }
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         int index = FluidloggedMod.getFluidIndex(fluidState.getFluid());
-        if(index != -1)
-            return placementState.with(FluidloggedMod.PROPERTY_FLUID, index);
-        return placementState;
+        if(index != -1) {
+            cir.setReturnValue(placementState.with(FluidloggedMod.PROPERTY_FLUID, index));
+            return;
+        }
+        cir.setReturnValue(placementState);
     }
+
+    @Shadow public abstract Block getBlock();
 
 }
