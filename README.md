@@ -13,6 +13,7 @@ This mod can cause issues with other mods. If you experience any crashes or othe
 <details><summary>Known incompatibilities</summary>
 
 - Origins
+- Very Many Players (vmp)
 
 </details>
 <details><summary>Adding fluids to the config</summary>
