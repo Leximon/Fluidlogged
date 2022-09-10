@@ -94,6 +94,12 @@ public class ConfigScreen extends Screen {
         client.setScreen(parent);
     }
 
+    @Override
+    public void renderBackground(MatrixStack matrices) {
+        this.renderBackgroundTexture(0);
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);

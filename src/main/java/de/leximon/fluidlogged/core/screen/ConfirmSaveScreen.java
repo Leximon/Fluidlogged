@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
@@ -21,6 +22,11 @@ public class ConfirmSaveScreen extends ConfirmScreen {
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 50 - 105, y, 100, 20, this.yesText, button -> this.callback.accept(true)));
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, y, 100, 20, this.noText, button -> this.callback.accept(false)));
         this.addDrawableChild(new ButtonWidget(this.width / 2 - 50 + 105, y, 100, 20, ScreenTexts.CANCEL, button -> close()));
+    }
+
+    @Override
+    public void renderBackground(MatrixStack matrices) {
+        this.renderBackgroundTexture(0);
     }
 
     @Override
