@@ -1,9 +1,17 @@
 {
-  "fluidlogged.midnightconfig.title": "Fluidlogged",
-  "fluidlogged.midnightconfig.restart": "§c§lAll of the options below require a restart",
-  "fluidlogged.midnightconfig.printFluidIds": "Print Fluid IDs",
-  "fluidlogged.midnightconfig.printFluidIds.tooltip": "Prints all fluid ids in the output log. Useful if you don't know the fluid id of a specific mod.",
-  "fluidlogged.midnightconfig.fluids": "Fluids",
-  "fluidlogged.midnightconfig.compatibilityMode": "Compatibility Mode",
-  "fluidlogged.midnightconfig.compatibilityMode.tooltip": "Some mods may cause incompatibilities with this mod.\nEnabling this option will fix most issues \nand will only allow vanilla blocks to be waterloggable with any fluid."
+  "fluidlogged.config.title": "Fluidlogged Config",
+  "fluidlogged.config.compatibilityMode": "Compatibility Mode",
+  "fluidlogged.config.compatibilityMode.tooltip": "Some mods may cause incompatibilities with this mod. Enabling this option will fix most issues and will only allow vanilla blocks to be fluidloggable.",
+  "fluidlogged.config.fluids": "Fluids",
+  "fluidlogged.config.save": "Save",
+  "fluidlogged.config.cancel": "Cancel",
+  "fluidlogged.config.warning": "§nWARNING:§r Changes in this config may mix up fluidlogged blocks in your previous worlds. Make sure to backup your worlds before entering one!",
+  "fluidlogged.confirm_save.title": "Unsaved Changes",
+  "fluidlogged.confirm_save.message": "Do you want to save these changes?",
+  "fluidlogged.restart_required.later": "Not Now",
+  "fluidlogged.restart_required.quit": "Quit Game",
+  "fluidlogged.fluid_config.title": "Fluids",
+  "fluidlogged.fluid_config.warning": "§nWARNING:§r Changes in this config may mix up fluidlogged blocks in your previous worlds. Make sure to backup your worlds before entering one!",
+  "fluidlogged.restart_required.title": "Game Restart Required",
+  "fluidlogged.restart_required.message": "Your game must be restarted to apply these changes!"
 }

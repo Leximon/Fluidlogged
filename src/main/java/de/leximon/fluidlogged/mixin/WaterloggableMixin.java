@@ -32,7 +32,7 @@ public interface WaterloggableMixin {
         if(state.contains(FluidloggedMod.PROPERTY_FLUID))
             return state.get(FluidloggedMod.PROPERTY_FLUID) == 0
                     && !state.get(Properties.WATERLOGGED)
-                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluids.contains(Registry.FLUID.getId(fluid).toString()));
+                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluidsLocked.contains(Registry.FLUID.getId(fluid)));
         else return !state.get(Properties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }
 

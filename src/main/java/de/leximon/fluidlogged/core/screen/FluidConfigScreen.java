@@ -1,0 +1,56 @@
+package de.leximon.fluidlogged.core.screen;
+
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+
+public class FluidConfigScreen extends Screen {
+
+    protected final ConfigScreen parent;
+
+    private FluidListWidget fluidList;
+
+    protected FluidConfigScreen(ConfigScreen parent) {
+        super(Text.translatable("fluidlogged.fluid_config.title"));
+        this.parent = parent;
+    }
+
+    @Override
+    protected void init() {
+        if(fluidList == null)
+            fluidList = new FluidListWidget(this, client);
+        else
+            fluidList.updateSize();
+        addSelectableChild(fluidList);
+        addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height - 29, 150, 20, ScreenTexts.DONE, button -> close()));
+    }
+
+    @Override
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
+        this.fluidList.render(matrices, mouseX, mouseY, delta);
+        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 12, 16777215);
+
+        super.render(matrices, mouseX, mouseY, delta);
+    }
+
+
+    @Override
+    public void close() {
+        for (FluidListWidget.Entry entry : fluidList.children()) {
+            Identifier id = entry.getId();
+            if(entry.isEnabled()) {
+                if(!parent.fluids.contains(id)) {
+                    parent.fluids.add(id);
+                }
+                continue;
+            }
+            if(parent.fluids.size() > 1)
+                parent.fluids.remove(id);
+        }
+        client.setScreen(parent);
+    }
+}

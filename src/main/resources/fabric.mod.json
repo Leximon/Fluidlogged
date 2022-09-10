@@ -21,9 +21,6 @@
     "main": [
       "de.leximon.fluidlogged.FluidloggedMod"
     ],
-    "client": [
-      "de.leximon.fluidlogged.FluidloggedModClient"
-    ],
     "modmenu": [
       "de.leximon.fluidlogged.FluidloggedModMenu"
     ]
@@ -36,8 +33,7 @@
     "fabricloader": ">=0.13.3",
     "fabric": "*",
     "minecraft": "~1.19",
-    "java": ">=17",
-    "midnightlib": ">=0.4.0"
+    "java": ">=17"
   },
   "suggests": {
   }

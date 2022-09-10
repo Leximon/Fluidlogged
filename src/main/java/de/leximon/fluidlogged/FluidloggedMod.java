@@ -9,14 +9,11 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 public class FluidloggedMod implements ModInitializer {
 
@@ -52,9 +49,9 @@ public class FluidloggedMod implements ModInitializer {
 		int index = state.get(FluidloggedMod.PROPERTY_FLUID) - 1;
 		if(index < 0)
 			return Fluids.EMPTY;
-		if (index >= FluidloggedConfig.fluids.size())
+		if (index >= FluidloggedConfig.fluidsLocked.size())
 			return null;
-		Identifier id = Identifier.tryParse(FluidloggedConfig.fluids.get(index));
+		Identifier id = FluidloggedConfig.fluidsLocked.get(index);
 		if (id == null)
 			return null;
 		return Registry.FLUID.get(id);
@@ -66,7 +63,7 @@ public class FluidloggedMod implements ModInitializer {
 	public static int getFluidIndex(Fluid fluid) {
 		if(fluid.equals(Fluids.EMPTY))
 			return 0;
-		return FluidloggedConfig.fluids.indexOf(Registry.FLUID.getId(fluid).toString()) + 1;
+		return FluidloggedConfig.fluidsLocked.indexOf(Registry.FLUID.getId(fluid)) + 1;
 	}
 
 	public static boolean isVanillaWaterloggable(Object block) {
