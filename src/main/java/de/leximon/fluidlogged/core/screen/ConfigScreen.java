@@ -27,12 +27,14 @@ public class ConfigScreen extends Screen {
 
     protected boolean compatibilityMode;
     protected List<Identifier> fluids;
+    protected List<Identifier> disabledEnforcedFluids;
 
     public ConfigScreen(Screen parent) {
         super(Text.translatable("fluidlogged.config.title"));
         this.parent = parent;
         this.compatibilityMode = FluidloggedConfig.compatibilityMode;
         this.fluids = new ArrayList<>(FluidloggedConfig.fluids);
+        this.disabledEnforcedFluids = new ArrayList<>(FluidloggedConfig.disabledEnforcedFluids);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class ConfigScreen extends Screen {
         int startX = this.width / 2;
         int startY = this.height / 4 + 5;
         int space = 24;
-        warningText = textRenderer.wrapLines(Text.translatable("fluidlogged.fluid_config.warning"), (int) (width * 0.8));
+        warningText = textRenderer.wrapLines(Text.translatable("fluidlogged.config.warning"), (int) (width * 0.8));
 
         addDrawableChild(new ButtonWidget(
                 startX - 100, startY,
@@ -114,6 +116,8 @@ public class ConfigScreen extends Screen {
         FluidloggedConfig.compatibilityMode = this.compatibilityMode;
         FluidloggedConfig.fluids.clear();
         FluidloggedConfig.fluids.addAll(this.fluids);
+        FluidloggedConfig.disabledEnforcedFluids.clear();
+        FluidloggedConfig.disabledEnforcedFluids.addAll(this.disabledEnforcedFluids);
         FluidloggedConfig.saveConfig();
 
         if(changed)
@@ -121,7 +125,9 @@ public class ConfigScreen extends Screen {
     }
 
     private boolean wereChangesMade() {
-        return this.compatibilityMode != FluidloggedConfig.compatibilityMode || !this.fluids.equals(FluidloggedConfig.fluids);
+        return this.compatibilityMode != FluidloggedConfig.compatibilityMode
+                || !this.fluids.equals(FluidloggedConfig.fluids)
+                || !this.disabledEnforcedFluids.equals(FluidloggedConfig.disabledEnforcedFluids);
     }
 
     private void updateSaveButton() {

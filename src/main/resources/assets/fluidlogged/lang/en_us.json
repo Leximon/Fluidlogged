@@ -11,7 +11,10 @@
   "fluidlogged.restart_required.later": "Not Now",
   "fluidlogged.restart_required.quit": "Quit Game",
   "fluidlogged.fluid_config.title": "Fluids",
-  "fluidlogged.fluid_config.warning": "§nWARNING:§r Changes in this config may mix up fluidlogged blocks in your previous worlds. Make sure to backup your worlds before entering one!",
+  "fluidlogged.fluid_config.category.enforced": "Enforced By Mods",
+  "fluidlogged.fluid_config.category.other": "Other",
+  "fluidlogged.fluid_config.error_toast.title": "Invalid Selection",
+  "fluidlogged.fluid_config.error_toast.description": "At least one fluid must be enabled!",
   "fluidlogged.restart_required.title": "Game Restart Required",
   "fluidlogged.restart_required.message": "Your game must be restarted to apply these changes!"
 }

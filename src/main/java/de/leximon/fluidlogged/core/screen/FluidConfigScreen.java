@@ -2,10 +2,10 @@ package de.leximon.fluidlogged.core.screen;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 public class FluidConfigScreen extends Screen {
 
@@ -40,16 +40,21 @@ public class FluidConfigScreen extends Screen {
 
     @Override
     public void close() {
-        for (FluidListWidget.Entry entry : fluidList.children()) {
-            Identifier id = entry.getId();
-            if(entry.isEnabled()) {
-                if(!parent.fluids.contains(id)) {
-                    parent.fluids.add(id);
-                }
-                continue;
-            }
-            if(parent.fluids.size() > 1)
-                parent.fluids.remove(id);
+        boolean anyEntryEnabled = false;
+        for (FluidListWidget.Entry entry : fluidList.children())
+            if (entry instanceof FluidListWidget.FluidEntry fluidEntry && fluidEntry.isEnabled())
+                anyEntryEnabled = true;
+
+        if(anyEntryEnabled) {
+            for (FluidListWidget.Entry entry : fluidList.children())
+                if (entry instanceof FluidListWidget.FluidEntry fluidEntry)
+                    fluidEntry.updateInList(parent.fluids, parent.disabledEnforcedFluids);
+        } else {
+            client.getToastManager().add(new SystemToast(
+                    SystemToast.Type.PERIODIC_NOTIFICATION,
+                    Text.translatable("fluidlogged.fluid_config.error_toast.title"),
+                    Text.translatable("fluidlogged.fluid_config.error_toast.description")
+            ));
         }
         client.setScreen(parent);
     }
