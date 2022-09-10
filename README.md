@@ -12,7 +12,7 @@ This mod can cause issues with other mods. If you experience any crashes or othe
 
 <details><summary>Known incompatibilities</summary>
 
-- Origins
+- Origins (<=1.6.2)
 - Very Many Players (vmp)
 
 </details>
