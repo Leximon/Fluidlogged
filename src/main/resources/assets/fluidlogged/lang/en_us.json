@@ -16,5 +16,8 @@
   "fluidlogged.fluid_config.error_toast.title": "Invalid Selection",
   "fluidlogged.fluid_config.error_toast.description": "At least one fluid must be enabled!",
   "fluidlogged.restart_required.title": "Game Restart Required",
-  "fluidlogged.restart_required.message": "Your game must be restarted to apply these changes!"
+  "fluidlogged.restart_required.message": "Your game must be restarted to apply these changes!",
+
+  "fluidlogged.fluidMismatchWarning.title": "Configuration Mismatch",
+  "fluidlogged.fluidMismatchWarning.description": "This worlds fluidlogged configuration doesn't match with your current mod configuration.\nLoading this world may cause fluidlogged blocks to mix up. Please make a backup before entering this world!"
 }

@@ -15,9 +15,12 @@
     "WaterloggableMixin",
     "accessor.AbstractBlockAccessor",
     "accessor.AbstractBlockSettingsAccessor",
-    "accessor.StateAccessor"
+    "accessor.StateAccessor",
+    "worldwarning.LevelInfoMixin",
+    "worldwarning.LevelPropertiesMixin"
   ],
   "client": [
+    "worldwarning.WorldListWidgetWorldEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

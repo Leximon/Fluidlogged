@@ -87,7 +87,7 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             int textWidth = client.textRenderer.getWidth(name);
-            client.textRenderer.draw(matrices, name, (parent.width - textWidth) / 2f, y + (entryHeight - 9) / 2f, 0xffffffff);
+            client.textRenderer.draw(matrices, name, (parent.width - textWidth) / 2f, y + (entryHeight - 9) / 2f + 4, 0xffffffff);
         }
     }
 
