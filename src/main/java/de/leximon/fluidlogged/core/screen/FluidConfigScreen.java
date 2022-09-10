@@ -29,6 +29,11 @@ public class FluidConfigScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(MatrixStack matrices) {
+        this.renderBackgroundTexture(0);
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         this.fluidList.render(matrices, mouseX, mouseY, delta);

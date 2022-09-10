@@ -3,6 +3,7 @@ package de.leximon.fluidlogged.core.screen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
@@ -22,6 +23,11 @@ public class RestartRequiredScreen extends ConfirmScreen {
                 new TranslatableText("fluidlogged.restart_required.quit"),
                 new TranslatableText("fluidlogged.restart_required.later")
         );
+    }
+
+    @Override
+    public void renderBackground(MatrixStack matrices) {
+        this.renderBackgroundTexture(0);
     }
 
     @Override
