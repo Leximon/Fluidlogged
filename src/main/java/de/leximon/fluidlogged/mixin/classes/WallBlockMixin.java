@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin;
+package de.leximon.fluidlogged.mixin.classes;
 
 import com.google.common.collect.ImmutableMap;
 import de.leximon.fluidlogged.Fluidlogged;

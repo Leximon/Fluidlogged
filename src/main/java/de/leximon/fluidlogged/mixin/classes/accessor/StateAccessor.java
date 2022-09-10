@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.accessor;
+package de.leximon.fluidlogged.mixin.classes.accessor;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.state.State;

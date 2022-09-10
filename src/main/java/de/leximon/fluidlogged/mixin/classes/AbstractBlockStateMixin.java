@@ -1,9 +1,9 @@
-package de.leximon.fluidlogged.mixin;
+package de.leximon.fluidlogged.mixin.classes;
 
 import de.leximon.fluidlogged.Fluidlogged;
-import de.leximon.fluidlogged.mixin.accessor.AbstractBlockAccessor;
-import de.leximon.fluidlogged.mixin.accessor.AbstractBlockSettingsAccessor;
-import de.leximon.fluidlogged.mixin.accessor.StateAccessor;
+import de.leximon.fluidlogged.mixin.classes.accessor.AbstractBlockAccessor;
+import de.leximon.fluidlogged.mixin.classes.accessor.AbstractBlockSettingsAccessor;
+import de.leximon.fluidlogged.mixin.classes.accessor.StateAccessor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin;
+package de.leximon.fluidlogged.mixin.classes;
 
 import de.leximon.fluidlogged.Fluidlogged;
 import net.minecraft.block.AbstractBlock;

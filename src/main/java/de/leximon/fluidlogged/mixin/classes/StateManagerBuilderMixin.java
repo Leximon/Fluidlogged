@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin;
+package de.leximon.fluidlogged.mixin.classes;
 
 import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
