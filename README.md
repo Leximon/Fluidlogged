@@ -2,7 +2,7 @@
 
 ## Fluidlogged
 
-**REQUIRES:** [Fabric Loader](https://fabricmc.net/), [Fabric API](https://modrinth.com/mod/fabric-api) and [MidnightLib](https://modrinth.com/mod/midnightlib)
+**REQUIRES:** [Fabric Loader](https://fabricmc.net/) and [Fabric API](https://modrinth.com/mod/fabric-api).
 
 Allows all waterloggable blocks to be lavalogged and also logged by any other fluids from other mods.
 
@@ -16,16 +16,9 @@ This mod can cause issues with other mods. If you experience any crashes or othe
 - Very Many Players (vmp)
 
 </details>
-<details><summary>Adding fluids to the config</summary>
-
-Due to the mod loading order, fluids from other mods have to be defined inside the config.
-In there you find a section named fluids. Simply add the fluid id to this list but consider using still fluids instead of flowing fluids.
-
-If you don't know the ids of the those fluids, you can enable "printFluidIds". This will print the ids into the output log after the game has finished loading.
-
-#### Example with the Create mod
-
-![example](https://i.imgur.com/vM6q0gf.png)
+<details><summary>Adding custom fluids to the config</summary>
+This can be achieved by opening the configuration menu using [ModMenu](https://www.curseforge.com/minecraft/mc-mods/modmenu).
+Alternatively, you can edit the `fluidlogged.json` file in the config folder.
 
 </details>
 <details><summary>FAQ</summary>
@@ -40,6 +33,26 @@ No, but let me know if there is one. Keep in mind that changing the config after
 
 #### Can I use it for my modpack?
 
-Sure.
+You can.
 
-</summary>
+</details>
+
+## Developers
+This mod provides a small API for mod developers to allow their fluids to be added by default to the fluidlogged list.<br>
+To use it, add the property `fluidlogged` inside the `custom` object of your `fabric.mod.json` file. This must target a json file.<br>
+Example:
+```json
+"custom": {
+    "fluidlogged": "fluidlogged.mod.json"
+}
+```
+The fluid ids belong into the `fluidloggeed.mod.json` file.
+Here is an example:
+```json
+{
+  "fluids": [
+    "create:honey",
+    "create:chocolate"
+  ]
+}
+```
