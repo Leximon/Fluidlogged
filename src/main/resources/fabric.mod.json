@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "de.leximon.fluidlogged.FluidloggedMod"
+      "de.leximon.fluidlogged.Fluidlogged"
     ],
     "modmenu": [
-      "de.leximon.fluidlogged.FluidloggedModMenu"
+      "de.leximon.fluidlogged.FluidloggedMenu"
     ]
   },
   "mixins": [

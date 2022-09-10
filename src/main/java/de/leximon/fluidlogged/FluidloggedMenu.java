@@ -4,7 +4,7 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import de.leximon.fluidlogged.core.screen.ConfigScreen;
 
-public class FluidloggedModMenu implements ModMenuApi {
+public class FluidloggedMenu implements ModMenuApi {
 
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return ConfigScreen::new;

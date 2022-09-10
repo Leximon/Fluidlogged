@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FluidloggedMod implements ModInitializer {
+public class Fluidlogged implements ModInitializer {
 
 	public static final String MOD_ID = "fluidlogged";
 	public static final Logger LOGGER = LoggerFactory.getLogger("fluidlogged");
@@ -44,9 +44,9 @@ public class FluidloggedMod implements ModInitializer {
 	public static Fluid getFluid(BlockState state) {
 		if(state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
 			return Fluids.WATER;
-		if (!state.contains(FluidloggedMod.PROPERTY_FLUID))
+		if (!state.contains(Fluidlogged.PROPERTY_FLUID))
 			return null;
-		int index = state.get(FluidloggedMod.PROPERTY_FLUID) - 1;
+		int index = state.get(Fluidlogged.PROPERTY_FLUID) - 1;
 		if(index < 0)
 			return Fluids.EMPTY;
 		if (index >= FluidloggedConfig.fluidsLocked.size())

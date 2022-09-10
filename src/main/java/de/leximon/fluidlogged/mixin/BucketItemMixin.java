@@ -1,6 +1,6 @@
 package de.leximon.fluidlogged.mixin;
 
-import de.leximon.fluidlogged.FluidloggedMod;
+import de.leximon.fluidlogged.Fluidlogged;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidDrainable;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,7 +49,7 @@ public class BucketItemMixin {
     // play the right sound when draining a fluidlogged block
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/FluidDrainable;getBucketFillSound()Ljava/util/Optional;", shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void playRightSound(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir, ItemStack itemStack, BlockHitResult blockHitResult, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState, FluidDrainable fluidDrainable, ItemStack itemStack2) {
-        Fluid fluid = FluidloggedMod.getFluid(blockState);
+        Fluid fluid = Fluidlogged.getFluid(blockState);
         if(fluid != null) {
             fluid.getBucketFillSound().ifPresentOrElse(
                     sound -> user.playSound(sound, 1.0F, 1.0F),

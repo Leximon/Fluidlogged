@@ -1,13 +1,12 @@
 package de.leximon.fluidlogged.core.screen;
 
 import com.google.common.collect.ImmutableList;
-import de.leximon.fluidlogged.FluidloggedMod;
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.option.ControlsListWidget;
 import net.minecraft.client.gui.widget.CheckboxWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -102,7 +101,7 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
         private final CheckboxWidget checkbox;
 
         private FluidEntry(Identifier id, Fluid fluid, boolean enforced, boolean enabled) {
-            FluidBlock block = FluidloggedMod.fluidBlocks.get(fluid);
+            FluidBlock block = Fluidlogged.fluidBlocks.get(fluid);
             this.name = block == null ? null : Text.translatable(block.getTranslationKey());
             Item item = fluid.getBucketItem();
             this.icon = item == null ? ItemStack.EMPTY : new ItemStack(item);

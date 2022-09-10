@@ -1,6 +1,6 @@
 package de.leximon.fluidlogged.mixin;
 
-import de.leximon.fluidlogged.FluidloggedMod;
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,8 +29,8 @@ public interface WaterloggableMixin {
      */
     @Overwrite
     default boolean canFillWithFluid(BlockView world, BlockPos pos, BlockState state, Fluid fluid) {
-        if(state.contains(FluidloggedMod.PROPERTY_FLUID))
-            return state.get(FluidloggedMod.PROPERTY_FLUID) == 0
+        if(state.contains(Fluidlogged.PROPERTY_FLUID))
+            return state.get(Fluidlogged.PROPERTY_FLUID) == 0
                     && !state.get(Properties.WATERLOGGED)
                     && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluidsLocked.contains(Registry.FLUID.getId(fluid)));
         else return !state.get(Properties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
@@ -43,17 +43,17 @@ public interface WaterloggableMixin {
     @Overwrite
     default boolean tryFillWithFluid(WorldAccess world, BlockPos pos, BlockState state, FluidState fluidState) {
         Fluid fluid = fluidState.getFluid();
-        if(state.contains(FluidloggedMod.PROPERTY_FLUID) && !state.get(Properties.WATERLOGGED) && state.get(FluidloggedMod.PROPERTY_FLUID) == 0) {
+        if(state.contains(Fluidlogged.PROPERTY_FLUID) && !state.get(Properties.WATERLOGGED) && state.get(Fluidlogged.PROPERTY_FLUID) == 0) {
             if (!world.isClient()) {
                 BlockState newState = state;
                 if (fluid.equals(Fluids.WATER))
                     newState = newState.with(Properties.WATERLOGGED, true);
-                int index = FluidloggedMod.getFluidIndex(fluid);
+                int index = Fluidlogged.getFluidIndex(fluid);
                 if (index == -1) {
-                    FluidloggedMod.LOGGER.warn("Tried to fill a block with a not loggable fluid!");
+                    Fluidlogged.LOGGER.warn("Tried to fill a block with a not loggable fluid!");
                     return false;
                 }
-                world.setBlockState(pos, newState.with(FluidloggedMod.PROPERTY_FLUID, index), Block.NOTIFY_ALL);
+                world.setBlockState(pos, newState.with(Fluidlogged.PROPERTY_FLUID, index), Block.NOTIFY_ALL);
                 world.createAndScheduleFluidTick(pos, fluid, fluid.getTickRate(world));
             }
             return true;
@@ -74,12 +74,12 @@ public interface WaterloggableMixin {
      */
     @Overwrite
     default ItemStack tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
-        if(state.get(Properties.WATERLOGGED) || (state.contains(FluidloggedMod.PROPERTY_FLUID) && state.get(FluidloggedMod.PROPERTY_FLUID) > 0)) {
-            Fluid fluid = FluidloggedMod.getFluid(state);
+        if(state.get(Properties.WATERLOGGED) || (state.contains(Fluidlogged.PROPERTY_FLUID) && state.get(Fluidlogged.PROPERTY_FLUID) > 0)) {
+            Fluid fluid = Fluidlogged.getFluid(state);
             if(state.get(Properties.WATERLOGGED))
                 fluid = Fluids.WATER;
-            if(state.contains(FluidloggedMod.PROPERTY_FLUID))
-                state = state.with(FluidloggedMod.PROPERTY_FLUID, 0);
+            if(state.contains(Fluidlogged.PROPERTY_FLUID))
+                state = state.with(Fluidlogged.PROPERTY_FLUID, 0);
             world.setBlockState(pos, state.with(Properties.WATERLOGGED, false), Block.NOTIFY_ALL);
             if (!state.canPlaceAt(world, pos)) {
                 world.breakBlock(pos, true);

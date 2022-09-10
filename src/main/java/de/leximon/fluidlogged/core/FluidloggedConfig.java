@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import de.leximon.fluidlogged.FluidloggedMod;
+import de.leximon.fluidlogged.Fluidlogged;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
@@ -101,7 +101,7 @@ public class FluidloggedConfig {
             if(!ids.contains(id))
                 ids.add(id);
         fluidsLocked = Collections.unmodifiableList(ids);
-        FluidloggedMod.LOGGER.info("Locked {} fluid(s)! Have fun :)", fluidsLocked.size());
+        Fluidlogged.LOGGER.info("Locked {} fluid(s)! Have fun :)", fluidsLocked.size());
     }
 
     private static void loadModConfigs() {
@@ -112,7 +112,7 @@ public class FluidloggedConfig {
             Optional<Path> confPath = mod.findPath(value.getAsString());
             confPath.ifPresent(FluidloggedConfig::loadModConfig);
         }
-        FluidloggedMod.LOGGER.info("Enforced {} fluid(s)!", enforcedFluids.size());
+        Fluidlogged.LOGGER.info("Enforced {} fluid(s)!", enforcedFluids.size());
     }
 
     private static void loadModConfig(Path path) {

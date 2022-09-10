@@ -1,6 +1,6 @@
 package de.leximon.fluidlogged.mixin;
 
-import de.leximon.fluidlogged.FluidloggedMod;
+import de.leximon.fluidlogged.Fluidlogged;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FluidState;
@@ -18,12 +18,12 @@ public abstract class BlockItemMixin {
     private BlockState injectCustomFluidPlacementState(BlockState placementState, ItemPlacementContext ctx) {
         if (placementState == null)
             return null;
-        if (!placementState.contains(FluidloggedMod.PROPERTY_FLUID))
+        if (!placementState.contains(Fluidlogged.PROPERTY_FLUID))
             return placementState;
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        int index = FluidloggedMod.getFluidIndex(fluidState.getFluid());
+        int index = Fluidlogged.getFluidIndex(fluidState.getFluid());
         if (index != -1)
-            return placementState.with(FluidloggedMod.PROPERTY_FLUID, index);
+            return placementState.with(Fluidlogged.PROPERTY_FLUID, index);
         return placementState;
     }
 
