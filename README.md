@@ -17,7 +17,7 @@ This mod can cause issues with other mods. If you experience any crashes or othe
 
 </details>
 <details><summary>Adding custom fluids to the config</summary>
-This can be achieved by opening the configuration menu using [ModMenu](https://www.curseforge.com/minecraft/mc-mods/modmenu).
+This can be achieved by opening the configuration menu using ModMenu.
 Alternatively, you can edit the `fluidlogged.json` file in the config folder.
 
 </details>
