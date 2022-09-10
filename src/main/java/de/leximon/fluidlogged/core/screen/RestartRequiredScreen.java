@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 public class RestartRequiredScreen extends ConfirmScreen {
@@ -16,10 +17,10 @@ public class RestartRequiredScreen extends ConfirmScreen {
                     else
                         MinecraftClient.getInstance().setScreen(nextScreen);
                 },
-                Text.translatable("fluidlogged.restart_required.title").styled(s -> s.withColor(Formatting.RED)),
-                Text.translatable("fluidlogged.restart_required.message"),
-                Text.translatable("fluidlogged.restart_required.quit"),
-                Text.translatable("fluidlogged.restart_required.later")
+                new TranslatableText("fluidlogged.restart_required.title").styled(s -> s.withColor(Formatting.RED)),
+                new TranslatableText("fluidlogged.restart_required.message"),
+                new TranslatableText("fluidlogged.restart_required.quit"),
+                new TranslatableText("fluidlogged.restart_required.later")
         );
     }
 

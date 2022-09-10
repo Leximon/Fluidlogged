@@ -20,7 +20,7 @@ public class Fluidlogged implements ModInitializer {
 	public static final String MOD_ID = "fluidlogged";
 	public static final Logger LOGGER = LoggerFactory.getLogger("fluidlogged");
 
-	public static final ArrayList<Class<? extends Block>> VANILLA_WATERLOGGABLES = new ArrayList<>(41);
+	public static final ArrayList<Class<? extends Block>> VANILLA_WATERLOGGABLES = new ArrayList<>(40);
 	public static final FluidProperty PROPERTY_FLUID = FluidProperty.of("fluidlogged");
 
 	public static final HashMap<Fluid, FluidBlock> fluidBlocks = new HashMap<>();
@@ -91,23 +91,19 @@ public class Fluidlogged implements ModInitializer {
 		VANILLA_WATERLOGGABLES.add(SlabBlock.class);
 		VANILLA_WATERLOGGABLES.add(WallSignBlock.class);
 		VANILLA_WATERLOGGABLES.add(DetectorRailBlock.class);
-		VANILLA_WATERLOGGABLES.add(SculkVeinBlock.class);
 		VANILLA_WATERLOGGABLES.add(TrapdoorBlock.class);
 		VANILLA_WATERLOGGABLES.add(LeavesBlock.class);
 		VANILLA_WATERLOGGABLES.add(OxidizableSlabBlock.class);
 		VANILLA_WATERLOGGABLES.add(PointedDripstoneBlock.class);
 		VANILLA_WATERLOGGABLES.add(AmethystClusterBlock.class);
-		VANILLA_WATERLOGGABLES.add(SculkShriekerBlock.class);
 		VANILLA_WATERLOGGABLES.add(CoralWallFanBlock.class);
 		VANILLA_WATERLOGGABLES.add(PaneBlock.class);
 		VANILLA_WATERLOGGABLES.add(DeadCoralBlock.class);
 		VANILLA_WATERLOGGABLES.add(CoralBlock.class);
 		VANILLA_WATERLOGGABLES.add(SignBlock.class);
 		VANILLA_WATERLOGGABLES.add(GlowLichenBlock.class);
-		VANILLA_WATERLOGGABLES.add(PropaguleBlock.class);
 		VANILLA_WATERLOGGABLES.add(FenceBlock.class);
 		VANILLA_WATERLOGGABLES.add(HangingRootsBlock.class);
-		VANILLA_WATERLOGGABLES.add(MangroveLeavesBlock.class);
 		VANILLA_WATERLOGGABLES.add(ScaffoldingBlock.class);
 		VANILLA_WATERLOGGABLES.add(SculkSensorBlock.class);
 		VANILLA_WATERLOGGABLES.add(LightningRodBlock.class);
@@ -122,6 +118,5 @@ public class Fluidlogged implements ModInitializer {
 		VANILLA_WATERLOGGABLES.add(TrappedChestBlock.class);
 		VANILLA_WATERLOGGABLES.add(ChainBlock.class);
 		VANILLA_WATERLOGGABLES.add(LightBlock.class);
-		VANILLA_WATERLOGGABLES.add(MangroveRootsBlock.class);
 	}
 }

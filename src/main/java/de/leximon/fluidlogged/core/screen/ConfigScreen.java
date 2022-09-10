@@ -8,6 +8,7 @@ import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ConfigScreen extends Screen {
 
     private static final List<OrderedText> COMPATIBILITY_MODE_TOOLTIP = MinecraftClient.getInstance().textRenderer.wrapLines(
-            Text.translatable("fluidlogged.config.compatibilityMode.tooltip"),
+            new TranslatableText("fluidlogged.config.compatibilityMode.tooltip"),
             200
     );
 
@@ -30,7 +31,7 @@ public class ConfigScreen extends Screen {
     protected List<Identifier> disabledEnforcedFluids;
 
     public ConfigScreen(Screen parent) {
-        super(Text.translatable("fluidlogged.config.title"));
+        super(new TranslatableText("fluidlogged.config.title"));
         this.parent = parent;
         this.compatibilityMode = FluidloggedConfig.compatibilityMode;
         this.fluids = new ArrayList<>(FluidloggedConfig.fluids);
@@ -42,18 +43,18 @@ public class ConfigScreen extends Screen {
         int startX = this.width / 2;
         int startY = this.height / 4 + 5;
         int space = 24;
-        warningText = textRenderer.wrapLines(Text.translatable("fluidlogged.config.warning"), (int) (width * 0.8));
+        warningText = textRenderer.wrapLines(new TranslatableText("fluidlogged.config.warning"), (int) (width * 0.8));
 
         addDrawableChild(new ButtonWidget(
                 startX - 100, startY,
                 200, 20,
-                Text.translatable("fluidlogged.config.fluids"),
+                new TranslatableText("fluidlogged.config.fluids"),
                 button -> client.setScreen(new FluidConfigScreen(this))
         ));
         compatibilityModeButton = addDrawableChild(CyclingButtonWidget.onOffBuilder(compatibilityMode).build(
                 startX - 100, startY + space,
                 200, 20,
-                Text.translatable("fluidlogged.config.compatibilityMode"),
+                new TranslatableText("fluidlogged.config.compatibilityMode"),
                 (button, value) -> {
                     this.compatibilityMode = value;
                     updateSaveButton();
@@ -63,14 +64,14 @@ public class ConfigScreen extends Screen {
         saveButton = addDrawableChild(new ButtonWidget(
                 startX - 100, startY + space*3,
                 200, 20,
-                Text.translatable("fluidlogged.config.save"),
+                new TranslatableText("fluidlogged.config.save"),
                 button -> saveAndClose(wereChangesMade())
         ));
         updateSaveButton();
         addDrawableChild(new ButtonWidget(
                 startX - 100, startY + space*4,
                 200, 20,
-                Text.translatable("fluidlogged.config.cancel"),
+                new TranslatableText("fluidlogged.config.cancel"),
                 button -> close()
         ));
     }

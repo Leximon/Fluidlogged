@@ -1,11 +1,11 @@
 package de.leximon.fluidlogged.core.screen;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 public class FluidConfigScreen extends Screen {
 
@@ -14,7 +14,7 @@ public class FluidConfigScreen extends Screen {
     private FluidListWidget fluidList;
 
     protected FluidConfigScreen(ConfigScreen parent) {
-        super(Text.translatable("fluidlogged.fluid_config.title"));
+        super(new TranslatableText("fluidlogged.fluid_config.title"));
         this.parent = parent;
     }
 
@@ -52,8 +52,8 @@ public class FluidConfigScreen extends Screen {
         } else {
             client.getToastManager().add(new SystemToast(
                     SystemToast.Type.PERIODIC_NOTIFICATION,
-                    Text.translatable("fluidlogged.fluid_config.error_toast.title"),
-                    Text.translatable("fluidlogged.fluid_config.error_toast.description")
+                    new TranslatableText("fluidlogged.fluid_config.error_toast.title"),
+                    new TranslatableText("fluidlogged.fluid_config.error_toast.description")
             ));
         }
         client.setScreen(parent);

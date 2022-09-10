@@ -9,8 +9,7 @@ import net.minecraft.client.gui.screen.world.EditWorldScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldListWidget;
 import net.minecraft.client.toast.SystemToast;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.level.storage.LevelSummary;
@@ -24,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.IOException;
 import java.util.List;
 
-@Mixin(WorldListWidget.WorldEntry.class)
+@Mixin(WorldListWidget.Entry.class)
 public abstract class WorldListWidgetWorldEntryMixin {
 
     @Shadow @Final private LevelSummary level;
@@ -61,7 +60,7 @@ public abstract class WorldListWidgetWorldEntryMixin {
 
                 fl_skipFluidMismatchWarning = true; // used show other warnings
                 play();
-        }, Text.translatable("fluidlogged.fluidMismatchWarning.title"), Text.translatable("fluidlogged.fluidMismatchWarning.description"), false));
+        }, new TranslatableText("fluidlogged.fluidMismatchWarning.title"), new TranslatableText("fluidlogged.fluidMismatchWarning.description"), false));
         ci.cancel();
     }
 

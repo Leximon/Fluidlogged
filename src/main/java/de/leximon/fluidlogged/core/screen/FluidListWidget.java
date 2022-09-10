@@ -13,8 +13,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
@@ -41,7 +43,7 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
                 continue;
 
             if(!enforcedCategoryAdded) {
-                addEntry(new CategoryEntry(Text.translatable("fluidlogged.fluid_config.category.enforced")));
+                addEntry(new CategoryEntry(new TranslatableText("fluidlogged.fluid_config.category.enforced")));
                 enforcedCategoryAdded = true;
             }
             addEntry(new FluidEntry(id, fluid, true, !parent.parent.disabledEnforcedFluids.contains(id)));
@@ -57,7 +59,7 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
             if(!fluid.isStill(fluid.getDefaultState()) && !inConfig || id.equals(WATER_ID))
                 continue; // only show still fluids but if a flowing fluid is specified in the config for whatever reason, show it anyway
             if(!otherCategoryAdded) {
-                addEntry(new CategoryEntry(Text.translatable("fluidlogged.fluid_config.category.other")));
+                addEntry(new CategoryEntry(new TranslatableText("fluidlogged.fluid_config.category.other")));
                 otherCategoryAdded = true;
             }
             addEntry(new FluidEntry(id, fluid, false, inConfig));
@@ -102,11 +104,11 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
 
         private FluidEntry(Identifier id, Fluid fluid, boolean enforced, boolean enabled) {
             FluidBlock block = Fluidlogged.fluidBlocks.get(fluid);
-            this.name = block == null ? null : Text.translatable(block.getTranslationKey());
+            this.name = block == null ? null : new TranslatableText(block.getTranslationKey());
             Item item = fluid.getBucketItem();
             this.icon = item == null ? ItemStack.EMPTY : new ItemStack(item);
-            this.idText = Text.literal(id.toString());
-            this.checkbox = new CheckboxWidget(0, 0, 20, 20, Text.empty(), enabled, false);
+            this.idText = new LiteralText(id.toString());
+            this.checkbox = new CheckboxWidget(0, 0, 20, 20, new LiteralText(""), enabled, false);
             this.id = id;
             this.enforced = enforced;
         }
