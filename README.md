@@ -46,7 +46,7 @@ Example:
     "fluidlogged": "fluidlogged.mod.json"
 }
 ```
-The fluid ids belong into the `fluidlogged.mod.json` file.
+The fluid ids belong in this case into the `fluidlogged.mod.json` file.
 Here is an example:
 ```json
 {
