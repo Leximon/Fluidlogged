@@ -19,9 +19,33 @@ public class ConfirmSaveScreen extends ConfirmScreen {
 
     @Override
     protected void addButtons(int y) {
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 50 - 105, y, 100, 20, this.yesText, button -> this.callback.accept(true)));
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, y, 100, 20, this.noText, button -> this.callback.accept(false)));
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 50 + 105, y, 100, 20, ScreenTexts.CANCEL, button -> close()));
+        this.addDrawableChild(
+                ButtonWidget.builder(
+                                this.yesText,
+                                button -> this.callback.accept(true)
+                        )
+                        .size(100, 20)
+                        .position(this.width / 2 - 50 - 105, y)
+                        .build()
+        );
+        this.addDrawableChild(
+                ButtonWidget.builder(
+                                this.noText,
+                                button -> this.callback.accept(false)
+                        )
+                        .size(100, 20)
+                        .position(this.width / 2 - 50, y)
+                        .build()
+        );
+        this.addDrawableChild(
+                ButtonWidget.builder(
+                                ScreenTexts.CANCEL,
+                                button -> close()
+                        )
+                        .size(100, 20)
+                        .position(this.width / 2 - 50 + 105, y)
+                        .build()
+        );
     }
 
     @Override

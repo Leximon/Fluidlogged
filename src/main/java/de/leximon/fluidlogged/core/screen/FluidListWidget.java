@@ -13,11 +13,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
 
 
         boolean enforcedCategoryAdded = false;
-        for (Map.Entry<RegistryKey<Fluid>, Fluid> entry : Registry.FLUID.getEntrySet()) {
+        for (Map.Entry<RegistryKey<Fluid>, Fluid> entry : Registries.FLUID.getEntrySet()) {
             Identifier id = entry.getKey().getValue();
             Fluid fluid = entry.getValue();
             if (!FluidloggedConfig.enforcedFluids.contains(id))
@@ -47,7 +47,7 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
             addEntry(new FluidEntry(id, fluid, true, !parent.parent.disabledEnforcedFluids.contains(id)));
         }
         boolean otherCategoryAdded = false;
-        for (Map.Entry<RegistryKey<Fluid>, Fluid> entry : Registry.FLUID.getEntrySet()) {
+        for (Map.Entry<RegistryKey<Fluid>, Fluid> entry : Registries.FLUID.getEntrySet()) {
             Identifier id = entry.getKey().getValue();
             Fluid fluid = entry.getValue();
             if(FluidloggedConfig.enforcedFluids.contains(id))
@@ -123,8 +123,8 @@ public class FluidListWidget extends ElementListWidget<FluidListWidget.Entry> {
 
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            checkbox.x = x;
-            checkbox.y = y;
+            checkbox.setX(x);
+            checkbox.setY(y);
             checkbox.render(matrices, mouseX, mouseY, tickDelta);
             if(name == null) {
                 client.textRenderer.draw(matrices, idText, x + 42, y + (entryHeight - 9) / 2f, 0xff5c5c5c);

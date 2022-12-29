@@ -20,12 +20,21 @@ public class FluidConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        if(fluidList == null)
+        if (fluidList == null)
             fluidList = new FluidListWidget(this, client);
         else
             fluidList.updateSize();
         addSelectableChild(fluidList);
-        addDrawableChild(new ButtonWidget(this.width / 2 - 75, this.height - 29, 150, 20, ScreenTexts.DONE, button -> close()));
+
+        addDrawableChild(
+                ButtonWidget.builder(
+                                ScreenTexts.DONE,
+                                button -> close()
+                        )
+                        .size(150, 20)
+                        .position(this.width / 2 - 75, this.height - 29)
+                        .build()
+        );
     }
 
     @Override
@@ -50,7 +59,7 @@ public class FluidConfigScreen extends Screen {
             if (entry instanceof FluidListWidget.FluidEntry fluidEntry && fluidEntry.isEnabled())
                 anyEntryEnabled = true;
 
-        if(anyEntryEnabled) {
+        if (anyEntryEnabled) {
             for (FluidListWidget.Entry entry : fluidList.children())
                 if (entry instanceof FluidListWidget.FluidEntry fluidEntry)
                     fluidEntry.updateInList(parent.fluids, parent.disabledEnforcedFluids);

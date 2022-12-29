@@ -28,7 +28,7 @@ public class FluidloggedConfig {
     private static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .create();
-    private static final File CONFIG_FILE;
+    private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "fluidlogged.json");
 
     public static boolean compatibilityMode = false;
     public static List<Identifier> fluids = new ArrayList<>();
@@ -37,8 +37,7 @@ public class FluidloggedConfig {
     public static List<Identifier> fluidsLocked;
     public static List<Identifier> enforcedFluids = new ArrayList<>();
 
-    static {
-        CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "fluidlogged.json");
+    public static void init() {
         loadConfig();
         loadModConfigs();
         lockFluids();

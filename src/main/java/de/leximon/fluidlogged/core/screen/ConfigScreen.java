@@ -44,12 +44,15 @@ public class ConfigScreen extends Screen {
         int space = 24;
         warningText = textRenderer.wrapLines(Text.translatable("fluidlogged.config.warning"), (int) (width * 0.8));
 
-        addDrawableChild(new ButtonWidget(
-                startX - 100, startY,
-                200, 20,
-                Text.translatable("fluidlogged.config.fluids"),
-                button -> client.setScreen(new FluidConfigScreen(this))
-        ));
+        addDrawableChild(
+                ButtonWidget.builder(
+                                Text.translatable("fluidlogged.config.fluids"),
+                                button -> client.setScreen(new FluidConfigScreen(this))
+                        )
+                        .size(200, 20)
+                        .position(startX - 100, startY)
+                        .build()
+        );
         compatibilityModeButton = addDrawableChild(CyclingButtonWidget.onOffBuilder(compatibilityMode).build(
                 startX - 100, startY + space,
                 200, 20,
@@ -60,19 +63,26 @@ public class ConfigScreen extends Screen {
                 }
         ));
 
-        saveButton = addDrawableChild(new ButtonWidget(
-                startX - 100, startY + space*3,
-                200, 20,
-                Text.translatable("fluidlogged.config.save"),
-                button -> saveAndClose(wereChangesMade())
-        ));
+        saveButton = addDrawableChild(
+                ButtonWidget.builder(
+                                Text.translatable("fluidlogged.config.save"),
+                                button -> saveAndClose(wereChangesMade())
+                        )
+                        .size(200, 20)
+                        .position(startX - 100, startY + space * 3)
+                        .build()
+        );
+
         updateSaveButton();
-        addDrawableChild(new ButtonWidget(
-                startX - 100, startY + space*4,
-                200, 20,
-                Text.translatable("fluidlogged.config.cancel"),
-                button -> close()
-        ));
+        addDrawableChild(
+                ButtonWidget.builder(
+                                Text.translatable("fluidlogged.config.cancel"),
+                                button -> close()
+                        )
+                        .size(200, 20)
+                        .position(startX - 100, startY + space * 4)
+                        .build()
+        );
     }
 
     @Override

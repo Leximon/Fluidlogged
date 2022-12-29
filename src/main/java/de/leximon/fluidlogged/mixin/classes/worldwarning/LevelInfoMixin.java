@@ -2,7 +2,7 @@ package de.leximon.fluidlogged.mixin.classes.worldwarning;
 
 import com.mojang.serialization.Dynamic;
 import de.leximon.fluidlogged.mixin.interfaces.ILevelInfo;
-import net.minecraft.resource.DataPackSettings;
+import net.minecraft.resource.DataConfiguration;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.level.LevelInfo;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +19,7 @@ public abstract class LevelInfoMixin implements ILevelInfo {
 
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "fromDynamic", at = @At("RETURN"))
-    private static void injectLoadFluidList(Dynamic<?> dynamic, DataPackSettings dataPackSettings, CallbackInfoReturnable<LevelInfo> cir) {
+    private static void injectLoadFluidList(Dynamic<?> dynamic, DataConfiguration dataConfiguration, CallbackInfoReturnable<LevelInfo> cir) {
         ILevelInfo props = (ILevelInfo) (Object) cir.getReturnValue();
         props.fl_setFluidList(dynamic);
     }

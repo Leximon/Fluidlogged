@@ -7,7 +7,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = "${project.archives_base_name}-mc${project.mc_version}"
+archivesBaseName = "${project.archives_base_name}-mc${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
 
@@ -56,7 +56,7 @@ publishing {
 		mavenJava(MavenPublication) {
 			groupId "${project.maven_group}"
 			artifactId "${project.archives_base_name}"
-			version "mc${project.mc_version}-${project.mod_version}"
+			version "mc${project.minecraft_version}-${project.mod_version}"
 
 			from components.java
 		}

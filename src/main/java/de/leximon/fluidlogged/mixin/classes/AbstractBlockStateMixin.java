@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.ToIntFunction;
 
+@SuppressWarnings("deprecation")
 @Mixin(value = AbstractBlock.AbstractBlockState.class, priority = 1010)
 public abstract class AbstractBlockStateMixin {
 
@@ -49,7 +50,7 @@ public abstract class AbstractBlockStateMixin {
     private BlockState makeCustomFluidTickable(Block instance, BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         Fluid f = Fluidlogged.getFluid(state);
         if (!(f == null || Fluids.EMPTY.equals(f)))
-            world.createAndScheduleFluidTick(pos, f, f.getTickRate(world));
+            world.scheduleFluidTick(pos, f, f.getTickRate(world));
         return instance.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 

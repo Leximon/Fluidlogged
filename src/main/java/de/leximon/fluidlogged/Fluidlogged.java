@@ -6,9 +6,9 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +19,10 @@ public class Fluidlogged implements ModInitializer {
 
 	public static final String MOD_ID = "fluidlogged";
 	public static final Logger LOGGER = LoggerFactory.getLogger("fluidlogged");
+
+	static {
+		FluidloggedConfig.init();
+	}
 
 	public static final ArrayList<Class<? extends Block>> VANILLA_WATERLOGGABLES = new ArrayList<>(41);
 	public static final FluidProperty PROPERTY_FLUID = FluidProperty.of("fluidlogged");
@@ -54,7 +58,7 @@ public class Fluidlogged implements ModInitializer {
 		Identifier id = FluidloggedConfig.fluidsLocked.get(index);
 		if (id == null)
 			return null;
-		return Registry.FLUID.get(id);
+		return Registries.FLUID.get(id);
 	}
 
 	/**
@@ -63,7 +67,7 @@ public class Fluidlogged implements ModInitializer {
 	public static int getFluidIndex(Fluid fluid) {
 		if(fluid.equals(Fluids.EMPTY))
 			return 0;
-		return FluidloggedConfig.fluidsLocked.indexOf(Registry.FLUID.getId(fluid)) + 1;
+		return FluidloggedConfig.fluidsLocked.indexOf(Registries.FLUID.getId(fluid)) + 1;
 	}
 
 	public static boolean isVanillaWaterloggable(Object block) {

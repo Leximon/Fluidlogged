@@ -9,10 +9,10 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +32,7 @@ public interface WaterloggableMixin {
         if(state.contains(Fluidlogged.PROPERTY_FLUID))
             return state.get(Fluidlogged.PROPERTY_FLUID) == 0
                     && !state.get(Properties.WATERLOGGED)
-                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluidsLocked.contains(Registry.FLUID.getId(fluid)));
+                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluidsLocked.contains(Registries.FLUID.getId(fluid)));
         else return !state.get(Properties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }
 
@@ -54,13 +54,13 @@ public interface WaterloggableMixin {
                     return false;
                 }
                 world.setBlockState(pos, newState.with(Fluidlogged.PROPERTY_FLUID, index), Block.NOTIFY_ALL);
-                world.createAndScheduleFluidTick(pos, fluid, fluid.getTickRate(world));
+                world.scheduleFluidTick(pos, fluid, fluid.getTickRate(world));
             }
             return true;
         } else if(!state.get(Properties.WATERLOGGED)) {
             if (!world.isClient()) {
                 world.setBlockState(pos, state.with(Properties.WATERLOGGED, true), Block.NOTIFY_ALL);
-                world.createAndScheduleFluidTick(pos, fluid, fluid.getTickRate(world));
+                world.scheduleFluidTick(pos, fluid, fluid.getTickRate(world));
             }
             return true;
         } else {
