@@ -3,6 +3,8 @@ package de.leximon.fluidlogged.mixin.classes;
 import de.leximon.fluidlogged.Fluidlogged;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.enums.SlabType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
@@ -19,6 +21,9 @@ public abstract class BlockItemMixin {
         if (placementState == null)
             return null;
         if (!placementState.contains(Fluidlogged.PROPERTY_FLUID))
+            return placementState;
+        // check for slab because we have to remove the fluid if double slabbed
+        if (placementState.getBlock() instanceof SlabBlock && placementState.get(SlabBlock.TYPE) == SlabType.DOUBLE)
             return placementState;
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         int index = Fluidlogged.getFluidIndex(fluidState.getFluid());

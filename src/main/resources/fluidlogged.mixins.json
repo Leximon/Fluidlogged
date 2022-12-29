@@ -11,6 +11,7 @@
     "BucketItemMixin",
     "FluidBlockMixin",
     "ShapeCacheMixin",
+    "SlabBlockMixin",
     "StateManagerBuilderMixin",
     "WallBlockMixin",
     "WaterloggableMixin",
