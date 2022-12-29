@@ -50,26 +50,3 @@ jar {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
 }
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			groupId "${project.maven_group}"
-			artifactId "${project.archives_base_name}"
-			version "mc${project.minecraft_version}-${project.mod_version}"
-
-			from components.java
-		}
-	}
-
-	repositories {
-		maven {
-			name = "tts-craft-releases"
-			url = "https://repo.tts-craft.de/releases"
-			credentials {
-				username "${ttscraft_username}"
-				password "${ttscraft_password}"
-			}
-		}
-	}
-}
