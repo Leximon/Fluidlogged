@@ -4,20 +4,6 @@ import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.mixin.classes.accessor.AbstractBlockAccessor;
 import de.leximon.fluidlogged.mixin.classes.accessor.AbstractBlockSettingsAccessor;
 import de.leximon.fluidlogged.mixin.classes.accessor.StateAccessor;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,9 +11,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.ToIntFunction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 @SuppressWarnings("deprecation")
-@Mixin(value = AbstractBlock.AbstractBlockState.class, priority = 1010)
+@Mixin(value = BlockBehaviour.BlockStateBase.class, priority = 1010)
 public abstract class AbstractBlockStateMixin {
 
     // luminance for example lavalogged blocks
@@ -35,51 +35,51 @@ public abstract class AbstractBlockStateMixin {
     private <T> int injectLuminance(ToIntFunction<T> instance, T t) {
         if(t instanceof BlockState state
                 && ((StateAccessor) state).fl_getEntries() != null
-                && state.contains(Fluidlogged.PROPERTY_FLUID)) {
+                && state.hasProperty(Fluidlogged.PROPERTY_FLUID)) {
             Fluid fluid = Fluidlogged.getFluid(state);
-            FluidBlock block = Fluidlogged.fluidBlocks.get(fluid);
+            LiquidBlock block = Fluidlogged.fluidBlocks.get(fluid);
             if(block != null) {
-                AbstractBlock.Settings settings = ((AbstractBlockAccessor) block).fl_getSettings();
+                BlockBehaviour.Properties settings = ((AbstractBlockAccessor) block).fl_getSettings();
                 return ((AbstractBlockSettingsAccessor) settings).fl_getLuminance().applyAsInt((BlockState) t);
             }
         }
         return instance.applyAsInt(t);
     }
 
-    @Redirect(method = "getStateForNeighborUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"))
-    private BlockState makeCustomFluidTickable(Block instance, BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    @Redirect(method = "updateShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;updateShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"))
+    private BlockState makeCustomFluidTickable(Block instance, BlockState state, Direction direction, BlockState neighborState, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
         Fluid f = Fluidlogged.getFluid(state);
         if (!(f == null || Fluids.EMPTY.equals(f)))
-            world.scheduleFluidTick(pos, f, f.getTickRate(world));
-        return instance.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+            world.scheduleTick(pos, f, f.getTickDelay(world));
+        return instance.updateShape(state, direction, neighborState, world, pos, neighborPos);
     }
 
-    @Redirect(method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getCollisionShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;"))
-    private VoxelShape injectCustomFluidCollsionShape(Block instance, BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+    @Redirect(method = "getCollisionShape(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getCollisionShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
+    private VoxelShape injectCustomFluidCollsionShape(Block instance, BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return instance.getCollisionShape(
-                state.contains(Fluidlogged.PROPERTY_FLUID)
-                        ? state.with(Fluidlogged.PROPERTY_FLUID, 0)
+                state.hasProperty(Fluidlogged.PROPERTY_FLUID)
+                        ? state.setValue(Fluidlogged.PROPERTY_FLUID, 0)
                         : state,
                 world, pos, context
         );
     }
 
-    @Redirect(method = "getOutlineShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getOutlineShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;"))
-    private VoxelShape injectCustomFluidOutlineShape(Block instance, BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return instance.getOutlineShape(
-                state.contains(Fluidlogged.PROPERTY_FLUID)
-                        ? state.with(Fluidlogged.PROPERTY_FLUID, 0)
+    @Redirect(method = "getShape(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/phys/shapes/CollisionContext;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
+    private VoxelShape injectCustomFluidOutlineShape(Block instance, BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        return instance.getShape(
+                state.hasProperty(Fluidlogged.PROPERTY_FLUID)
+                        ? state.setValue(Fluidlogged.PROPERTY_FLUID, 0)
                         : state,
                 world, pos, context
         );
     }
 
-    @Redirect(method = "getSidesShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSidesShape(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/util/shape/VoxelShape;"))
-    private VoxelShape injectCustomFluidSidesShape(Block instance, BlockState state, BlockView world, BlockPos pos) {
-        ShapeContext context = ShapeContext.absent();
+    @Redirect(method = "getBlockSupportShape", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getBlockSupportShape(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/phys/shapes/VoxelShape;"))
+    private VoxelShape injectCustomFluidSidesShape(Block instance, BlockState state, BlockGetter world, BlockPos pos) {
+        CollisionContext context = CollisionContext.empty();
         return instance.getCollisionShape(
-                state.contains(Fluidlogged.PROPERTY_FLUID)
-                        ? state.with(Fluidlogged.PROPERTY_FLUID, 0)
+                state.hasProperty(Fluidlogged.PROPERTY_FLUID)
+                        ? state.setValue(Fluidlogged.PROPERTY_FLUID, 0)
                         : state,
                 world, pos, context
         );
@@ -92,19 +92,19 @@ public abstract class AbstractBlockStateMixin {
     @Overwrite
     public FluidState getFluidState() {
         Block block = this.getBlock();
-        BlockState state = this.asBlockState();
-        if (state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED))
+        BlockState state = this.asState();
+        if (state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED))
             return block.getFluidState(state);
-        if (state.contains(Fluidlogged.PROPERTY_FLUID)) {
+        if (state.hasProperty(Fluidlogged.PROPERTY_FLUID)) {
             Fluid f = Fluidlogged.getFluid(state);
             if (f != null)
-                return f.getDefaultState();
+                return f.defaultFluidState();
         }
         return block.getFluidState(state);
     }
 
 
-    @Shadow protected abstract BlockState asBlockState();
+    @Shadow protected abstract BlockState asState();
     @Shadow public abstract Block getBlock();
 
 }

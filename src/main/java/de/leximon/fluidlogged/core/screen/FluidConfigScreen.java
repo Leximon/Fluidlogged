@@ -1,11 +1,11 @@
 package de.leximon.fluidlogged.core.screen;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.toast.SystemToast;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 
 public class FluidConfigScreen extends Screen {
 
@@ -14,46 +14,46 @@ public class FluidConfigScreen extends Screen {
     private FluidListWidget fluidList;
 
     protected FluidConfigScreen(ConfigScreen parent) {
-        super(Text.translatable("fluidlogged.fluid_config.title"));
+        super(Component.translatable("fluidlogged.fluid_config.title"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
         if (fluidList == null)
-            fluidList = new FluidListWidget(this, client);
+            fluidList = new FluidListWidget(this, minecraft);
         else
             fluidList.updateSize();
-        addSelectableChild(fluidList);
+        addWidget(fluidList);
 
-        addDrawableChild(
-                ButtonWidget.builder(
-                                ScreenTexts.DONE,
-                                button -> close()
+        addRenderableWidget(
+                Button.builder(
+                                CommonComponents.GUI_DONE,
+                                button -> onClose()
                         )
                         .size(150, 20)
-                        .position(this.width / 2 - 75, this.height - 29)
+                        .pos(this.width / 2 - 75, this.height - 29)
                         .build()
         );
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices) {
-        this.renderBackgroundTexture(0);
+    public void renderBackground(PoseStack matrices) {
+        this.renderDirtBackground(0);
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         this.fluidList.render(matrices, mouseX, mouseY, delta);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 12, 16777215);
+        drawCenteredString(matrices, this.font, this.title, this.width / 2, 12, 16777215);
 
         super.render(matrices, mouseX, mouseY, delta);
     }
 
 
     @Override
-    public void close() {
+    public void onClose() {
         boolean anyEntryEnabled = false;
         for (FluidListWidget.Entry entry : fluidList.children())
             if (entry instanceof FluidListWidget.FluidEntry fluidEntry && fluidEntry.isEnabled())
@@ -64,12 +64,12 @@ public class FluidConfigScreen extends Screen {
                 if (entry instanceof FluidListWidget.FluidEntry fluidEntry)
                     fluidEntry.updateInList(parent.fluids, parent.disabledEnforcedFluids);
         } else {
-            client.getToastManager().add(new SystemToast(
-                    SystemToast.Type.PERIODIC_NOTIFICATION,
-                    Text.translatable("fluidlogged.fluid_config.error_toast.title"),
-                    Text.translatable("fluidlogged.fluid_config.error_toast.description")
+            minecraft.getToasts().addToast(new SystemToast(
+                    SystemToast.SystemToastIds.PERIODIC_NOTIFICATION,
+                    Component.translatable("fluidlogged.fluid_config.error_toast.title"),
+                    Component.translatable("fluidlogged.fluid_config.error_toast.description")
             ));
         }
-        client.setScreen(parent);
+        minecraft.setScreen(parent);
     }
 }

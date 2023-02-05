@@ -1,11 +1,11 @@
 package de.leximon.fluidlogged.core.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 public class RestartRequiredScreen extends ConfirmScreen {
 
@@ -13,20 +13,20 @@ public class RestartRequiredScreen extends ConfirmScreen {
         super(
                 v -> {
                     if(v)
-                        MinecraftClient.getInstance().scheduleStop();
+                        Minecraft.getInstance().stop();
                     else
-                        MinecraftClient.getInstance().setScreen(nextScreen);
+                        Minecraft.getInstance().setScreen(nextScreen);
                 },
-                Text.translatable("fluidlogged.restart_required.title").styled(s -> s.withColor(Formatting.RED)),
-                Text.translatable("fluidlogged.restart_required.message"),
-                Text.translatable("fluidlogged.restart_required.quit"),
-                Text.translatable("fluidlogged.restart_required.later")
+                Component.translatable("fluidlogged.restart_required.title").withStyle(s -> s.withColor(ChatFormatting.RED)),
+                Component.translatable("fluidlogged.restart_required.message"),
+                Component.translatable("fluidlogged.restart_required.quit"),
+                Component.translatable("fluidlogged.restart_required.later")
         );
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices) {
-        this.renderBackgroundTexture(0);
+    public void renderBackground(PoseStack matrices) {
+        this.renderDirtBackground(0);
     }
 
     @Override

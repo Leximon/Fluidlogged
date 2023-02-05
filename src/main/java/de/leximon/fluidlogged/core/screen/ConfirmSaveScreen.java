@@ -1,61 +1,61 @@
 package de.leximon.fluidlogged.core.screen;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 
 public class ConfirmSaveScreen extends ConfirmScreen {
 
     private final Screen parent;
 
     public ConfirmSaveScreen(Screen parent, BooleanConsumer callback) {
-        super(callback, Text.translatable("fluidlogged.confirm_save.title"), Text.translatable("fluidlogged.confirm_save.message"));
+        super(callback, Component.translatable("fluidlogged.confirm_save.title"), Component.translatable("fluidlogged.confirm_save.message"));
         this.parent = parent;
     }
 
     @Override
     protected void addButtons(int y) {
-        this.addDrawableChild(
-                ButtonWidget.builder(
-                                this.yesText,
+        this.addRenderableWidget(
+                Button.builder(
+                                this.yesButton,
                                 button -> this.callback.accept(true)
                         )
                         .size(100, 20)
-                        .position(this.width / 2 - 50 - 105, y)
+                        .pos(this.width / 2 - 50 - 105, y)
                         .build()
         );
-        this.addDrawableChild(
-                ButtonWidget.builder(
-                                this.noText,
+        this.addRenderableWidget(
+                Button.builder(
+                                this.noButton,
                                 button -> this.callback.accept(false)
                         )
                         .size(100, 20)
-                        .position(this.width / 2 - 50, y)
+                        .pos(this.width / 2 - 50, y)
                         .build()
         );
-        this.addDrawableChild(
-                ButtonWidget.builder(
-                                ScreenTexts.CANCEL,
-                                button -> close()
+        this.addRenderableWidget(
+                Button.builder(
+                                CommonComponents.GUI_CANCEL,
+                                button -> onClose()
                         )
                         .size(100, 20)
-                        .position(this.width / 2 - 50 + 105, y)
+                        .pos(this.width / 2 - 50 + 105, y)
                         .build()
         );
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices) {
-        this.renderBackgroundTexture(0);
+    public void renderBackground(PoseStack matrices) {
+        this.renderDirtBackground(0);
     }
 
     @Override
-    public void close() {
-        client.setScreen(parent);
+    public void onClose() {
+        minecraft.setScreen(parent);
     }
 
     @Override

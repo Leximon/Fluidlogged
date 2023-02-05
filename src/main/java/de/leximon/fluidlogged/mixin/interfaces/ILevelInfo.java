@@ -1,19 +1,18 @@
 package de.leximon.fluidlogged.mixin.interfaces;
 
 import com.mojang.serialization.Dynamic;
-import net.minecraft.util.Identifier;
-
 import java.util.List;
+import net.minecraft.resources.ResourceLocation;
 
 public interface ILevelInfo {
 
     default void fl_setFluidList(Dynamic<?> dynamic) {
-        List<Identifier> ids = dynamic.get("fluidlogged").asList(entry -> Identifier.tryParse(entry.asString("minecraft:empty")));
+        List<ResourceLocation> ids = dynamic.get("fluidlogged").asList(entry -> ResourceLocation.tryParse(entry.asString("minecraft:empty")));
         fl_setFluidList(ids);
     }
 
-    List<Identifier> fl_getFluidList();
+    List<ResourceLocation> fl_getFluidList();
 
-    void fl_setFluidList(List<Identifier> list);
+    void fl_setFluidList(List<ResourceLocation> list);
 
 }

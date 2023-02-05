@@ -5,16 +5,6 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.Lifecycle;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
 import de.leximon.fluidlogged.mixin.interfaces.ILevelInfo;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.GeneratorOptions;
-import net.minecraft.world.level.LevelInfo;
-import net.minecraft.world.level.LevelProperties;
-import net.minecraft.world.level.storage.SaveVersionInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,33 +12,43 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.LevelSettings;
+import net.minecraft.world.level.levelgen.WorldOptions;
+import net.minecraft.world.level.storage.LevelVersion;
+import net.minecraft.world.level.storage.PrimaryLevelData;
 
-@Mixin(LevelProperties.class)
+@Mixin(PrimaryLevelData.class)
 public class LevelPropertiesMixin implements ILevelInfo {
 
-    private List<Identifier> fl_fluidList;
+    private List<ResourceLocation> fl_fluidList;
 
-    @Inject(method = "readProperties", at = @At("RETURN"))
-    private static void injectLoadFluidList(Dynamic<NbtElement> dynamic, DataFixer dataFixer, int dataVersion, NbtCompound playerData, LevelInfo levelInfo, SaveVersionInfo saveVersionInfo, LevelProperties.SpecialProperty specialProperty, GeneratorOptions generatorOptions, Lifecycle lifecycle, CallbackInfoReturnable<LevelProperties> cir) {
+    @Inject(method = "parse", at = @At("RETURN"))
+    private static void injectLoadFluidList(Dynamic<Tag> dynamic, DataFixer dataFixer, int dataVersion, CompoundTag playerData, LevelSettings levelInfo, LevelVersion saveVersionInfo, PrimaryLevelData.SpecialWorldProperty specialProperty, WorldOptions generatorOptions, Lifecycle lifecycle, CallbackInfoReturnable<PrimaryLevelData> cir) {
         ILevelInfo props = (ILevelInfo) cir.getReturnValue();
         props.fl_setFluidList(dynamic);
     }
 
-    @Inject(method = "updateProperties", at = @At("TAIL"))
-    private void injectSaveFluidList(DynamicRegistryManager registryManager, NbtCompound levelNbt, NbtCompound playerNbt, CallbackInfo ci) {
-        NbtList list = new NbtList();
-        for (Identifier id : FluidloggedConfig.fluidsLocked)
-            list.add(NbtString.of(id.toString()));
+    @Inject(method = "setTagData", at = @At("TAIL"))
+    private void injectSaveFluidList(RegistryAccess registryManager, CompoundTag levelNbt, CompoundTag playerNbt, CallbackInfo ci) {
+        ListTag list = new ListTag();
+        for (ResourceLocation id : FluidloggedConfig.fluidsLocked)
+            list.add(StringTag.valueOf(id.toString()));
         levelNbt.put("fluidlogged", list);
     }
 
     @Override
-    public List<Identifier> fl_getFluidList() {
+    public List<ResourceLocation> fl_getFluidList() {
         return this.fl_fluidList;
     }
 
     @Override
-    public void fl_setFluidList(List<Identifier> list) {
+    public void fl_setFluidList(List<ResourceLocation> list) {
         this.fl_fluidList = list;
     }
 }

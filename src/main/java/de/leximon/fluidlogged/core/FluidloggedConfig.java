@@ -9,8 +9,7 @@ import de.leximon.fluidlogged.Fluidlogged;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -31,11 +30,11 @@ public class FluidloggedConfig {
     private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "fluidlogged.json");
 
     public static boolean compatibilityMode = false;
-    public static List<Identifier> fluids = new ArrayList<>();
-    public static List<Identifier> disabledEnforcedFluids = new ArrayList<>();
+    public static List<ResourceLocation> fluids = new ArrayList<>();
+    public static List<ResourceLocation> disabledEnforcedFluids = new ArrayList<>();
 
-    public static List<Identifier> fluidsLocked;
-    public static List<Identifier> enforcedFluids = new ArrayList<>();
+    public static List<ResourceLocation> fluidsLocked;
+    public static List<ResourceLocation> enforcedFluids = new ArrayList<>();
 
     public static void init() {
         loadConfig();
@@ -56,13 +55,13 @@ public class FluidloggedConfig {
                 fluids.clear();
                 JsonArray fluidArray = obj.getAsJsonArray("fluids");
                 for (JsonElement element : fluidArray)
-                    fluids.add(new Identifier(element.getAsString()));
+                    fluids.add(new ResourceLocation(element.getAsString()));
             }
             if(obj.has("disabledEnforcedFluids")) {
                 disabledEnforcedFluids.clear();
                 JsonArray fluidArray = obj.getAsJsonArray("disabledEnforcedFluids");
                 for (JsonElement element : fluidArray)
-                    disabledEnforcedFluids.add(new Identifier(element.getAsString()));
+                    disabledEnforcedFluids.add(new ResourceLocation(element.getAsString()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,13 +74,13 @@ public class FluidloggedConfig {
 
         {
             JsonArray fluidArray = new JsonArray();
-            for (Identifier fluid : fluids)
+            for (ResourceLocation fluid : fluids)
                 fluidArray.add(fluid.toString());
             obj.add("fluids", fluidArray);
         }
         {
             JsonArray fluidArray = new JsonArray();
-            for (Identifier fluid : disabledEnforcedFluids)
+            for (ResourceLocation fluid : disabledEnforcedFluids)
                 fluidArray.add(fluid.toString());
             obj.add("disabledEnforcedFluids", fluidArray);
         }
@@ -94,9 +93,9 @@ public class FluidloggedConfig {
     }
 
     private static void lockFluids() {
-        ArrayList<Identifier> ids = new ArrayList<>(enforcedFluids.size() + fluids.size());
+        ArrayList<ResourceLocation> ids = new ArrayList<>(enforcedFluids.size() + fluids.size());
         ids.addAll(enforcedFluids);
-        for (Identifier id : fluids) // add all and prevent duplicates
+        for (ResourceLocation id : fluids) // add all and prevent duplicates
             if(!ids.contains(id))
                 ids.add(id);
         fluidsLocked = Collections.unmodifiableList(ids);
@@ -120,7 +119,7 @@ public class FluidloggedConfig {
             if(obj.has("fluids")) {
                 JsonArray fluidArray = obj.getAsJsonArray("fluids");
                 for (JsonElement element : fluidArray) {
-                    Identifier id = new Identifier(element.getAsString());
+                    ResourceLocation id = new ResourceLocation(element.getAsString());
                     if(!disabledEnforcedFluids.contains(id))
                         enforcedFluids.add(id);
                 }

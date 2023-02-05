@@ -1,36 +1,35 @@
 package de.leximon.fluidlogged.core.screen;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.CyclingButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
 public class ConfigScreen extends Screen {
 
-    private static final List<OrderedText> COMPATIBILITY_MODE_TOOLTIP = MinecraftClient.getInstance().textRenderer.wrapLines(
-            Text.translatable("fluidlogged.config.compatibilityMode.tooltip"),
+    private static final List<FormattedCharSequence> COMPATIBILITY_MODE_TOOLTIP = Minecraft.getInstance().font.split(
+            Component.translatable("fluidlogged.config.compatibilityMode.tooltip"),
             200
     );
 
     private final Screen parent;
-    private List<OrderedText> warningText;
-    private CyclingButtonWidget<Boolean> compatibilityModeButton;
-    private ButtonWidget saveButton;
+    private List<FormattedCharSequence> warningText;
+    private CycleButton<Boolean> compatibilityModeButton;
+    private Button saveButton;
 
     protected boolean compatibilityMode;
-    protected List<Identifier> fluids;
-    protected List<Identifier> disabledEnforcedFluids;
+    protected List<ResourceLocation> fluids;
+    protected List<ResourceLocation> disabledEnforcedFluids;
 
     public ConfigScreen(Screen parent) {
-        super(Text.translatable("fluidlogged.config.title"));
+        super(Component.translatable("fluidlogged.config.title"));
         this.parent = parent;
         this.compatibilityMode = FluidloggedConfig.compatibilityMode;
         this.fluids = new ArrayList<>(FluidloggedConfig.fluids);
@@ -42,45 +41,45 @@ public class ConfigScreen extends Screen {
         int startX = this.width / 2;
         int startY = this.height / 4 + 5;
         int space = 24;
-        warningText = textRenderer.wrapLines(Text.translatable("fluidlogged.config.warning"), (int) (width * 0.8));
+        warningText = font.split(Component.translatable("fluidlogged.config.warning"), (int) (width * 0.8));
 
-        addDrawableChild(
-                ButtonWidget.builder(
-                                Text.translatable("fluidlogged.config.fluids"),
-                                button -> client.setScreen(new FluidConfigScreen(this))
+        addRenderableWidget(
+                Button.builder(
+                                Component.translatable("fluidlogged.config.fluids"),
+                                button -> minecraft.setScreen(new FluidConfigScreen(this))
                         )
                         .size(200, 20)
-                        .position(startX - 100, startY)
+                        .pos(startX - 100, startY)
                         .build()
         );
-        compatibilityModeButton = addDrawableChild(CyclingButtonWidget.onOffBuilder(compatibilityMode).build(
+        compatibilityModeButton = addRenderableWidget(CycleButton.onOffBuilder(compatibilityMode).create(
                 startX - 100, startY + space,
                 200, 20,
-                Text.translatable("fluidlogged.config.compatibilityMode"),
+                Component.translatable("fluidlogged.config.compatibilityMode"),
                 (button, value) -> {
                     this.compatibilityMode = value;
                     updateSaveButton();
                 }
         ));
 
-        saveButton = addDrawableChild(
-                ButtonWidget.builder(
-                                Text.translatable("fluidlogged.config.save"),
+        saveButton = addRenderableWidget(
+                Button.builder(
+                                Component.translatable("fluidlogged.config.save"),
                                 button -> saveAndClose(wereChangesMade())
                         )
                         .size(200, 20)
-                        .position(startX - 100, startY + space * 3)
+                        .pos(startX - 100, startY + space * 3)
                         .build()
         );
 
         updateSaveButton();
-        addDrawableChild(
-                ButtonWidget.builder(
-                                Text.translatable("fluidlogged.config.cancel"),
-                                button -> close()
+        addRenderableWidget(
+                Button.builder(
+                                Component.translatable("fluidlogged.config.cancel"),
+                                button -> onClose()
                         )
                         .size(200, 20)
-                        .position(startX - 100, startY + space * 4)
+                        .pos(startX - 100, startY + space * 4)
                         .build()
         );
     }
@@ -88,11 +87,11 @@ public class ConfigScreen extends Screen {
     @Override
     public boolean shouldCloseOnEsc() {
         if(wereChangesMade()) {
-            client.setScreen(new ConfirmSaveScreen(this, save -> {
+            minecraft.setScreen(new ConfirmSaveScreen(this, save -> {
                 if(save)
                     saveAndClose(true);
                 else
-                    close();
+                    onClose();
             }));
             return false;
         }
@@ -100,31 +99,31 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void close() {
-        client.setScreen(parent);
+    public void onClose() {
+        minecraft.setScreen(parent);
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices) {
-        this.renderBackgroundTexture(0);
+    public void renderBackground(PoseStack matrices) {
+        this.renderDirtBackground(0);
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        drawCenteredString(matrices, this.font, this.title, this.width / 2, 17, 16777215);
         if (warningText != null) {
             int i = 0;
-            for (OrderedText line : warningText) {
-                textRenderer.drawWithShadow(matrices, line, (float) ((width / 2) - textRenderer.getWidth(line) / 2), 17 + 13 + 9 * i, 0xffffb617);
+            for (FormattedCharSequence line : warningText) {
+                font.drawShadow(matrices, line, (float) ((width / 2) - font.width(line) / 2), 17 + 13 + 9 * i, 0xffffb617);
                 i++;
             }
         }
 
         super.render(matrices, mouseX, mouseY, delta);
 
-        if(compatibilityModeButton.isHovered())
-            renderOrderedTooltip(matrices, COMPATIBILITY_MODE_TOOLTIP, mouseX, mouseY);
+        if(compatibilityModeButton.isHoveredOrFocused())
+            renderTooltip(matrices, COMPATIBILITY_MODE_TOOLTIP, mouseX, mouseY);
 
     }
 
@@ -137,7 +136,7 @@ public class ConfigScreen extends Screen {
         FluidloggedConfig.saveConfig();
 
         if(changed)
-            client.setScreen(new RestartRequiredScreen(parent));
+            minecraft.setScreen(new RestartRequiredScreen(parent));
     }
 
     private boolean wereChangesMade() {
