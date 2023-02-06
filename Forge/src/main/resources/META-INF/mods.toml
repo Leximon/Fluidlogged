@@ -13,7 +13,7 @@ issueTrackerURL="https://github.com/Leximon/Fluidlogged/issues" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://github.com/Leximon/Fluidlogged" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="logo.png" #optional
+logoFile="assets/fluidlogged/icon.png" #optional
 # A text field displayed in the mod UI
 credits="" #optional
 # A text field displayed in the mod UI
@@ -28,10 +28,8 @@ version="${file.jarVersion}" #mandatory
 displayName="Fluidlogged" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 #updateJSONURL="" #optional
-# The description text for the mod (multi line!) (#mandatory)
-description='''
-Allows waterlogging for any fluids
-'''
+# The description text for the mod
+description="Allows waterlogging for any fluids"
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.fluidlogged]] #optional
 # the modid of the dependency

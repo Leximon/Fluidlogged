@@ -9,8 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,10 +20,9 @@ public class FluidloggedCommon {
     }
 
     public static final ArrayList<Class<? extends Block>> VANILLA_WATERLOGGABLES = new ArrayList<>(41);
-    public static final FluidProperty PROPERTY_FLUID = FluidProperty.of("fluidlogged");
+    public static FluidProperty PROPERTY_FLUID = FluidProperty.of("fluidlogged");
 
     public static final HashMap<Fluid, LiquidBlock> fluidBlocks = new HashMap<>();
-
 
     /**
      * @return the fluid of the block state by its property

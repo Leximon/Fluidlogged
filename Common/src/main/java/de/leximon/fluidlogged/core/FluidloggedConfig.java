@@ -6,16 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.leximon.fluidlogged.Constants;
-import de.leximon.fluidlogged.FluidloggedCommon;
 import de.leximon.fluidlogged.platform.services.Services;
 import net.minecraft.resources.ResourceLocation;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -101,23 +95,19 @@ public class FluidloggedConfig {
     }
 
     private static void loadModConfigs() {
-        Services.PLATFORM.confPath().ifPresent(FluidloggedConfig::loadModConfig);
+        Services.PLATFORM.loadModConfigs(FluidloggedConfig::loadModConfig);
         Constants.LOGGER.info("Enforced {} fluid(s)!", enforcedFluids.size());
     }
 
-    private static void loadModConfig(Path path) {
-        try (InputStreamReader reader = new InputStreamReader(Files.newInputStream(path))) {
-            JsonObject obj = GSON.fromJson(reader, JsonObject.class);
-            if(obj.has("fluids")) {
-                JsonArray fluidArray = obj.getAsJsonArray("fluids");
-                for (JsonElement element : fluidArray) {
-                    ResourceLocation id = new ResourceLocation(element.getAsString());
-                    if(!disabledEnforcedFluids.contains(id))
-                        enforcedFluids.add(id);
-                }
+    public static void loadModConfig(Reader reader) {
+        JsonObject obj = GSON.fromJson(reader, JsonObject.class);
+        if(obj.has("fluids")) {
+            JsonArray fluidArray = obj.getAsJsonArray("fluids");
+            for (JsonElement element : fluidArray) {
+                ResourceLocation id = new ResourceLocation(element.getAsString());
+                if(!disabledEnforcedFluids.contains(id))
+                    enforcedFluids.add(id);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

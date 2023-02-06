@@ -1,8 +1,8 @@
 # gradle
 
-.gradle/
-build/
-out/
+.gradle
+build
+out
 /classes/
 
 # eclipse
@@ -18,9 +18,9 @@ out/
 
 # vscode
 
-.settings/
+.settings
 .vscode/
-bin/
+bin
 .classpath
 .project
 
@@ -29,5 +29,4 @@ bin/
 *.DS_Store
 
 # fabric
-
-Common/run/
+run

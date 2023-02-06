@@ -1,12 +1,12 @@
 package de.leximon.fluidlogged.platform.services;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.util.Optional;
+import java.io.Reader;
+import java.util.function.Consumer;
 
 public interface IPlatformHelper {
 
     File getConfigDir();
-    Optional<Path> confPath();
+    void loadModConfigs(Consumer<Reader> consumer);
 
 }
