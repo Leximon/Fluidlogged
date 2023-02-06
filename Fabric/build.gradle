@@ -5,6 +5,7 @@ plugins {
 }
 
 archivesBaseName = "${mod_id}-fabric-mc${minecraft_version}"
+version = "${mod_version}"
 
 repositories {
 	maven { url = "https://api.modrinth.com/maven" }

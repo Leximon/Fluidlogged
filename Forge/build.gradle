@@ -16,6 +16,7 @@ plugins {
 }
 
 archivesBaseName = "${mod_id}-forge-mc${minecraft_version}"
+version = "${mod_version}"
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -78,4 +79,16 @@ mixin {
     config "${mod_id}.forge.mixins.json"
 }
 
-jar.finalizedBy('reobfJar')
+jar {
+    manifest {
+        attributes([
+                "Specification-Title": "${mod_name}",
+                "Specification-Vendor": "${mod_author}",
+                "Specification-Version": "1", // We are version 1 of ourselves
+                "Implementation-Title": "${mod_name}",
+                "Implementation-Version": "${archiveVersion.get()}",
+                "Implementation-Vendor" :"${mod_author}"
+        ])
+    }
+    finalizedBy 'reobfJar'
+}
