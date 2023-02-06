@@ -2,7 +2,9 @@
 
 ## Fluidlogged
 
-**REQUIRES:** [Fabric Loader](https://fabricmc.net/) and [Fabric API](https://modrinth.com/mod/fabric-api).
+**REQUIREMENTS:**
+- Fabric: [Fabric Loader](https://fabricmc.net/) and [Fabric API](https://modrinth.com/mod/fabric-api).
+- Forge: [Forge Loader](https://files.minecraftforge.net/)
 
 Allows all waterloggable blocks to be lavalogged and also logged by any other fluids from other mods.
 

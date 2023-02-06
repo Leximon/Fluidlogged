@@ -1,0 +1,34 @@
+plugins {
+    id 'org.quiltmc.loom' version '1.+'
+}
+
+archivesBaseName = "${mod_name}-common-${minecraft_version}"
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    // Don't use the loader in the common project only for ASM
+    modCompileOnly("org.quiltmc:quilt-loader:${quilt_loader_version}")
+
+    compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
+}
+
+loom {
+    runConfigs.configureEach {
+        ideConfigGenerated = false
+    }
+}
+
+import net.fabricmc.loom.task.AbstractRemapJarTask
+tasks.withType(AbstractRemapJarTask).each {
+    it.targetNamespace = "named"
+}
+
+processResources {
+    def buildProps = project.properties.clone()
+
+    filesMatching(['pack.mcmeta']) {
+        expand buildProps
+    }
+}
