@@ -20,8 +20,8 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-archivesBaseName = "${mod_id}-forge-mc${minecraft_version}"
-version = "${mod_version}"
+archivesBaseName = mod_id
+version = "${mod_version}-forge-${mod_version_suffix}"
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -91,7 +91,7 @@ jar {
                 "Specification-Vendor": "${mod_author}",
                 "Specification-Version": "1", // We are version 1 of ourselves
                 "Implementation-Title": "${mod_name}",
-                "Implementation-Version": "${archiveVersion.get()}",
+                "Implementation-Version": "${mod_version}",
                 "Implementation-Vendor" :"${mod_author}"
         ])
     }

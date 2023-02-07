@@ -4,9 +4,12 @@
   "version": "${version}",
 
   "name": "Fluidlogged",
-  "description": "Allows waterlogging for any fluids",
+  "description": "Allows waterlogging with any fluid",
   "authors": [
     "Leximon"
+  ],
+  "contributors": [
+    "MoreThanHidden"
   ],
   "contact": {
     "sources": "https://github.com/Leximon/Fluidlogged",
