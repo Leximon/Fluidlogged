@@ -4,7 +4,7 @@ subprojects {
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
-//    java.withJavadocJar()
+    java.withJavadocJar()
 
     jar {
         manifest {
