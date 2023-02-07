@@ -1,7 +1,12 @@
+import com.modrinth.minotaur.dependencies.ModDependency
+import groovy.json.JsonSlurper
+
 plugins {
 	id 'io.github.juuxel.loom-quiltflower' version '1.7.+'
 	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.modrinth.minotaur' version '2.+'
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 archivesBaseName = "${mod_id}-fabric-mc${minecraft_version}"
@@ -63,4 +68,52 @@ java {
 
 tasks.withType(JavaCompile) {
 	source(project(':Common').sourceSets.main.allSource)
+}
+
+// publishing to mod sites
+modrinth {
+	def slurper = new JsonSlurper()
+
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = "BnXpPaut"
+	versionNumber = mod_version
+	versionName = "Fluidlogged ${mod_version} Fabric"
+	changelog = file("CHANGELOG.md").getText("UTF-8")
+	uploadFile = remapJar
+	gameVersions = slurper.parseText(mod_game_versions)
+	loaders = ["fabric"]
+	dependencies = [
+			new ModDependency("P7dR8mSH", "required") // Fabric API
+	]
+}
+
+curseforge {
+	def slurper = new JsonSlurper()
+	def gameVersions = slurper.parseText(mod_game_versions)
+
+	apiKey = System.getenv("CURSEFORGE_TOKEN") ?: ""
+	project {
+		id = "620894"
+		releaseType = "release"
+		changelogType = "markdown"
+		changelog = file("CHANGELOG.md")
+
+		gameVersions.each { addGameVersion it }
+		addGameVersion "Java 17"
+		addGameVersion "Fabric"
+		relations {
+			requiredDependency "fabric-api" // Fabric API
+		}
+
+		mainArtifact(remapJar) {
+			displayName = "[${gameVersions[0]}] Fluidlogged ${mod_version} Fabric"
+		}
+	}
+	options {
+		forgeGradleIntegration = false
+	}
+}
+
+afterEvaluate {
+	tasks.curseforge620894.dependsOn remapJar
 }

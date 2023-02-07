@@ -1,0 +1,35 @@
+name: Publish to Modrinth & CurseForge
+on: [workflow_dispatch]
+env:
+  MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+  CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}   
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        java: [ 17 ]
+        os: [ ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+    
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+        
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+          
+      - name: Gradle Publish To Modrinth (Fabric)
+        uses: gradle/gradle-build-action@v2.1.5
+        with:
+          arguments: Fabric:modrinth
+
+      - name: Gradle Publish To Modrinth (Fabric)
+        uses: gradle/gradle-build-action@v2.1.5
+        with:
+          arguments: Fabric:modrinth

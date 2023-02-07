@@ -1,3 +1,6 @@
+import com.modrinth.minotaur.dependencies.ModDependency
+import groovy.json.JsonSlurper
+
 buildscript {
     repositories {
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
@@ -13,6 +16,8 @@ plugins {
     id 'eclipse'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'com.modrinth.minotaur' version '2.+'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 archivesBaseName = "${mod_id}-forge-mc${minecraft_version}"
@@ -91,4 +96,52 @@ jar {
         ])
     }
     finalizedBy 'reobfJar'
+}
+
+// publishing to mod sites
+modrinth {
+    def slurper = new JsonSlurper()
+
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "BnXpPaut"
+    versionNumber = mod_version
+    versionName = "Fluidlogged ${mod_version} Forge"
+    changelog = file("CHANGELOG.md").getText("UTF-8")
+    uploadFile = jar
+    gameVersions = slurper.parseText(mod_game_versions)
+    loaders = ["forge"]
+    dependencies = [
+            new ModDependency("P7dR8mSH", "required") // Fabric API
+    ]
+}
+
+curseforge {
+    def slurper = new JsonSlurper()
+    def gameVersions = slurper.parseText(mod_game_versions)
+
+    apiKey = System.getenv("CURSEFORGE_TOKEN") ?: ""
+    project {
+        id = "620894"
+        releaseType = "beta"
+        changelogType = "markdown"
+        changelog = file("CHANGELOG.md")
+
+        gameVersions.each { addGameVersion it }
+        addGameVersion "Java 17"
+        addGameVersion "Forge"
+        relations {
+            requiredDependency "fabric-api" // Fabric API
+        }
+
+        mainArtifact(jar) {
+            displayName = "[${gameVersions[0]}] Fluidlogged ${mod_version} Forge"
+        }
+    }
+    options {
+        forgeGradleIntegration = false
+    }
+}
+
+afterEvaluate {
+    tasks.curseforge620894.dependsOn jar
 }

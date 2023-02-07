@@ -6,11 +6,7 @@ jobs:
     if: github.event_name == 'push' && contains(toJson(github.event.commits), '[CI-SKIP]') == false
     strategy:
       matrix:
-        # Use these Java versions
-        java: [
-          17    # Current Java LTS & minimum supported by Minecraft
-        ]
-        # and run on both Linux and Windows
+        java: [ 17 ]
         os: [ ubuntu-20.04 ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -31,21 +27,19 @@ jobs:
         with:
           arguments: Fabric:build
 
+      - name: Capture Build Artifacts Fabric
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts Fabric
+          path: fabric/build/libs/
+
       - name: Gradle Build Forge
         uses: gradle/gradle-build-action@v2.1.5
         with:
           arguments: Forge:build
 
-      - name: Capture Build Artifacts Fabric
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
-        uses: actions/upload-artifact@v3
-        with:
-          name: Artifacts Fabric
-          path: Fabric/build/libs/
-
       - name: Capture Build Artifacts Forge
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from latest java on one OS
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts Forge
-          path: Forge/build/libs/
+          path: forge/build/libs/
