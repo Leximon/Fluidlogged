@@ -78,23 +78,19 @@ public class FluidloggedCommon {
         VANILLA_WATERLOGGABLES.add(SlabBlock.class);
         VANILLA_WATERLOGGABLES.add(WallSignBlock.class);
         VANILLA_WATERLOGGABLES.add(DetectorRailBlock.class);
-        VANILLA_WATERLOGGABLES.add(SculkVeinBlock.class);
         VANILLA_WATERLOGGABLES.add(TrapDoorBlock.class);
         VANILLA_WATERLOGGABLES.add(LeavesBlock.class);
         VANILLA_WATERLOGGABLES.add(WeatheringCopperSlabBlock.class);
         VANILLA_WATERLOGGABLES.add(PointedDripstoneBlock.class);
         VANILLA_WATERLOGGABLES.add(AmethystClusterBlock.class);
-        VANILLA_WATERLOGGABLES.add(SculkShriekerBlock.class);
         VANILLA_WATERLOGGABLES.add(CoralWallFanBlock.class);
         VANILLA_WATERLOGGABLES.add(IronBarsBlock.class);
         VANILLA_WATERLOGGABLES.add(BaseCoralPlantBlock.class);
         VANILLA_WATERLOGGABLES.add(CoralPlantBlock.class);
         VANILLA_WATERLOGGABLES.add(StandingSignBlock.class);
         VANILLA_WATERLOGGABLES.add(GlowLichenBlock.class);
-        VANILLA_WATERLOGGABLES.add(MangrovePropaguleBlock.class);
         VANILLA_WATERLOGGABLES.add(FenceBlock.class);
         VANILLA_WATERLOGGABLES.add(HangingRootsBlock.class);
-        VANILLA_WATERLOGGABLES.add(MangroveLeavesBlock.class);
         VANILLA_WATERLOGGABLES.add(ScaffoldingBlock.class);
         VANILLA_WATERLOGGABLES.add(SculkSensorBlock.class);
         VANILLA_WATERLOGGABLES.add(LightningRodBlock.class);
@@ -109,7 +105,6 @@ public class FluidloggedCommon {
         VANILLA_WATERLOGGABLES.add(TrappedChestBlock.class);
         VANILLA_WATERLOGGABLES.add(ChainBlock.class);
         VANILLA_WATERLOGGABLES.add(LightBlock.class);
-        VANILLA_WATERLOGGABLES.add(MangroveRootsBlock.class);
     }
 
 }

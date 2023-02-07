@@ -11,6 +11,7 @@ import net.minecraft.client.gui.screens.worldselection.EditWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.LevelSummary;
@@ -61,7 +62,7 @@ public abstract class WorldListWidgetWorldEntryMixin {
 
                 fl_skipFluidMismatchWarning = true; // used show other warnings
                 joinWorld();
-        }, Component.translatable("fluidlogged.fluidMismatchWarning.title"), Component.translatable("fluidlogged.fluidMismatchWarning.description"), false));
+        }, new TranslatableComponent("fluidlogged.fluidMismatchWarning.title"), new TranslatableComponent("fluidlogged.fluidMismatchWarning.description"), false));
         ci.cancel();
     }
 

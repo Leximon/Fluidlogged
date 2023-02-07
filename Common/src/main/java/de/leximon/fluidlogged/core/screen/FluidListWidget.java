@@ -11,6 +11,8 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -41,7 +43,7 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
                 continue;
 
             if(!enforcedCategoryAdded) {
-                addEntry(new CategoryEntry(Component.translatable("fluidlogged.fluid_config.category.enforced")));
+                addEntry(new CategoryEntry(new TranslatableComponent("fluidlogged.fluid_config.category.enforced")));
                 enforcedCategoryAdded = true;
             }
             addEntry(new FluidEntry(id, fluid, true, !parent.parent.disabledEnforcedFluids.contains(id)));
@@ -57,7 +59,7 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
             if(!fluid.isSource(fluid.defaultFluidState()) && !inConfig || id.equals(WATER_ID))
                 continue; // only show still fluids but if a flowing fluid is specified in the config for whatever reason, show it anyway
             if(!otherCategoryAdded) {
-                addEntry(new CategoryEntry(Component.translatable("fluidlogged.fluid_config.category.other")));
+                addEntry(new CategoryEntry(new TranslatableComponent("fluidlogged.fluid_config.category.other")));
                 otherCategoryAdded = true;
             }
             addEntry(new FluidEntry(id, fluid, false, inConfig));
@@ -102,11 +104,11 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
 
         private FluidEntry(ResourceLocation id, Fluid fluid, boolean enforced, boolean enabled) {
             LiquidBlock block = FluidloggedCommon.fluidBlocks.get(fluid);
-            this.name = block == null ? null : Component.translatable(block.getDescriptionId());
+            this.name = block == null ? null : new TranslatableComponent(block.getDescriptionId());
             Item item = fluid.getBucket();
             this.icon = item == null ? ItemStack.EMPTY : new ItemStack(item);
-            this.idText = Component.literal(id.toString());
-            this.checkbox = new Checkbox(0, 0, 20, 20, Component.empty(), enabled, false);
+            this.idText = new TextComponent(id.toString());
+            this.checkbox = new Checkbox(0, 0, 20, 20, TextComponent.EMPTY, enabled, false);
             this.id = id;
             this.enforced = enforced;
         }

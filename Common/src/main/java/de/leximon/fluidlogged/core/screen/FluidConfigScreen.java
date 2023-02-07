@@ -6,6 +6,7 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class FluidConfigScreen extends Screen {
 
@@ -14,7 +15,7 @@ public class FluidConfigScreen extends Screen {
     private FluidListWidget fluidList;
 
     protected FluidConfigScreen(ConfigScreen parent) {
-        super(Component.translatable("fluidlogged.fluid_config.title"));
+        super(new TranslatableComponent("fluidlogged.fluid_config.title"));
         this.parent = parent;
     }
 
@@ -62,8 +63,8 @@ public class FluidConfigScreen extends Screen {
         } else {
             minecraft.getToasts().addToast(new SystemToast(
                     SystemToast.SystemToastIds.PERIODIC_NOTIFICATION,
-                    Component.translatable("fluidlogged.fluid_config.error_toast.title"),
-                    Component.translatable("fluidlogged.fluid_config.error_toast.description")
+                    new TranslatableComponent("fluidlogged.fluid_config.error_toast.title"),
+                    new TranslatableComponent("fluidlogged.fluid_config.error_toast.description")
             ));
         }
         minecraft.setScreen(parent);

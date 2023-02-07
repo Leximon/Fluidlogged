@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class RestartRequiredScreen extends ConfirmScreen {
 
@@ -17,10 +18,10 @@ public class RestartRequiredScreen extends ConfirmScreen {
                     else
                         Minecraft.getInstance().setScreen(nextScreen);
                 },
-                Component.translatable("fluidlogged.restart_required.title").withStyle(s -> s.withColor(ChatFormatting.RED)),
-                Component.translatable("fluidlogged.restart_required.message"),
-                Component.translatable("fluidlogged.restart_required.quit"),
-                Component.translatable("fluidlogged.restart_required.later")
+                new TranslatableComponent("fluidlogged.restart_required.title").withStyle(s -> s.withColor(ChatFormatting.RED)),
+                new TranslatableComponent("fluidlogged.restart_required.message"),
+                new TranslatableComponent("fluidlogged.restart_required.quit"),
+                new TranslatableComponent("fluidlogged.restart_required.later")
         );
     }
 
