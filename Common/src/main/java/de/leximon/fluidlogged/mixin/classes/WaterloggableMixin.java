@@ -3,12 +3,8 @@ package de.leximon.fluidlogged.mixin.classes;
 import de.leximon.fluidlogged.Constants;
 import de.leximon.fluidlogged.FluidloggedCommon;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-
-import java.util.Optional;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -20,6 +16,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
+import java.util.Optional;
 
 @Mixin(SimpleWaterloggedBlock.class)
 public interface WaterloggableMixin {
@@ -33,7 +33,7 @@ public interface WaterloggableMixin {
         if(state.hasProperty(FluidloggedCommon.PROPERTY_FLUID))
             return state.getValue(FluidloggedCommon.PROPERTY_FLUID) == 0
                     && !state.getValue(BlockStateProperties.WATERLOGGED)
-                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluidsLocked.contains(BuiltInRegistries.FLUID.getKey(fluid)));
+                    && (fluid.equals(Fluids.WATER) || FluidloggedConfig.fluidsLocked.contains(Registry.FLUID.getKey(fluid)));
         else return !state.getValue(BlockStateProperties.WATERLOGGED) && (fluid.equals(Fluids.WATER));
     }
 

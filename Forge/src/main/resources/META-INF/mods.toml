@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[37,)"
+loaderVersion="[43,)"
 license="MIT"
 issueTrackerURL="https://github.com/Leximon/Fluidlogged/issues"
 
@@ -10,19 +10,19 @@ issueTrackerURL="https://github.com/Leximon/Fluidlogged/issues"
     description="Allows waterlogging with any fluid"
     authors="Leximon"
     credits="MoreThanHidden"
-    logoFile="assets/fluidlogged/icon.png"
+    logoFile="icon.png"
     displayURL="https://github.com/Leximon/Fluidlogged"
 
 [[dependencies.fluidlogged]]
     modId="forge"
     mandatory=true
-    versionRange="[44,)"
+    versionRange="[43,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.fluidlogged]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3,]"
+    versionRange="[1.19,1.19.3]"
     ordering="NONE"
     side="BOTH"

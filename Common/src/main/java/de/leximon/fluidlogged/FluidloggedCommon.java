@@ -2,7 +2,7 @@ package de.leximon.fluidlogged;
 
 import de.leximon.fluidlogged.core.FluidProperty;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,7 +40,8 @@ public class FluidloggedCommon {
         ResourceLocation id = FluidloggedConfig.fluidsLocked.get(index);
         if (id == null)
             return null;
-        return BuiltInRegistries.FLUID.get(id);
+
+        return Registry.FLUID.get(id);
     }
 
     /**
@@ -49,7 +50,7 @@ public class FluidloggedCommon {
     public static int getFluidIndex(Fluid fluid) {
         if(fluid.equals(Fluids.EMPTY))
             return 0;
-        return FluidloggedConfig.fluidsLocked.indexOf(BuiltInRegistries.FLUID.getKey(fluid)) + 1;
+        return FluidloggedConfig.fluidsLocked.indexOf(Registry.FLUID.getKey(fluid)) + 1;
     }
 
     public static boolean isVanillaWaterloggable(Object block) {

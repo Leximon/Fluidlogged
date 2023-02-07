@@ -26,15 +26,11 @@ public class FluidConfigScreen extends Screen {
             fluidList.updateSize();
         addWidget(fluidList);
 
-        addRenderableWidget(
-                Button.builder(
-                                CommonComponents.GUI_DONE,
-                                button -> onClose()
-                        )
-                        .size(150, 20)
-                        .pos(this.width / 2 - 75, this.height - 29)
-                        .build()
-        );
+        addRenderableWidget(new Button(
+                this.width / 2 - 75, this.height - 29,
+                150, 20,
+                CommonComponents.GUI_DONE, button -> onClose()
+        ));
     }
 
     @Override

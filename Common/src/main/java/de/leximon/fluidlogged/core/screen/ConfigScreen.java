@@ -43,15 +43,12 @@ public class ConfigScreen extends Screen {
         int space = 24;
         warningText = font.split(Component.translatable("fluidlogged.config.warning"), (int) (width * 0.8));
 
-        addRenderableWidget(
-                Button.builder(
-                                Component.translatable("fluidlogged.config.fluids"),
-                                button -> minecraft.setScreen(new FluidConfigScreen(this))
-                        )
-                        .size(200, 20)
-                        .pos(startX - 100, startY)
-                        .build()
-        );
+        addRenderableWidget(new Button(
+                startX - 100, startY,
+                200, 20,
+                Component.translatable("fluidlogged.config.fluids"),
+                button -> minecraft.setScreen(new FluidConfigScreen(this))
+        ));
         compatibilityModeButton = addRenderableWidget(CycleButton.onOffBuilder(compatibilityMode).create(
                 startX - 100, startY + space,
                 200, 20,
@@ -62,26 +59,20 @@ public class ConfigScreen extends Screen {
                 }
         ));
 
-        saveButton = addRenderableWidget(
-                Button.builder(
-                                Component.translatable("fluidlogged.config.save"),
-                                button -> saveAndClose(wereChangesMade())
-                        )
-                        .size(200, 20)
-                        .pos(startX - 100, startY + space * 3)
-                        .build()
-        );
+        saveButton = addRenderableWidget(new Button(
+                startX - 100, startY + space * 3,
+                200, 20,
+                Component.translatable("fluidlogged.config.save"),
+                button -> saveAndClose(wereChangesMade())
+        ));
 
         updateSaveButton();
-        addRenderableWidget(
-                Button.builder(
-                                Component.translatable("fluidlogged.config.cancel"),
-                                button -> onClose()
-                        )
-                        .size(200, 20)
-                        .pos(startX - 100, startY + space * 4)
-                        .build()
-        );
+        addRenderableWidget(new Button(
+                startX - 100, startY + space * 4,
+                200, 20,
+                Component.translatable("fluidlogged.config.cancel"),
+                button -> onClose()
+        ));
     }
 
     @Override

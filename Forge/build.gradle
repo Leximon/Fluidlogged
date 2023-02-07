@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 buildscript {
     repositories {
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
     }
     dependencies {

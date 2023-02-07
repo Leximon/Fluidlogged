@@ -4,14 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import de.leximon.fluidlogged.FluidloggedCommon;
 import de.leximon.fluidlogged.core.FluidloggedConfig;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +18,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.material.Fluid;
+
+import java.util.List;
+import java.util.Map;
 
 public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidget.Entry> {
 
@@ -33,7 +34,7 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
 
 
         boolean enforcedCategoryAdded = false;
-        for (Map.Entry<ResourceKey<Fluid>, Fluid> entry : BuiltInRegistries.FLUID.entrySet()) {
+        for (Map.Entry<ResourceKey<Fluid>, Fluid> entry : Registry.FLUID.entrySet()) {
             ResourceLocation id = entry.getKey().location();
             Fluid fluid = entry.getValue();
             if (!FluidloggedConfig.enforcedFluids.contains(id))
@@ -46,7 +47,7 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
             addEntry(new FluidEntry(id, fluid, true, !parent.parent.disabledEnforcedFluids.contains(id)));
         }
         boolean otherCategoryAdded = false;
-        for (Map.Entry<ResourceKey<Fluid>, Fluid> entry : BuiltInRegistries.FLUID.entrySet()) {
+        for (Map.Entry<ResourceKey<Fluid>, Fluid> entry : Registry.FLUID.entrySet()) {
             ResourceLocation id = entry.getKey().location();
             Fluid fluid = entry.getValue();
             if(FluidloggedConfig.enforcedFluids.contains(id))
@@ -122,8 +123,8 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
 
         @Override
         public void render(PoseStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            checkbox.setX(x);
-            checkbox.setY(y);
+            checkbox.x = x;
+            checkbox.y = y;
             checkbox.render(matrices, mouseX, mouseY, tickDelta);
             if(name == null) {
                 minecraft.font.draw(matrices, idText, x + 42, y + (entryHeight - 9) / 2f, 0xff5c5c5c);

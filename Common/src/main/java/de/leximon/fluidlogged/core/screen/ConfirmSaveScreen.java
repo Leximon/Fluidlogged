@@ -19,33 +19,21 @@ public class ConfirmSaveScreen extends ConfirmScreen {
 
     @Override
     protected void addButtons(int y) {
-        this.addRenderableWidget(
-                Button.builder(
-                                this.yesButton,
-                                button -> this.callback.accept(true)
-                        )
-                        .size(100, 20)
-                        .pos(this.width / 2 - 50 - 105, y)
-                        .build()
-        );
-        this.addRenderableWidget(
-                Button.builder(
-                                this.noButton,
-                                button -> this.callback.accept(false)
-                        )
-                        .size(100, 20)
-                        .pos(this.width / 2 - 50, y)
-                        .build()
-        );
-        this.addRenderableWidget(
-                Button.builder(
-                                CommonComponents.GUI_CANCEL,
-                                button -> onClose()
-                        )
-                        .size(100, 20)
-                        .pos(this.width / 2 - 50 + 105, y)
-                        .build()
-        );
+        this.addRenderableWidget(new Button(
+                this.width / 2 - 50 - 105, y,
+                100, 20,
+                this.yesButton, button -> this.callback.accept(true)
+        ));
+        this.addRenderableWidget(new Button(
+                this.width / 2 - 50, y,
+                100, 20,
+                this.noButton, button -> this.callback.accept(false)
+        ));
+        this.addRenderableWidget(new Button(
+                this.width / 2 - 50 + 105, y,
+                100, 20,
+                CommonComponents.GUI_CANCEL, button -> onClose()
+        ));
     }
 
     @Override

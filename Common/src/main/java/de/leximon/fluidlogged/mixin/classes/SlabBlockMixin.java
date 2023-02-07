@@ -14,7 +14,9 @@ public class SlabBlockMixin {
 
     @Inject(method = "getStateForPlacement", at = @At(value = "RETURN", ordinal = 0), cancellable = true)
     private void injectRemoveFluidloggedStateIfDouble(BlockPlaceContext ctx, CallbackInfoReturnable<BlockState> cir) {
-        cir.setReturnValue(cir.getReturnValue().trySetValue(FluidloggedCommon.PROPERTY_FLUID, 0));
+        BlockState state = cir.getReturnValue();
+        if (state.hasProperty(FluidloggedCommon.PROPERTY_FLUID))
+            cir.setReturnValue(state.setValue(FluidloggedCommon.PROPERTY_FLUID, 0));
     }
 
 }
