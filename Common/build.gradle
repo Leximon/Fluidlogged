@@ -8,8 +8,8 @@ dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()
 
-    // Don't use the loader in the common project only for ASM
-    modCompileOnly("org.quiltmc:quilt-loader:${quilt_loader_version}")
+    modCompileOnly "org.ow2.asm:asm:${asm_version}"
+    modCompileOnly "org.ow2.asm:asm-tree:${asm_version}"
 
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
 }
