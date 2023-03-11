@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts Fabric
-          path: Fabric/build/libs/
+          path: fabric/build/libs/
 
       - name: Gradle Build Forge
         uses: gradle/gradle-build-action@v2.1.5
@@ -42,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts Forge
-          path: Forge/build/libs/
+          path: forge/build/libs/
