@@ -62,9 +62,23 @@ minecraft {
 
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
+repositories {
+    maven {
+        url "https://maven.tterrag.com/"
+    }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":Common")
+    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_forge_version}") { transitive = false }
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_forge_version}")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
