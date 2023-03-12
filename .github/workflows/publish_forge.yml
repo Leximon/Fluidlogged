@@ -24,10 +24,10 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Gradle Publish To CurseForge (Forge)
+      - name: Gradle Publish To Modrinth (Forge)
         uses: gradle/gradle-build-action@v2.1.5
         with:
-          arguments: Forge:curseforge
+          arguments: Forge:modrinth
 
       - name: Gradle Publish To CurseForge (Forge)
         uses: gradle/gradle-build-action@v2.1.5
