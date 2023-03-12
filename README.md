@@ -39,7 +39,7 @@ You can.
 
 </details>
 
-## Developers
+## Developers (Fabric Only)
 This mod provides a small API for mod developers to allow their fluids to be added by default to the fluid list.<br>
 To use it, add the property `fluidlogged` inside the `custom` object of your `fabric.mod.json` file. This must target another json file.<br>
 Example:
