@@ -1,4 +1,4 @@
-name: Publish to Modrinth & CurseForge
+name: Publish Forge to Modrinth & CurseForge
 on: [workflow_dispatch]
 env:
   MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
