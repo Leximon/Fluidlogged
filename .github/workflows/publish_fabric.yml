@@ -29,7 +29,7 @@ jobs:
         with:
           arguments: Fabric:modrinth
 
-      - name: Gradle Publish To Modrinth (Fabric)
+      - name: Gradle Publish To CurseForge (Fabric)
         uses: gradle/gradle-build-action@v2.1.5
         with:
-          arguments: Fabric:modrinth
+          arguments: Fabric:curseforge
