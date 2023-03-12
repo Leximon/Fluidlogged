@@ -17,7 +17,6 @@
     "accessor.AbstractBlockAccessor",
     "accessor.AbstractBlockSettingsAccessor",
     "accessor.StateAccessor",
-    "compat.create.ContraptionMixin",
     "worldwarning.LevelInfoMixin",
     "worldwarning.LevelPropertiesMixin"
   ],
