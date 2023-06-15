@@ -83,7 +83,6 @@ modrinth {
 	gameVersions = slurper.parseText(mod_game_versions)
 	loaders = ["fabric"]
 	dependencies = [
-			new ModDependency("P7dR8mSH", "required") // Fabric API
 	]
 }
 
@@ -102,7 +101,6 @@ curseforge {
 		addGameVersion "Java 17"
 		addGameVersion "Fabric"
 		relations {
-			requiredDependency "fabric-api" // Fabric API
 		}
 
 		mainArtifact(remapJar) {
