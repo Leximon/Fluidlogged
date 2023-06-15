@@ -100,8 +100,6 @@ curseforge {
 		gameVersions.each { addGameVersion it }
 		addGameVersion "Java 17"
 		addGameVersion "Fabric"
-		relations {
-		}
 
 		mainArtifact(remapJar) {
 			displayName = "[${gameVersions[0]}] Fluidlogged ${mod_version} Fabric"
