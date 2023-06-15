@@ -7,6 +7,7 @@ import de.leximon.fluidlogged.core.FluidloggedConfig;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -84,10 +85,11 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
         public List<? extends GuiEventListener> children() { return ImmutableList.of(); }
 
         @Override
-        public void render(PoseStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void render(GuiGraphics g, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             int textWidth = minecraft.font.width(name);
-            minecraft.font.draw(matrices, name, (parent.width - textWidth) / 2f, y + (entryHeight - 9) / 2f + 4, 0xffffffff);
+            g.drawString(minecraft.font, name, (parent.width - textWidth) / 2, y + (entryHeight - 9) / 2 + 4, 0xffffffff);
         }
+
     }
 
     public class FluidEntry extends de.leximon.fluidlogged.core.screen.FluidListWidget.Entry {
@@ -121,19 +123,19 @@ public class FluidListWidget extends ContainerObjectSelectionList<FluidListWidge
         }
 
         @Override
-        public void render(PoseStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void render(GuiGraphics g, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             checkbox.setX(x);
             checkbox.setY(y);
-            checkbox.render(matrices, mouseX, mouseY, tickDelta);
-            if(name == null) {
-                minecraft.font.draw(matrices, idText, x + 42, y + (entryHeight - 9) / 2f, 0xff5c5c5c);
+            checkbox.render(g, mouseX, mouseY, tickDelta);
+            if (name == null) {
+                g.drawString(minecraft.font, idText, x + 42, y + (entryHeight - 9) / 2, 0xff5c5c5c);
             } else {
-                minecraft.font.draw(matrices, name, x + 42, y + 2, 0xffffffff);
-                minecraft.font.draw(matrices, idText, x + 42, y + 11, 0xff5c5c5c);
+                g.drawString(minecraft.font, name, x + 42, y + 2, 0xffffffff);
+                g.drawString(minecraft.font, idText, x + 42, y + 11, 0xff5c5c5c);
             }
 
-            if(icon != null)
-                minecraft.getItemRenderer().renderGuiItem(icon, x + 22, y + 2);
+            if (icon != null)
+                g.renderItem(icon, x + 22, y + 2);
         }
 
         @Override

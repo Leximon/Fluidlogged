@@ -1,8 +1,8 @@
 package de.leximon.fluidlogged.core.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -25,8 +25,8 @@ public class RestartRequiredScreen extends ConfirmScreen {
     }
 
     @Override
-    public void renderBackground(PoseStack matrices) {
-        this.renderDirtBackground(0);
+    public void renderBackground(GuiGraphics g) {
+        renderDirtBackground(g);
     }
 
     @Override

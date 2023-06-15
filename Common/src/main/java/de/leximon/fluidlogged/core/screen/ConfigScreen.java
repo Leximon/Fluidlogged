@@ -5,6 +5,7 @@ import de.leximon.fluidlogged.core.FluidloggedConfig;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
@@ -103,28 +104,29 @@ public class ConfigScreen extends Screen {
         minecraft.setScreen(parent);
     }
 
-    @Override
-    public void renderBackground(PoseStack matrices) {
-        this.renderDirtBackground(0);
-    }
 
     @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        drawCenteredString(matrices, this.font, this.title, this.width / 2, 17, 16777215);
+    public void renderBackground(GuiGraphics g) {
+        renderDirtBackground(g);
+    }
+
+
+    @Override
+    public void render(GuiGraphics g, int mouseX, int mouseY, float delta) {
+        renderBackground(g);
+        g.drawCenteredString(font, title, width / 2, 17, 16777215);
         if (warningText != null) {
             int i = 0;
             for (FormattedCharSequence line : warningText) {
-                font.drawShadow(matrices, line, (float) ((width / 2) - font.width(line) / 2), 17 + 13 + 9 * i, 0xffffb617);
+                g.drawString(font, line, ((width / 2) - font.width(line) / 2), 17 + 13 + 9 * i, 0xffffb617, true);
                 i++;
             }
         }
 
-        super.render(matrices, mouseX, mouseY, delta);
+        super.render(g, mouseX, mouseY, delta);
 
-        if(compatibilityModeButton.isHoveredOrFocused())
-            renderTooltip(matrices, COMPATIBILITY_MODE_TOOLTIP, mouseX, mouseY);
-
+        if (compatibilityModeButton.isHoveredOrFocused())
+            g.renderTooltip(font, COMPATIBILITY_MODE_TOOLTIP, mouseX, mouseY);
     }
 
     private void saveAndClose(boolean changed) {

@@ -1,7 +1,6 @@
 package de.leximon.fluidlogged.mixin;
 
 import de.leximon.fluidlogged.Constants;
-import de.leximon.fluidlogged.FluidloggedCommon;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;

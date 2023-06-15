@@ -1,6 +1,7 @@
 package de.leximon.fluidlogged.core.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
@@ -37,18 +38,20 @@ public class FluidConfigScreen extends Screen {
         );
     }
 
+
     @Override
-    public void renderBackground(PoseStack matrices) {
-        this.renderDirtBackground(0);
+    public void renderBackground(GuiGraphics g) {
+        renderDirtBackground(g);
     }
 
-    @Override
-    public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        this.fluidList.render(matrices, mouseX, mouseY, delta);
-        drawCenteredString(matrices, this.font, this.title, this.width / 2, 12, 16777215);
 
-        super.render(matrices, mouseX, mouseY, delta);
+    @Override
+    public void render(GuiGraphics g, int mouseX, int mouseY, float delta) {
+        renderBackground(g);
+        fluidList.render(g, mouseX, mouseY, delta);
+        g.drawCenteredString(font, title, width / 2, 12 , 16777215);
+
+        super.render(g, mouseX, mouseY, delta);
     }
 
 
