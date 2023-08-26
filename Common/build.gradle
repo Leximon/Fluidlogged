@@ -15,6 +15,8 @@ dependencies {
 }
 
 loom {
+    accessWidenerPath = file("../Fabric/src/main/resources/fluidlogged.accesswidener")
+
     runConfigs.configureEach {
         ideConfigGenerated = false
     }

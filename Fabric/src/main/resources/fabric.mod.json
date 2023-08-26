@@ -23,14 +23,12 @@
   "entrypoints": {
     "main": [
       "de.leximon.fluidlogged.Fluidlogged"
-    ],
-    "modmenu": [
-      "de.leximon.fluidlogged.FluidloggedMenu"
     ]
   },
   "mixins": [
     "fluidlogged.mixins.json"
   ],
+  "accessWidener": "fluidlogged.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.13.3",

@@ -3,25 +3,20 @@
   "minVersion": "0.8",
   "package": "de.leximon.fluidlogged.mixin.classes",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "de.leximon.fluidlogged.mixin.FluidloggedMixinConfig",
   "mixins": [
-    "AbstractBlockStateMixin",
-    "BlockItemMixin",
-    "BlockMixin",
-    "ForgeFluidBlockMixin",
-    "ShapeCacheMixin",
-    "SlabBlockMixin",
-    "StateManagerBuilderMixin",
-    "WallBlockMixin",
-    "WaterloggableMixin",
-    "accessor.AbstractBlockAccessor",
-    "accessor.AbstractBlockSettingsAccessor",
-    "accessor.StateAccessor",
-    "worldwarning.LevelInfoMixin",
-    "worldwarning.LevelPropertiesMixin"
+    "storage_and_access.LevelChunkSectionMixin",
+    "storage_and_access.LevelMixin",
+    "storage_and_access.ChunkSerializerMixin",
+    "storage_and_access.LevelChunkMixin",
+    "world_interaction.BlockStateBaseMixin",
+    "world_interaction.FlowingFluidMixin",
+    "world_interaction.BlockLightEngineMixin"
   ],
   "client": [
-    "worldwarning.WorldListWidgetWorldEntryMixin"
+    "rendering.LiquidBlockRendererMixin",
+    "rendering.RebuildTaskMixin",
+    "rendering.RenderChunkRegionMixin",
+    "rendering.RenderChunkMixin"
   ],
   "injectors": {
     "defaultRequire": 1
