@@ -13,19 +13,19 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.Optional;
 
 @Mod("fluidlogged")
-public class Fluidlogged {
+public class FluidloggedForge {
 
     public static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel PACKET_CHANNEL = NetworkRegistry.newSimpleChannel(
-            FluidloggedCommon.id("channel"),
+            Fluidlogged.id("channel"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
     );
 
 
-    public Fluidlogged() {
+    public FluidloggedForge() {
         registerPackets();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::setupClient);
     }

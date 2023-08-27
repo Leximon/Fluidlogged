@@ -1,26 +1,23 @@
 package de.leximon.fluidlogged.network.fabric;
 
-import de.leximon.fluidlogged.FluidloggedCommon;
+import de.leximon.fluidlogged.Fluidlogged;
+import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
 import de.leximon.fluidlogged.network.ClientPacketHandler;
-import it.unimi.dsi.fastutil.shorts.ShortIterator;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 
 public class ClientboundSectionFluidsUpdatePacket implements FabricPacket {
 
-    public static final ResourceLocation ID = FluidloggedCommon.id("section_fluids_update");
+    public static final ResourceLocation ID = Fluidlogged.id("section_fluids_update");
     public static final PacketType<ClientboundSectionFluidsUpdatePacket> PACKET_TYPE = PacketType.create(ID, ClientboundSectionFluidsUpdatePacket::read);
 
     private final SectionPos sectionPos;
@@ -42,7 +39,7 @@ public class ClientboundSectionFluidsUpdatePacket implements FabricPacket {
         int index = 0;
         for(short pos : shortSet) {
             this.positions[index] = pos;
-            this.states[index] = levelChunkSection.getFluidState(
+            this.states[index] = ((LevelChunkSectionExtension) levelChunkSection).getFluidStateExact(
                     SectionPos.sectionRelativeX(pos),
                     SectionPos.sectionRelativeY(pos),
                     SectionPos.sectionRelativeZ(pos)
@@ -65,7 +62,7 @@ public class ClientboundSectionFluidsUpdatePacket implements FabricPacket {
         buf.writeVarInt(this.positions.length);
 
         for(int i = 0; i < this.positions.length; i++)
-            buf.writeVarLong((long) FluidloggedCommon.getFluidId(this.states[i]) << 12 | (long) this.positions[i]);
+            buf.writeVarLong((long) Fluidlogged.getFluidId(this.states[i]) << 12 | (long) this.positions[i]);
     }
 
     public static ClientboundSectionFluidsUpdatePacket read(FriendlyByteBuf buf) {

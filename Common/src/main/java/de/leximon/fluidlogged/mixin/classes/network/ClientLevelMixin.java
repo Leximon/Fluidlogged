@@ -58,13 +58,13 @@ public abstract class ClientLevelMixin extends Level implements ClientLevelExten
         if (this.fluidStatePredictionHandler.isPredicting()) {
             FluidState actualFluidState = this.getFluidState(blockPos);
 
-            boolean success = LevelExtension.super.setFluid(blockPos, fluidState, flags, maxUpdateDepth);
+            boolean success = original$setFluid(blockPos, fluidState, flags, maxUpdateDepth);
             if (success)
                 this.fluidStatePredictionHandler.retainKnownServerState(blockPos, actualFluidState, this.minecraft.player);
 
             return success;
         } else {
-            return $setFluidOriginal(blockPos, fluidState, flags, maxUpdateDepth);
+            return original$setFluid(blockPos, fluidState, flags, maxUpdateDepth);
         }
     }
 

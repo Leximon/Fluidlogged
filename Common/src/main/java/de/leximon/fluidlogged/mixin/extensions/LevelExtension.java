@@ -7,11 +7,11 @@ import org.jetbrains.annotations.ApiStatus;
 public interface LevelExtension {
 
     default boolean setFluid(BlockPos blockPos, FluidState fluidState, int flags, int maxUpdateDepth) {
-        return $setFluidOriginal(blockPos, fluidState, flags, maxUpdateDepth);
+        return original$setFluid(blockPos, fluidState, flags, maxUpdateDepth);
     }
 
     @ApiStatus.Internal
-    boolean $setFluidOriginal(BlockPos blockPos, FluidState fluidState, int flags, int maxUpdateDepth);
+    boolean original$setFluid(BlockPos blockPos, FluidState fluidState, int flags, int maxUpdateDepth);
 
     default boolean setFluid(BlockPos blockPos, FluidState fluidState, int flags) {
         return LevelExtension.this.setFluid(blockPos, fluidState, flags, 512);

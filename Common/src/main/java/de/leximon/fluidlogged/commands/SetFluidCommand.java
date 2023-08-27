@@ -3,6 +3,7 @@ package de.leximon.fluidlogged.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.commands.arguments.FluidInput;
 import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
 import net.minecraft.commands.CommandBuildContext;
@@ -28,7 +29,7 @@ public class SetFluidCommand {
     private static int setFluid(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "pos");
         FluidInput fluid = FluidStateArgument.getFluid(context, "fluid");
-        fluid.place(context.getSource().getLevel(), pos, Block.UPDATE_CLIENTS);
+        fluid.place(context.getSource().getLevel(), pos, Block.UPDATE_CLIENTS | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
         return 1;
     }
 

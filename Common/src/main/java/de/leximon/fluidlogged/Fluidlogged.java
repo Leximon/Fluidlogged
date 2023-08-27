@@ -3,14 +3,15 @@ package de.leximon.fluidlogged;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidloggedCommon {
+public class Fluidlogged {
 
     public static final String MOD_ID = "fluidlogged";
+
+    public static final int UPDATE_SCHEDULE_FLUID_TICK = 0x80;
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);

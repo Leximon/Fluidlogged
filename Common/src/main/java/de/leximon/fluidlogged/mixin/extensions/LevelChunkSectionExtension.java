@@ -9,4 +9,6 @@ public interface LevelChunkSectionExtension {
 
     Short2ObjectMap<FluidState> getFluidStates();
     FluidState setFluidState(int x, int y, int z, FluidState fluidState);
+
+    FluidState getFluidStateExact(int x, int y, int z);
 }

@@ -22,10 +22,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "de.leximon.fluidlogged.Fluidlogged"
+      "de.leximon.fluidlogged.FluidloggedFabric"
     ],
     "client": [
-      "de.leximon.fluidlogged.FluidloggedClient"
+      "de.leximon.fluidlogged.FluidloggedFabricClient"
     ]
   },
   "mixins": [

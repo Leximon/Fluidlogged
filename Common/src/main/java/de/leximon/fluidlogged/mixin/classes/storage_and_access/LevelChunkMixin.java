@@ -1,6 +1,6 @@
 package de.leximon.fluidlogged.mixin.classes.storage_and_access;
 
-import de.leximon.fluidlogged.FluidloggedCommon;
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkExtension;
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
 import net.minecraft.core.BlockPos;
@@ -17,7 +17,6 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.blending.BlendingData;
-import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -60,7 +59,7 @@ public abstract class LevelChunkMixin extends ChunkAccess implements LevelChunkE
         if (hasOnlyAir != newHasOnlyAir)
             this.level.getChunkSource().getLightEngine().updateSectionStatus(blockPos, newHasOnlyAir);
 
-        if (FluidloggedCommon.hasDifferentLightEmission(prevFluidState, fluidState)) {
+        if (Fluidlogged.hasDifferentLightEmission(prevFluidState, fluidState)) {
             ProfilerFiller profilerFiller = this.level.getProfiler();
             profilerFiller.push("updateSkyLightSources");
             this.skyLightSources.update(this, rx, ry, rz);
@@ -68,9 +67,6 @@ public abstract class LevelChunkMixin extends ChunkAccess implements LevelChunkE
             this.level.getChunkSource().getLightEngine().checkBlock(blockPos);
             profilerFiller.pop();
         }
-
-        if (!levelChunkSection.getFluidState(rx, ry, rz).is(fluidState.getType()))
-            return null;
 
         unsaved = true;
         return prevFluidState;

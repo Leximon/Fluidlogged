@@ -1,24 +1,32 @@
 package de.leximon.fluidlogged.mixin.classes.storage_and_access;
 
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkExtension;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.EmptyLevelChunk;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 
 /**
  * Default implementations are in {@link de.leximon.fluidlogged.mixin.extensions.LevelExtension}
  */
 @Mixin(Level.class)
-public abstract class LevelMixin implements LevelExtension {
+public abstract class LevelMixin implements LevelAccessor, AutoCloseable, LevelExtension {
+
+    @Shadow public abstract LevelChunk getChunkAt(BlockPos blockPos);
 
     @Override
-    public boolean $setFluidOriginal(BlockPos blockPos, FluidState fluidState, int flags, int maxUpdateDepth) {
+    public boolean original$setFluid(BlockPos blockPos, FluidState fluidState, int flags, int maxUpdateDepth) {
         Level $this = (Level) (Object) this;
         
         if ((flags & Block.UPDATE_MOVE_BY_PISTON) != 0)
@@ -37,14 +45,9 @@ public abstract class LevelMixin implements LevelExtension {
         if (prevFluidState == null)
             return false;
 
-        FluidState actualFluidState = $this.getFluidState(blockPos);
-        if (actualFluidState != fluidState)
-            return true;
 
-
-        if (prevFluidState != actualFluidState)
+        if (prevFluidState != fluidState)
             $setBlocksDirty(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
-
 
         if ((flags & Block.UPDATE_CLIENTS) != 0
                 && (!$this.isClientSide || (flags & Block.UPDATE_INVISIBLE) == 0)
@@ -58,6 +61,11 @@ public abstract class LevelMixin implements LevelExtension {
             $this.blockUpdated(blockPos, blockState.getBlock());
             if (!$this.isClientSide && blockState.hasAnalogOutputSignal())
                 $this.updateNeighbourForOutputSignal(blockPos, blockState.getBlock());
+        }
+
+        if ((flags & Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK) != 0) {
+            Fluid fluid = fluidState.getType();
+            scheduleTick(blockPos, fluid, fluid.getTickDelay($this));
         }
 
         if ((flags & Block.UPDATE_KNOWN_SHAPE) == 0 && maxUpdateDepth > 0) {

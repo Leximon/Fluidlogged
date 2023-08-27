@@ -1,6 +1,8 @@
 package de.leximon.fluidlogged.mixin.classes.network;
 
 import de.leximon.fluidlogged.mixin.extensions.ChunkHolderExtension;
+import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
+import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
 import de.leximon.fluidlogged.platform.services.Services;
 import it.unimi.dsi.fastutil.shorts.ShortOpenHashSet;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
@@ -81,16 +83,20 @@ public abstract class ChunkHolderMixin implements ChunkHolderExtension {
 
         int sectionY = this.levelHeightAccessor.getSectionYFromSectionIndex(i);
         SectionPos sectionPos = SectionPos.of(levelChunk.getPos(), sectionY);
+        LevelChunkSection levelChunkSection = levelChunk.getSection(i);
 
         if (changedFluids.size() == 1) {
             BlockPos blockPos = sectionPos.relativeToBlockPos(changedFluids.iterator().nextShort());
-            FluidState fluidState = level.getFluidState(blockPos);
+            FluidState fluidState = ((LevelChunkSectionExtension) levelChunkSection).getFluidStateExact(
+                    blockPos.getX() & 15,
+                    blockPos.getY() & 15,
+                    blockPos.getZ() & 15
+            );
 
             Services.PLATFORM.broadcastFluidUpdatePacket(players, blockPos, fluidState);
             return;
         }
 
-        LevelChunkSection levelChunkSection = levelChunk.getSection(i);
         Services.PLATFORM.broadcastSectionFluidsUpdatePacket(players, sectionPos, changedFluids, levelChunkSection);
 
     }

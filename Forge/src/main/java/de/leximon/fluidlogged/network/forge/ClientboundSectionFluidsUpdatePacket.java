@@ -1,6 +1,6 @@
 package de.leximon.fluidlogged.network.forge;
 
-import de.leximon.fluidlogged.FluidloggedCommon;
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.network.ClientPacketHandler;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.minecraft.core.SectionPos;
@@ -53,7 +53,7 @@ public class ClientboundSectionFluidsUpdatePacket {
         buf.writeVarInt(this.positions.length);
 
         for(int i = 0; i < this.positions.length; i++)
-            buf.writeVarLong((long) FluidloggedCommon.getFluidId(this.states[i]) << 12 | (long) this.positions[i]);
+            buf.writeVarLong((long) Fluidlogged.getFluidId(this.states[i]) << 12 | (long) this.positions[i]);
     }
 
     public static ClientboundSectionFluidsUpdatePacket read(FriendlyByteBuf buf) {

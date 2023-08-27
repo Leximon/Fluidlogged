@@ -1,17 +1,14 @@
 package de.leximon.fluidlogged.network.fabric;
 
-import de.leximon.fluidlogged.FluidloggedCommon;
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.network.ClientPacketHandler;
-import it.unimi.dsi.fastutil.shorts.ShortIterator;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 
@@ -20,7 +17,7 @@ public record ClientboundFluidUpdatePacket(
         FluidState state
 ) implements FabricPacket {
 
-    public static final ResourceLocation ID = FluidloggedCommon.id("fluid_update");
+    public static final ResourceLocation ID = Fluidlogged.id("fluid_update");
     public static final PacketType<ClientboundFluidUpdatePacket> PACKET_TYPE = PacketType.create(ID, ClientboundFluidUpdatePacket::read);
 
 

@@ -1,6 +1,6 @@
 package de.leximon.fluidlogged.platform;
 
-import de.leximon.fluidlogged.Fluidlogged;
+import de.leximon.fluidlogged.FluidloggedForge;
 import de.leximon.fluidlogged.network.forge.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket;
 import de.leximon.fluidlogged.platform.services.IPlatformHelper;
@@ -24,12 +24,12 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public void broadcastFluidUpdatePacket(List<ServerPlayer> players, BlockPos pos, FluidState state) {
-        Fluidlogged.PACKET_CHANNEL.send(PLAYER_LIST_DISTRIBUTOR.with(() -> players), new ClientboundFluidUpdatePacket(pos, state));
+        FluidloggedForge.PACKET_CHANNEL.send(PLAYER_LIST_DISTRIBUTOR.with(() -> players), new ClientboundFluidUpdatePacket(pos, state));
     }
 
     @Override
     public void broadcastSectionFluidsUpdatePacket(List<ServerPlayer> players, SectionPos sectionPos, ShortSet changedFluids, LevelChunkSection levelChunkSection) {
-        Fluidlogged.PACKET_CHANNEL.send(PLAYER_LIST_DISTRIBUTOR.with(() -> players), new ClientboundSectionFluidsUpdatePacket(sectionPos, changedFluids, levelChunkSection));
+        FluidloggedForge.PACKET_CHANNEL.send(PLAYER_LIST_DISTRIBUTOR.with(() -> players), new ClientboundSectionFluidsUpdatePacket(sectionPos, changedFluids, levelChunkSection));
     }
 
 }

@@ -44,6 +44,11 @@ public class LevelChunkSectionMixin implements LevelChunkSectionExtension {
         return this.fluidStates.put((short) (x << 8 | y << 4 | z), fluidState);
     }
 
+    @Override
+    public FluidState getFluidStateExact(int x, int y, int z) {
+        return this.fluidStates.get((short) (x << 8 | y << 4 | z));
+    }
+
     @Inject(method = "<init>(Lnet/minecraft/core/Registry;)V", at = @At("RETURN"))
     private void injectInit(Registry<Biome> registry, CallbackInfo ci) {
         createAndSetFluidStatesMap();
