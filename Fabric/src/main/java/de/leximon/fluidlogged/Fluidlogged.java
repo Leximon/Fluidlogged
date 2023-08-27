@@ -5,6 +5,7 @@ import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 
 

@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
 
 public class SetFluidCommand {
 
@@ -27,7 +28,7 @@ public class SetFluidCommand {
     private static int setFluid(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "pos");
         FluidInput fluid = FluidStateArgument.getFluid(context, "fluid");
-        fluid.place(context.getSource().getLevel(), pos);
+        fluid.place(context.getSource().getLevel(), pos, Block.UPDATE_CLIENTS);
         return 1;
     }
 

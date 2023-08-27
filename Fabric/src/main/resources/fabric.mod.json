@@ -23,6 +23,9 @@
   "entrypoints": {
     "main": [
       "de.leximon.fluidlogged.Fluidlogged"
+    ],
+    "client": [
+      "de.leximon.fluidlogged.FluidloggedClient"
     ]
   },
   "mixins": [

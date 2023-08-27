@@ -26,7 +26,7 @@ public class FluidInput {
         return this.properties;
     }
 
-    public boolean place(ServerLevel serverLevel, BlockPos blockPos) {
-        return ((LevelExtension) serverLevel).setFluid(blockPos, this.state);
+    public boolean place(ServerLevel serverLevel, BlockPos blockPos, int flags) {
+        return ((LevelExtension) serverLevel).setFluid(blockPos, this.state, flags);
     }
 }

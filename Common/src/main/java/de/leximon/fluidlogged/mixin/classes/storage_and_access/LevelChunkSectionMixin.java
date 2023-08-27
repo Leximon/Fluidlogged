@@ -23,29 +23,30 @@ public class LevelChunkSectionMixin implements LevelChunkSectionExtension {
     @Unique private Short2ObjectMap<FluidState> fluidStates;
 
     @Override
+    public Short2ObjectMap<FluidState> createAndSetFluidStatesMap() {
+        Short2ObjectOpenHashMap<FluidState> fluidStates = new Short2ObjectOpenHashMap<>();
+        fluidStates.defaultReturnValue(Fluids.EMPTY.defaultFluidState());
+        this.fluidStates = fluidStates;
+        return fluidStates;
+    }
+
+    @Override
     public Short2ObjectMap<FluidState> getFluidStates() {
         return this.fluidStates;
     }
 
-    @Override
-    public void setFluidStates(Short2ObjectMap<FluidState> fluidStates) {
-        this.fluidStates = fluidStates;
-    }
-
 
     @Override
-    public void setFluidState(int x, int y, int z, FluidState fluidState) {
-        if (fluidState.isEmpty()) {
-            this.fluidStates.remove((short) (x << 8 | y << 4 | z));
-            return;
-        }
+    public FluidState setFluidState(int x, int y, int z, FluidState fluidState) {
+        if (fluidState.isEmpty())
+            return this.fluidStates.remove((short) (x << 8 | y << 4 | z));
 
-        this.fluidStates.put((short) (x << 8 | y << 4 | z), fluidState);
+        return this.fluidStates.put((short) (x << 8 | y << 4 | z), fluidState);
     }
 
     @Inject(method = "<init>(Lnet/minecraft/core/Registry;)V", at = @At("RETURN"))
     private void injectInit(Registry<Biome> registry, CallbackInfo ci) {
-        this.fluidStates = new Short2ObjectOpenHashMap<>();
+        createAndSetFluidStatesMap();
     }
 
     @Inject(method = "getFluidState", at = @At("RETURN"), cancellable = true)
@@ -59,6 +60,13 @@ public class LevelChunkSectionMixin implements LevelChunkSectionExtension {
             return;
 
         cir.setReturnValue(fluidState);
+    }
+
+    @Inject(method = "hasOnlyAir", at = @At("RETURN"), cancellable = true)
+    private void injectHasOnlyAir(CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue())
+            return;
+        cir.setReturnValue(fluidStates.isEmpty());
     }
 
     @Inject(method = "getSerializedSize", at = @At("RETURN"), cancellable = true)

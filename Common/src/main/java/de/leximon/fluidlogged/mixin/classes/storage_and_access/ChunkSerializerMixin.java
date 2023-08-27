@@ -3,7 +3,6 @@ package de.leximon.fluidlogged.mixin.classes.storage_and_access;
 import com.mojang.serialization.Codec;
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
@@ -37,7 +36,7 @@ public abstract class ChunkSerializerMixin {
 
     @Inject(method = "read", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/village/poi/PoiManager;checkConsistencyWithBlocks(Lnet/minecraft/core/SectionPos;Lnet/minecraft/world/level/chunk/LevelChunkSection;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private static void injectRead(ServerLevel serverLevel, PoiManager poiManager, ChunkPos chunkPos, CompoundTag compoundTag, CallbackInfoReturnable<ProtoChunk> cir, ChunkPos chunkPos2, UpgradeData upgradeData, boolean bl, ListTag listTag, int i, LevelChunkSection[] levelChunkSections, boolean bl2, ChunkSource chunkSource, LevelLightEngine levelLightEngine, Registry registry, Codec codec, boolean bl3, int j, CompoundTag compoundTag2, int k, int l, PalettedContainer palettedContainer, PalettedContainerRO palettedContainerRO, LevelChunkSection levelChunkSection, SectionPos sectionPos) {
-        Short2ObjectMap<FluidState> container = new Short2ObjectOpenHashMap<>();
+        Short2ObjectMap<FluidState> container = ((LevelChunkSectionExtension) levelChunkSection).createAndSetFluidStatesMap();
         if (compoundTag2.contains("fluidlogged.fluid_states", Tag.TAG_COMPOUND)) {
             CompoundTag fluidStates = compoundTag2.getCompound("fluidlogged.fluid_states");
 
@@ -60,7 +59,6 @@ public abstract class ChunkSerializerMixin {
                 container.put(pos, state);
             }
         }
-        ((LevelChunkSectionExtension) levelChunkSection).setFluidStates(container);
     }
 
     @Inject(method = "write", at = @At(value = "INVOKE", target = "Lcom/mojang/serialization/Codec;encodeStart(Lcom/mojang/serialization/DynamicOps;Ljava/lang/Object;)Lcom/mojang/serialization/DataResult;", ordinal = 3), locals = LocalCapture.CAPTURE_FAILHARD)

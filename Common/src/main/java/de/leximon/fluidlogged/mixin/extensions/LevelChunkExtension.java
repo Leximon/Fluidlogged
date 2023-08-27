@@ -5,6 +5,6 @@ import net.minecraft.world.level.material.FluidState;
 
 public interface LevelChunkExtension {
 
-    void setFluidState(BlockPos blockPos, FluidState fluidState);
+    FluidState setFluidState(BlockPos blockPos, FluidState fluidState);
 
 }
