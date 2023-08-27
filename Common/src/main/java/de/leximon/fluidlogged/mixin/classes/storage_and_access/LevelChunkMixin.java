@@ -59,7 +59,7 @@ public abstract class LevelChunkMixin extends ChunkAccess implements LevelChunkE
         if (hasOnlyAir != newHasOnlyAir)
             this.level.getChunkSource().getLightEngine().updateSectionStatus(blockPos, newHasOnlyAir);
 
-        if (Fluidlogged.hasDifferentLightEmission(prevFluidState, fluidState)) {
+        if (Fluidlogged.Internal.hasDifferentLightEmission(prevFluidState, fluidState)) {
             ProfilerFiller profilerFiller = this.level.getProfiler();
             profilerFiller.push("updateSkyLightSources");
             this.skyLightSources.update(this, rx, ry, rz);

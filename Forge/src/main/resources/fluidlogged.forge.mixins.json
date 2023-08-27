@@ -13,7 +13,9 @@
     "storage_and_access.LevelChunkMixin",
     "world_interaction.BlockStateBaseMixin",
     "world_interaction.FlowingFluidMixin",
-    "world_interaction.BlockLightEngineMixin"
+    "world_interaction.BlockLightEngineMixin",
+    "world_interaction.LevelMixin",
+    "world_interaction.MultiPlayerGameModeMixin"
   ],
   "client": [
     "network.ClientLevelMixin",
