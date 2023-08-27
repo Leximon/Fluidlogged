@@ -44,6 +44,7 @@ public class ClientboundSectionFluidsUpdatePacket implements FabricPacket {
                     SectionPos.sectionRelativeY(pos),
                     SectionPos.sectionRelativeZ(pos)
             );
+            index++;
         }
     }
 
@@ -67,11 +68,11 @@ public class ClientboundSectionFluidsUpdatePacket implements FabricPacket {
 
     public static ClientboundSectionFluidsUpdatePacket read(FriendlyByteBuf buf) {
         SectionPos sectionPos = SectionPos.of(buf.readLong());
-        int i = buf.readVarInt();
-        short[] positions = new short[i];
-        FluidState[] states = new FluidState[i];
+        int length = buf.readVarInt();
+        short[] positions = new short[length];
+        FluidState[] states = new FluidState[length];
 
-        for(int j = 0; j < i; ++j) {
+        for(int j = 0; j < length; ++j) {
             long idAndPos = buf.readVarLong();
             positions[j] = (short)((int) (idAndPos & 0xFFF));
             states[j] = Fluid.FLUID_STATE_REGISTRY.byId((int) (idAndPos >>> 12));
