@@ -7,6 +7,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -32,6 +34,20 @@ public class Fluidlogged {
             int i = Fluid.FLUID_STATE_REGISTRY.getId(blockState);
             return i == -1 ? 0 : i;
         }
+    }
+
+    public static boolean canPlaceFluid(BlockState blockState) {
+        return true;
+    }
+
+    public static boolean placeFluid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState) {
+        if (level.isClientSide())
+            return false;
+
+        if (!level.getFluidState(pos).isEmpty())
+            return false;
+
+        return ((LevelExtension) level).setFluid(pos, fluidState, Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
     }
 
     @ApiStatus.Internal

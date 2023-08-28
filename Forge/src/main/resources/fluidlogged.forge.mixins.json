@@ -15,7 +15,8 @@
     "world_interaction.FlowingFluidMixin",
     "world_interaction.BlockLightEngineMixin",
     "world_interaction.LevelMixin",
-    "world_interaction.MultiPlayerGameModeMixin"
+    "world_interaction.MultiPlayerGameModeMixin",
+    "world_interaction.removal_and_placement.BucketItemMixin"
   ],
   "client": [
     "network.ClientLevelMixin",
