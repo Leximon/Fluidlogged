@@ -7,10 +7,6 @@ import net.minecraft.world.phys.Vec3;
 
 public interface ClientLevelExtension {
 
-    void handleFluidChangedAck(int i);
-
-    void setServerVerifiedFluidState(BlockPos blockPos, FluidState fluidState, int flags);
-
     void syncFluidState(BlockPos blockPos, FluidState fluidState);
 
 }

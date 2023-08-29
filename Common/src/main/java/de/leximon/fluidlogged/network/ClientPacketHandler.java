@@ -2,6 +2,7 @@ package de.leximon.fluidlogged.network;
 
 import com.mojang.authlib.minecraft.client.MinecraftClient;
 import de.leximon.fluidlogged.mixin.extensions.ClientLevelExtension;
+import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -15,7 +16,7 @@ public class ClientPacketHandler {
     public static void handleFluidUpdate(BlockPos pos, FluidState state) {
         ClientLevel level = Minecraft.getInstance().level;
 
-        ((ClientLevelExtension) level).setServerVerifiedFluidState(
+        ((LevelExtension) level).setFluid(
                 pos, state,
                 Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE
         );
@@ -29,7 +30,7 @@ public class ClientPacketHandler {
             short pos = positions[i];
             mutPos.set(sectionPos.relativeToBlockX(pos), sectionPos.relativeToBlockY(pos), sectionPos.relativeToBlockZ(pos));
 
-            ((ClientLevelExtension) level).setServerVerifiedFluidState(
+            ((LevelExtension) level).setFluid(
                     mutPos, states[i],
                     Block.UPDATE_NEIGHBORS | Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE
             );

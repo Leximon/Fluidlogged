@@ -9,11 +9,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.EmptyLevelChunk;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -26,7 +24,7 @@ public abstract class LevelMixin implements LevelAccessor, AutoCloseable, LevelE
     @Shadow public abstract LevelChunk getChunkAt(BlockPos blockPos);
 
     @Override
-    public boolean original$setFluid(BlockPos blockPos, FluidState fluidState, int flags, int maxUpdateDepth) {
+    public boolean setFluid(BlockPos blockPos, FluidState fluidState, int flags, int maxUpdateDepth) {
         Level $this = (Level) (Object) this;
         
         if ((flags & Block.UPDATE_MOVE_BY_PISTON) != 0)
@@ -47,7 +45,7 @@ public abstract class LevelMixin implements LevelAccessor, AutoCloseable, LevelE
 
 
         if (prevFluidState != fluidState)
-            $setBlocksDirty(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
+            fluidlogged$setBlocksDirty(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
         if ((flags & Block.UPDATE_CLIENTS) != 0
                 && (!$this.isClientSide || (flags & Block.UPDATE_INVISIBLE) == 0)
