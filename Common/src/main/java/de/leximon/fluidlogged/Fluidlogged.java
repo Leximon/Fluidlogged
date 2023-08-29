@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
@@ -37,14 +36,16 @@ public class Fluidlogged {
     }
 
     public static boolean canPlaceFluid(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid) {
-
         if (blockState.getBlock() instanceof LiquidBlockContainer container
                 && container.canPlaceLiquid(blockGetter, blockPos, blockState, fluid))
             return true;
 
-        // TODO: check config for custom fluidloggable blocks
+        return isBlockFluidloggable(blockState.getBlock());
+    }
 
-        return false;
+    public static boolean isBlockFluidloggable(Block block) {
+        // TODO: check config for custom fluidloggable blocks
+        return block instanceof LiquidBlockContainer;
     }
 
     @ApiStatus.Internal
