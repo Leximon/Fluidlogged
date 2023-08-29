@@ -37,6 +37,7 @@ public class Fluidlogged {
     }
 
     public static boolean canPlaceFluid(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid) {
+
         if (blockState.getBlock() instanceof LiquidBlockContainer container
                 && container.canPlaceLiquid(blockGetter, blockPos, blockState, fluid))
             return true;
@@ -44,16 +45,6 @@ public class Fluidlogged {
         // TODO: check config for custom fluidloggable blocks
 
         return false;
-    }
-
-    public static boolean placeFluid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState) {
-        if (level.isClientSide())
-            return false;
-
-        if (!level.getFluidState(pos).isEmpty())
-            return false;
-
-        return ((LevelExtension) level).setFluid(pos, fluidState, Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
     }
 
     @ApiStatus.Internal

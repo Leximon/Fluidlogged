@@ -17,7 +17,8 @@
     "world_interaction.LevelMixin",
     "world_interaction.MultiPlayerGameModeMixin",
     "world_interaction.removal_and_placement.BucketItemMixin",
-    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin"
+    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin",
+    "world_interaction.removal_and_placement.BlockItemMixin"
   ],
   "client": [
     "network.ClientLevelMixin",

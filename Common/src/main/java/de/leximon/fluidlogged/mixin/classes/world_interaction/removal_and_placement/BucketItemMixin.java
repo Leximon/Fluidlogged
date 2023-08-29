@@ -1,6 +1,7 @@
 package de.leximon.fluidlogged.mixin.classes.world_interaction.removal_and_placement;
 
 import de.leximon.fluidlogged.Fluidlogged;
+import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -10,6 +11,7 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -133,7 +135,7 @@ public abstract class BucketItemMixin {
 
         // try to place the fluid via blockState first then via Fluidlogged
         if (!(blockState.getBlock() instanceof LiquidBlockContainer container && container.placeLiquid(level, blockPos, blockState, contentFluidState)))
-            Fluidlogged.placeFluid(level, blockPos, blockState, contentFluidState);
+            ((LevelExtension) level).setFluid(blockPos, contentFluidState, Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
 
         playEmptySound(player, level, blockPos);
         cir.setReturnValue(true);
