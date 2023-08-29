@@ -7,7 +7,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.material.FluidState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(targets = "me/jellysquid/mods/sodium/client/render/chunk/compile/tasks/ChunkBuilderMeshingTask")
 public class ChunkBuilderMeshingTaskMixin {
@@ -23,20 +25,21 @@ public class ChunkBuilderMeshingTaskMixin {
         return false;
     }
 
-    @Redirect(
+    @ModifyArgs(
             method = "execute(Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildContext;Lme/jellysquid/mods/sodium/client/util/task/CancellationToken;)Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildOutput;",
             at = @At(
                     value = "INVOKE",
                     target = "Lme/jellysquid/mods/sodium/client/render/chunk/compile/pipeline/FluidRenderer;render(Lme/jellysquid/mods/sodium/client/world/WorldSlice;Lnet/minecraft/world/level/material/FluidState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildBuffers;)V"
             )
     )
-    private void redirectFluidRender(FluidRenderer instance, WorldSlice slice, FluidState fluidState, BlockPos blockPos, BlockPos modelOffset, ChunkBuildBuffers buffers) {
-        FluidState actualFluidState = fluidState;
+    private void modifyFluidRenderArgs(Args args) {
+        WorldSlice slice = args.get(0);
+        FluidState actualFluidState = args.get(1);
+        BlockPos blockPos = args.get(2);
         if (actualFluidState.isEmpty())
             actualFluidState = slice.getFluidState(blockPos);
 
-        if (!actualFluidState.isEmpty())
-            instance.render(slice, actualFluidState, blockPos, modelOffset, buffers);
+        args.set(1, actualFluidState);
     }
 
 }

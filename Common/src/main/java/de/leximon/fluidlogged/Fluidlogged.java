@@ -55,15 +55,19 @@ public class Fluidlogged {
             return prevFluidState.createLegacyBlock().getLightEmission() != newFluidState.createLegacyBlock().getLightEmission();
         }
 
-        public static boolean handleBlockRemoval(Level instance, BlockPos blockPos, BlockState blockState, int flags, int maxUpdateDepth) {
+        public static BlockState handleBlockRemoval(Level instance, BlockPos blockPos, int flags, int maxUpdateDepth) {
             FluidState fluidState = instance.getFluidState(blockPos);
 
-            ((LevelExtension) instance).setFluid(blockPos, Fluids.EMPTY.defaultFluidState(), flags, maxUpdateDepth);
+            ((LevelExtension) instance).setFluid(
+                    blockPos,
+                    Fluids.EMPTY.defaultFluidState(),
+                    flags,
+                    maxUpdateDepth
+            );
 
             int replacementFluidLevel = Mth.clamp(8 - fluidState.getAmount(), 0, 8);
-            BlockState replacementBlock = fluidState.createLegacyBlock()
+            return fluidState.createLegacyBlock()
                     .trySetValue(LiquidBlock.LEVEL, replacementFluidLevel);
-            return instance.setBlock(blockPos, replacementBlock, flags, maxUpdateDepth);
         }
 
     }
