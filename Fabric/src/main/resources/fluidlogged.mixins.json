@@ -3,29 +3,34 @@
   "minVersion": "0.8",
   "package": "de.leximon.fluidlogged.mixin.classes",
   "compatibilityLevel": "JAVA_17",
+  "plugin": "de.leximon.fluidlogged.mixin.FluidloggedFabricMixinPlugin",
   "mixins": [
+    "network.ChunkHolderMixin",
     "network.ServerChunkCacheMixin",
     "network.ServerLevelMixin",
-    "network.ChunkHolderMixin",
-    "storage_and_access.LevelChunkSectionMixin",
-    "storage_and_access.LevelMixin",
+    "rendering.sodium_compat.ChunkBuilderMeshingTaskMixin",
+    "rendering.sodium_compat.ClonedChunkSectionMixin",
+    "rendering.sodium_compat.FluidRendererMixin",
+    "rendering.sodium_compat.WorldSliceMixin",
     "storage_and_access.ChunkSerializerMixin",
     "storage_and_access.LevelChunkMixin",
+    "storage_and_access.LevelChunkSectionMixin",
+    "storage_and_access.LevelMixin",
+    "world_interaction.BlockLightEngineMixin",
     "world_interaction.BlockStateBaseMixin",
     "world_interaction.FlowingFluidMixin",
-    "world_interaction.BlockLightEngineMixin",
     "world_interaction.LevelMixin",
     "world_interaction.MultiPlayerGameModeMixin",
+    "world_interaction.removal_and_placement.BlockItemMixin",
     "world_interaction.removal_and_placement.BucketItemMixin",
-    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin",
-    "world_interaction.removal_and_placement.BlockItemMixin"
+    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin"
   ],
   "client": [
     "network.ClientLevelMixin",
     "rendering.LiquidBlockRendererMixin",
     "rendering.RebuildTaskMixin",
-    "rendering.RenderChunkRegionMixin",
-    "rendering.RenderChunkMixin"
+    "rendering.RenderChunkMixin",
+    "rendering.RenderChunkRegionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

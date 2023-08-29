@@ -5,10 +5,15 @@ import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.renderer.block.LiquidBlockRenderer;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 
 
 public class FluidloggedFabric implements ModInitializer {
+
+	public static final boolean SODIUM_LOADED = FabricLoader.getInstance().isModLoaded("sodium");
+
 	@Override
 	public void onInitialize() {
 		ArgumentTypeRegistry.registerArgumentType(
