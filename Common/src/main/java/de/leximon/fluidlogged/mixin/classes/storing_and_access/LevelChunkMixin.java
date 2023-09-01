@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.storage_and_access;
+package de.leximon.fluidlogged.mixin.classes.storing_and_access;
 
 import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkExtension;

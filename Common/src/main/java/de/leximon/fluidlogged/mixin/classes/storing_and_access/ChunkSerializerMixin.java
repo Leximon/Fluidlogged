@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.storage_and_access;
+package de.leximon.fluidlogged.mixin.classes.storing_and_access;
 
 import com.mojang.serialization.Codec;
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
