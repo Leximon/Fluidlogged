@@ -40,12 +40,8 @@ public class Fluidlogged {
                 && container.canPlaceLiquid(blockGetter, blockPos, blockState, fluid))
             return true;
 
-        return isBlockFluidloggable(blockState.getBlock());
-    }
-
-    public static boolean isBlockFluidloggable(Block block) {
         // TODO: check config for custom fluidloggable blocks
-        return block instanceof LiquidBlockContainer;
+        return false;
     }
 
     @ApiStatus.Internal
