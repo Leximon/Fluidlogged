@@ -15,6 +15,7 @@ version = "${mod_version}-fabric-${mod_version_suffix}"
 repositories {
 	maven { url = "https://api.modrinth.com/maven" }
 	maven { url = "https://maven.terraformersmc.com"}
+	maven { url = "https://mvn.devos.one/snapshots/" }
 }
 
 dependencies {
@@ -25,7 +26,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 	modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
 
+	// for compatibility
 	modImplementation "maven.modrinth:sodium:${project.sodium_version}"
+	modImplementation "io.github.tropheusj:Milk-Plus:${project.milk_plus_version}"
 
 	implementation project(path: ':Common', configuration: 'namedElements')
 }

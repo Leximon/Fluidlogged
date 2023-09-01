@@ -13,6 +13,7 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 public class FluidloggedFabric implements ModInitializer {
 
 	public static final boolean SODIUM_LOADED = FabricLoader.getInstance().isModLoaded("sodium");
+	public static final boolean MILK_LIB_LOADED = FabricLoader.getInstance().isModLoaded("milk");
 
 	@Override
 	public void onInitialize() {

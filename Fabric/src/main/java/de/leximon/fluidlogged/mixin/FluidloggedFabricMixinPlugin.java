@@ -23,8 +23,10 @@ public class FluidloggedFabricMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (FluidloggedFabric.SODIUM_LOADED && mixinClassName.equals("de.leximon.fluidlogged.mixin.classes.rendering.LiquidBlockRendererMixin"))
             return false;
-
         if (!FluidloggedFabric.SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.rendering.sodium_compat"))
+            return false;
+
+        if (!FluidloggedFabric.MILK_LIB_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.rendering.milk_lib_compat"))
             return false;
 
         return true;

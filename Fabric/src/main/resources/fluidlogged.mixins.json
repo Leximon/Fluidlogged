@@ -8,6 +8,7 @@
     "network.ChunkHolderMixin",
     "network.ServerChunkCacheMixin",
     "network.ServerLevelMixin",
+    "rendering.milk_lib_compat.MilkBucketItemMixin",
     "rendering.sodium_compat.ChunkBuilderMeshingTaskMixin",
     "rendering.sodium_compat.ClonedChunkSectionMixin",
     "rendering.sodium_compat.FluidRendererMixin",
