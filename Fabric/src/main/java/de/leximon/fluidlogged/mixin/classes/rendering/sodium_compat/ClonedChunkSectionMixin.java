@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClonedChunkSectionMixin implements ClonedChunkSectionExtension {
 
     @Unique @Nullable
-    private Int2ReferenceMap<FluidState> fluidData;
+    private Int2ReferenceMap<FluidState> fluidlogged$fluidData;
 
     @Inject(method = "<init>", at = @At("RETURN"), remap = false)
     private void injectFluidData(Level world, LevelChunk chunk, LevelChunkSection section, SectionPos chunkCoord, CallbackInfo ci) {
@@ -44,11 +44,11 @@ public class ClonedChunkSectionMixin implements ClonedChunkSectionExtension {
             fluidData.put(WorldSlice.getLocalBlockIndex(pos >> 8 & 15, pos >> 4 & 15, pos & 15), fluidState);
         }
 
-        this.fluidData = fluidData;
+        this.fluidlogged$fluidData = fluidData;
     }
 
     @Override
-    public @Nullable Int2ReferenceMap<FluidState> getFluidData() {
-        return this.fluidData;
+    public @Nullable Int2ReferenceMap<FluidState> getFluidlogged$fluidData() {
+        return this.fluidlogged$fluidData;
     }
 }

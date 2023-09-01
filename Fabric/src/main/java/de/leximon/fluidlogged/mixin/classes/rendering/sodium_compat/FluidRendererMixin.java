@@ -17,13 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "me/jellysquid/mods/sodium/client/render/chunk/compile/pipeline/FluidRenderer")
 public class FluidRendererMixin {
 
-
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void injectRenderCancellation(WorldSlice world, FluidState fluidState, BlockPos blockPos, BlockPos offset, ChunkBuildBuffers buffers, CallbackInfo ci) {
-        if (fluidState.isEmpty())
-            ci.cancel();
-    }
-
     @Redirect(
             method = "fluidHeight",
             at = @At(

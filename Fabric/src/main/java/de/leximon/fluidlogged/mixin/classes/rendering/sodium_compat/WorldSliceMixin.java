@@ -1,6 +1,7 @@
 package de.leximon.fluidlogged.mixin.classes.rendering.sodium_compat;
 
 import de.leximon.fluidlogged.mixin.extensions.sodium_compat.ClonedChunkSectionExtension;
+import de.leximon.fluidlogged.mixin.extensions.sodium_compat.WorldSliceExtension;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
 import me.jellysquid.mods.sodium.client.world.cloned.ChunkRenderContext;
 import me.jellysquid.mods.sodium.client.world.cloned.ClonedChunkSection;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 
 @Mixin(targets = "me/jellysquid/mods/sodium/client/world/WorldSlice")
-public abstract class WorldSliceMixin {
+public abstract class WorldSliceMixin implements WorldSliceExtension {
 
     @Shadow @Final private static int SECTION_ARRAY_SIZE;
 
@@ -27,9 +28,9 @@ public abstract class WorldSliceMixin {
 
     @Shadow public static int getLocalSectionIndex(int x, int y, int z) { return 0; }
 
-    @Shadow public abstract BlockState getBlockState(BlockPos pos);
-
     @Shadow public static int getLocalBlockIndex(int x, int y, int z) { return 0; }
+
+    @Shadow public abstract BlockState getBlockState(int x, int y, int z);
 
     @Unique
     private Int2ReferenceMap<FluidState>[] fluidArrays;
@@ -43,22 +44,35 @@ public abstract class WorldSliceMixin {
     @Inject(method = "copySectionData", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
     private void injectUnpackFluidData(ChunkRenderContext context, int sectionIndex, CallbackInfo ci, ClonedChunkSection section) {
         ClonedChunkSectionExtension sectionExt = ((ClonedChunkSectionExtension) section);
-        if (sectionExt.getFluidData() == null)
-            return;
 
-        this.fluidArrays[sectionIndex] = sectionExt.getFluidData();
+        this.fluidArrays[sectionIndex] = sectionExt.getFluidlogged$fluidData();
     }
+
+    @Inject(
+            method = "reset",
+            at = @At(value = "FIELD", target = "Lme/jellysquid/mods/sodium/client/world/WorldSlice;blockEntityArrays:[Lit/unimi/dsi/fastutil/ints/Int2ReferenceMap;"),
+            locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    private void injectReset(CallbackInfo ci, int sectionIndex) {
+        this.fluidArrays[sectionIndex] = null;
+    }
+
 
     @SuppressWarnings("OverwriteAuthorRequired")
     @Overwrite
     public FluidState getFluidState(BlockPos pos) {
-        FluidState fluidState = getBlockState(pos).getFluidState();
+        return fluidlogged$getFluidState(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    @Override
+    public FluidState fluidlogged$getFluidState(int x, int y, int z) {
+        FluidState fluidState = getBlockState(x, y, z).getFluidState();
         if (!fluidState.isEmpty())
             return fluidState;
 
-        int relX = pos.getX() - this.originX;
-        int relY = pos.getY() - this.originY;
-        int relZ = pos.getZ() - this.originZ;
+        int relX = x - this.originX;
+        int relY = y - this.originY;
+        int relZ = z - this.originZ;
 
         Int2ReferenceMap<FluidState> fluids = this.fluidArrays[getLocalSectionIndex(relX >> 4, relY >> 4, relZ >> 4)];
         if (fluids == null)
@@ -66,5 +80,4 @@ public abstract class WorldSliceMixin {
 
         return fluids.get(getLocalBlockIndex(relX & 15, relY & 15, relZ & 15));
     }
-
 }
