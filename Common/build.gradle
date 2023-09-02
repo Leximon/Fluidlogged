@@ -2,14 +2,17 @@ plugins {
     id 'org.quiltmc.loom' version '1.+'
 }
 
-archivesBaseName = "${mod_name}-common-${minecraft_version}"
+archivesBaseName = "${project.mod_name}-common-${project.minecraft_version}"
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.officialMojangMappings()
 
-    modCompileOnly "org.ow2.asm:asm:${asm_version}"
-    modCompileOnly "org.ow2.asm:asm-tree:${asm_version}"
+    modCompileOnly "org.ow2.asm:asm:${project.asm_version}"
+    modCompileOnly "org.ow2.asm:asm-tree:${project.asm_version}"
+    modCompileOnly("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}") {
+        exclude(group: "com.terraformersmc")
+    }
 
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
 }

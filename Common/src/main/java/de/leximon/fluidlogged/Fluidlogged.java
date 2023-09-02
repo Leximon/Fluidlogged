@@ -1,5 +1,6 @@
 package de.leximon.fluidlogged;
 
+import de.leximon.fluidlogged.config.Config;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -40,12 +41,15 @@ public class Fluidlogged {
                 && container.canPlaceLiquid(blockGetter, blockPos, blockState, fluid))
             return true;
 
-        // TODO: check config for custom fluidloggable blocks
-        return false;
+        return Config.isFluidloggable(blockState);
     }
 
     @ApiStatus.Internal
     public static class Internal {
+
+        public static void initialize() {
+            Config.load();
+        }
 
         public static boolean hasDifferentLightEmission(FluidState prevFluidState, FluidState newFluidState) {
             return prevFluidState.createLegacyBlock().getLightEmission() != newFluidState.createLegacyBlock().getLightEmission();

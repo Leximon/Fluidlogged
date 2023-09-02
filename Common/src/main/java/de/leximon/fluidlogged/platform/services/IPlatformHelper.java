@@ -7,9 +7,17 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 public interface IPlatformHelper {
+
+    Path getConfigPath();
+
+    default File getConfigFile() {
+        return getConfigPath().toFile();
+    }
 
     void broadcastFluidUpdatePacket(List<ServerPlayer> players, BlockPos pos, FluidState state);
 

@@ -1,23 +1,5 @@
 {
-  "fluidlogged.config.title": "Fluidlogged Config",
-  "fluidlogged.config.compatibilityMode": "Compatibility Mode",
-  "fluidlogged.config.compatibilityMode.tooltip": "Some mods may cause incompatibilities with this mod. Enabling this option will fix most issues and will only allow vanilla blocks to be fluidloggable.",
-  "fluidlogged.config.fluids": "Fluids",
-  "fluidlogged.config.save": "Save",
-  "fluidlogged.config.cancel": "Cancel",
-  "fluidlogged.config.warning": "§nWARNING:§r Changes in this config may mix up fluidlogged blocks in your previous worlds. Make sure to backup your worlds before entering one!",
-  "fluidlogged.confirm_save.title": "Unsaved Changes",
-  "fluidlogged.confirm_save.message": "Do you want to save these changes?",
-  "fluidlogged.restart_required.later": "Not Now",
-  "fluidlogged.restart_required.quit": "Quit Game",
-  "fluidlogged.fluid_config.title": "Fluids",
-  "fluidlogged.fluid_config.category.enforced": "Enforced By Mods",
-  "fluidlogged.fluid_config.category.other": "Other",
-  "fluidlogged.fluid_config.error_toast.title": "Invalid Selection",
-  "fluidlogged.fluid_config.error_toast.description": "At least one fluid must be enabled!",
-  "fluidlogged.restart_required.title": "Game Restart Required",
-  "fluidlogged.restart_required.message": "Your game must be restarted to apply these changes!",
-
-  "fluidlogged.fluidMismatchWarning.title": "Configuration Mismatch",
-  "fluidlogged.fluidMismatchWarning.description": "This worlds fluidlogged configuration doesn't match with your current mod configuration.\nLoading this world may cause fluidlogged blocks to mix up. Please make a backup before entering this world!"
+  "fluidlogged.config": "Fluidlogged Config",
+  "fluidlogged.config.general": "General",
+  "fluidlogged.config.general.fluidloggable_blocks": "Additional Fluidloggable Blocks"
 }

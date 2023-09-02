@@ -26,6 +26,9 @@
     ],
     "client": [
       "de.leximon.fluidlogged.FluidloggedFabricClient"
+    ],
+    "modmenu": [
+      "de.leximon.fluidlogged.FluidloggedFabricModMenu"
     ]
   },
   "mixins": [

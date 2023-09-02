@@ -26,6 +26,7 @@ public class FluidloggedForge {
 
 
     public FluidloggedForge() {
+        Fluidlogged.Internal.initialize();
         registerPackets();
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::setupClient);
     }
