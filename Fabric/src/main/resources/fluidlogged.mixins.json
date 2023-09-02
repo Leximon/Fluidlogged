@@ -8,11 +8,11 @@
     "network.ChunkHolderMixin",
     "network.ServerChunkCacheMixin",
     "network.ServerLevelMixin",
-    "rendering.milk_lib_compat.MilkBucketItemMixin",
-    "rendering.sodium_compat.ChunkBuilderMeshingTaskMixin",
-    "rendering.sodium_compat.ClonedChunkSectionMixin",
-    "rendering.sodium_compat.FluidRendererMixin",
-    "rendering.sodium_compat.WorldSliceMixin",
+    "milk_lib_compat.MilkBucketItemMixin",
+    "sodium_compat.ChunkBuilderMeshingTaskMixin",
+    "sodium_compat.ClonedChunkSectionMixin",
+    "sodium_compat.FluidRendererMixin",
+    "sodium_compat.WorldSliceMixin",
     "storing_and_access.ChunkSerializerMixin",
     "storing_and_access.LevelChunkMixin",
     "storing_and_access.LevelChunkSectionMixin",
@@ -28,10 +28,10 @@
   ],
   "client": [
     "network.ClientLevelMixin",
-    "rendering.LiquidBlockRendererMixin",
-    "rendering.RebuildTaskMixin",
-    "rendering.RenderChunkMixin",
-    "rendering.RenderChunkRegionMixin"
+    "LiquidBlockRendererMixin",
+    "RebuildTaskMixin",
+    "RenderChunkMixin",
+    "RenderChunkRegionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

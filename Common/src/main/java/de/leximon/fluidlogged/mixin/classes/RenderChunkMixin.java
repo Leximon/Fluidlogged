@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.rendering;
+package de.leximon.fluidlogged.mixin.classes;
 
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
 import de.leximon.fluidlogged.mixin.extensions.RenderChunkExtension;

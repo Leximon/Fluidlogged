@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.rendering;
+package de.leximon.fluidlogged.mixin.classes;
 
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.core.BlockPos;

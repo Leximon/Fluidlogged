@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.rendering;
+package de.leximon.fluidlogged.mixin.classes;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.block.LiquidBlockRenderer;

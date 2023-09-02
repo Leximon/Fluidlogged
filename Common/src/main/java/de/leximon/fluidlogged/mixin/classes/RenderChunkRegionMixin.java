@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.rendering;
+package de.leximon.fluidlogged.mixin.classes;
 
 import de.leximon.fluidlogged.mixin.extensions.RenderChunkExtension;
 import net.minecraft.client.renderer.chunk.RenderChunk;

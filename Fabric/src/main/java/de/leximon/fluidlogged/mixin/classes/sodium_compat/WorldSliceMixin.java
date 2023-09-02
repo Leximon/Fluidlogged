@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.rendering.sodium_compat;
+package de.leximon.fluidlogged.mixin.classes.sodium_compat;
 
 import de.leximon.fluidlogged.mixin.extensions.sodium_compat.ClonedChunkSectionExtension;
 import de.leximon.fluidlogged.mixin.extensions.sodium_compat.WorldSliceExtension;

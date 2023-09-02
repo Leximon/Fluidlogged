@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.rendering.milk_lib_compat;
+package de.leximon.fluidlogged.mixin.classes.milk_lib_compat;
 
 import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
@@ -76,7 +76,6 @@ public abstract class MilkBucketItemMixin {
     private void injectFluidPlacement(Player player, Level level, BlockPos pos, BlockHitResult hitResult, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockState = level.getBlockState(pos);
         FluidState fluidState = Milk.STILL_MILK.getSource(false);
-        System.out.println("hi");
 
         // try to place the fluid via blockState first then via Fluidlogged
         if (!(blockState.getBlock() instanceof LiquidBlockContainer container && container.placeLiquid(level, pos, blockState, fluidState)))

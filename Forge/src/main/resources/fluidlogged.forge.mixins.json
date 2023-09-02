@@ -22,10 +22,10 @@
   ],
   "client": [
     "network.ClientLevelMixin",
-    "rendering.LiquidBlockRendererMixin",
-    "rendering.RebuildTaskMixin",
-    "rendering.RenderChunkRegionMixin",
-    "rendering.RenderChunkMixin"
+    "LiquidBlockRendererMixin",
+    "RebuildTaskMixin",
+    "RenderChunkRegionMixin",
+    "RenderChunkMixin"
   ],
   "injectors": {
     "defaultRequire": 1
