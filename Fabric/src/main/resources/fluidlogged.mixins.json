@@ -5,10 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "de.leximon.fluidlogged.mixin.FluidloggedFabricMixinPlugin",
   "mixins": [
+    "lithium_compat.LevelChunkSectionMixin",
+    "milk_lib_compat.MilkBucketItemMixin",
     "network.ChunkHolderMixin",
     "network.ServerChunkCacheMixin",
     "network.ServerLevelMixin",
-    "milk_lib_compat.MilkBucketItemMixin",
     "sodium_compat.ChunkBuilderMeshingTaskMixin",
     "sodium_compat.ClonedChunkSectionMixin",
     "sodium_compat.FluidRendererMixin",
@@ -27,11 +28,11 @@
     "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin"
   ],
   "client": [
-    "network.ClientLevelMixin",
     "LiquidBlockRendererMixin",
     "RebuildTaskMixin",
     "RenderChunkMixin",
-    "RenderChunkRegionMixin"
+    "RenderChunkRegionMixin",
+    "network.ClientLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
