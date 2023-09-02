@@ -1,6 +1,7 @@
 package de.leximon.fluidlogged.mixin.extensions;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -12,6 +13,8 @@ public interface LevelExtension {
     default boolean setFluid(BlockPos blockPos, FluidState fluidState, int flags) {
         return LevelExtension.this.setFluid(blockPos, fluidState, flags, 512);
     }
+
+    boolean setBlockAndInsertFluidIfPossible(BlockPos blockPos, BlockState blockState, int flags);
 
     default void sendFluidUpdated(BlockPos blockPos, int flags) { }
 

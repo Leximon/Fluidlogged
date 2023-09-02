@@ -25,7 +25,9 @@
     "world_interaction.MultiPlayerGameModeMixin",
     "world_interaction.removal_and_placement.BlockItemMixin",
     "world_interaction.removal_and_placement.BucketItemMixin",
-    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin"
+    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin",
+    "world_interaction.removal_and_placement.extra.DoorBlockMixin",
+    "world_interaction.removal_and_placement.extra.BedBlockMixin"
   ],
   "client": [
     "LiquidBlockRendererMixin",

@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
@@ -74,5 +75,20 @@ public abstract class LevelMixin implements LevelAccessor, AutoCloseable, LevelE
         }
 
         return true;
+    }
+
+    @Override
+    public boolean setBlockAndInsertFluidIfPossible(BlockPos blockPos, BlockState blockState, int flags) {
+        FluidState fluidState = getFluidState(blockPos);
+
+        boolean success = setBlock(blockPos, blockState, flags);
+
+        if (blockState.hasProperty(BlockStateProperties.WATERLOGGED) && blockState.getValue(BlockStateProperties.WATERLOGGED))
+            return success;
+
+        if (success && Fluidlogged.canPlaceFluid(this, blockPos, blockState, fluidState.getType()))
+            setFluid(blockPos, fluidState, flags | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
+
+        return success;
     }
 }
