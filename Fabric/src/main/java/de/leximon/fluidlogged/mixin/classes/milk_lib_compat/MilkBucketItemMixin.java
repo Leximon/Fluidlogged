@@ -29,7 +29,7 @@ public abstract class MilkBucketItemMixin {
     @Shadow protected abstract void playEmptyingSound(@Nullable Player player, LevelAccessor world, BlockPos pos);
 
     @Redirect(
-            method = "use",
+            method = { "use"  },
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/core/BlockPos;relative(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/BlockPos;"
@@ -41,7 +41,7 @@ public abstract class MilkBucketItemMixin {
     }
 
     @ModifyVariable(
-            method = "emptyContents",
+            method = { "emptyContents", "method_7731" }, require = 1,
             at = @At(value = "STORE"),
             ordinal = 1
     )
@@ -53,7 +53,7 @@ public abstract class MilkBucketItemMixin {
     }
 
     @ModifyConstant(
-            method = "emptyContents",
+            method = { "emptyContents", "method_7731" }, require = 1,
             constant = @Constant(ordinal = 2, classValue = LiquidBlockContainer.class)
     )
     private boolean redirectBypassLiquidBlockContainerCheck(
@@ -64,7 +64,7 @@ public abstract class MilkBucketItemMixin {
     }
 
     @Inject(
-            method = "emptyContents",
+            method = { "emptyContents", "method_7731" }, require = 1,
             at = @At(
                     value = "JUMP",
                     opcode = Opcodes.IFEQ,
