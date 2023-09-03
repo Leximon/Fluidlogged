@@ -32,7 +32,7 @@
     ]
   },
   "mixins": [
-    "fluidlogged.mixins.json"
+    "fluidlogged.fabric.mixins.json"
   ],
   "accessWidener": "fluidlogged.accesswidener",
 

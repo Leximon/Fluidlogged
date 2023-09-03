@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.world_interaction;
+package de.leximon.fluidlogged.mixin.classes.fabric.world_interaction;
 
 import de.leximon.fluidlogged.Fluidlogged;
 import net.minecraft.client.Minecraft;

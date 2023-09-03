@@ -39,12 +39,28 @@ public class FlowingFluidMixin {
         return level.getFluidState(fluidloggedBlockPos);
     }
 
-    @Redirect(method = "method_15755", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;"))
+    @SuppressWarnings("UnresolvedMixinReference")
+    @Redirect(
+            method = { "method_15755", "lambda$getSlopeDistance$1" },
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;"
+            ),
+            require = 1
+    )
     private static FluidState redirectFluidBehavior2(BlockState instance, LevelReader level, BlockPos pos, short s) {
         return level.getFluidState(pos);
     }
 
-    @Redirect(method = "method_15734", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;"))
+    @SuppressWarnings("UnresolvedMixinReference")
+    @Redirect(
+            method = { "method_15734", "lambda$getSpread$3" },
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;"
+            ),
+            require = 1
+    )
     private static FluidState redirectFluidBehavior3(BlockState instance, Level level, BlockPos pos, short s) {
         return level.getFluidState(pos);
     }

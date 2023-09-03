@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.sodium_compat;
+package de.leximon.fluidlogged.mixin.classes.fabric.sodium_compat;
 
 import me.jellysquid.mods.sodium.client.render.chunk.compile.ChunkBuildBuffers;
 import me.jellysquid.mods.sodium.client.world.WorldSlice;

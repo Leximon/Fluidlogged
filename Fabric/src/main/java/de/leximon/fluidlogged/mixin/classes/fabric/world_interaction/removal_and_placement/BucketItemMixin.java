@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.world_interaction.removal_and_placement;
+package de.leximon.fluidlogged.mixin.classes.fabric.world_interaction.removal_and_placement;
 
 import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
@@ -40,11 +40,13 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class BucketItemMixin extends Item {
 
     @Shadow @Final private Fluid content;
+
     @Shadow protected abstract void playEmptySound(@Nullable Player player, LevelAccessor levelAccessor, BlockPos blockPos);
 
     public BucketItemMixin(Properties properties) {
         super(properties);
     }
+
 
     @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
     @ModifyConstant(
@@ -54,7 +56,6 @@ public abstract class BucketItemMixin extends Item {
     private boolean redirectBypassLiquidBlockContainerCheck(Object reference, Class<LiquidBlockContainer> clazz) {
         return true;
     }
-
 
     @Unique private BlockPos fluidlogged$blockPos;
     @Unique private BlockState fluidlogged$blockState;
@@ -88,6 +89,41 @@ public abstract class BucketItemMixin extends Item {
     }
 
 
+    @Inject(
+            method = "use",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;getBlock()Lnet/minecraft/world/level/block/Block;",
+                    ordinal = 0
+            ),
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            cancellable = true
+    )
+    private void injectRemoveFluid(Level level, Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir, ItemStack itemStack, BlockHitResult blockHitResult, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState) {
+        if (blockState instanceof BucketPickup)
+            return; // let the code after this injection handle it
+
+        FluidState fluidState = level.getFluidState(blockPos);
+        if (fluidState == blockState.getFluidState() || fluidState.isEmpty())
+            return;
+
+        if (!fluidState.isSource())
+            return;
+
+        Fluid fluid = fluidState.getType();
+        ItemStack filledBucket = fluid.getBucket().getDefaultInstance();
+
+        player.awardStat(Stats.ITEM_USED.get(this));
+        fluid.getPickupSound().ifPresent(soundEvent -> player.playSound(soundEvent, 1.0F, 1.0F));
+        level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
+        ItemStack newFilledBucket = ItemUtils.createFilledResult(itemStack, player, filledBucket);
+        if (!level.isClientSide)
+            CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, filledBucket);
+
+        ((LevelExtension) level).setFluid(blockPos, Fluids.EMPTY.defaultFluidState(), Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
+
+        cir.setReturnValue(InteractionResultHolder.sidedSuccess(newFilledBucket, level.isClientSide()));
+    }
 
     @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
     @ModifyConstant(
@@ -97,7 +133,6 @@ public abstract class BucketItemMixin extends Item {
     private boolean redirectBypassLiquidBlockContainerCheck2(Object reference, Class<LiquidBlockContainer> clazz) {
         return true;
     }
-
 
     @ModifyVariable(
             method = "emptyContents",
@@ -150,42 +185,5 @@ public abstract class BucketItemMixin extends Item {
 
         playEmptySound(player, level, blockPos);
         cir.setReturnValue(true);
-    }
-
-
-    @Inject(
-            method = "use",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/state/BlockState;getBlock()Lnet/minecraft/world/level/block/Block;",
-                    ordinal = 0
-            ),
-            locals = LocalCapture.CAPTURE_FAILHARD,
-            cancellable = true
-    )
-    private void injectRemoveFluid(Level level, Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir, ItemStack itemStack, BlockHitResult blockHitResult, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState) {
-        if (blockState instanceof BucketPickup)
-            return; // let the code after this injection handle it
-
-        FluidState fluidState = level.getFluidState(blockPos);
-        if (fluidState == blockState.getFluidState() || fluidState.isEmpty())
-            return;
-
-        if (!fluidState.isSource())
-            return;
-
-        Fluid fluid = fluidState.getType();
-        ItemStack filledBucket = fluid.getBucket().getDefaultInstance();
-
-        player.awardStat(Stats.ITEM_USED.get(this));
-        fluid.getPickupSound().ifPresent(soundEvent -> player.playSound(soundEvent, 1.0F, 1.0F));
-        level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
-        ItemStack newFilledBucket = ItemUtils.createFilledResult(itemStack, player, filledBucket);
-        if (!level.isClientSide)
-            CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, filledBucket);
-
-        ((LevelExtension) level).setFluid(blockPos, Fluids.EMPTY.defaultFluidState(), Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
-
-        cir.setReturnValue(InteractionResultHolder.sidedSuccess(newFilledBucket, level.isClientSide()));
     }
 }

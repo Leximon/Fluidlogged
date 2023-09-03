@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.milk_lib_compat;
+package de.leximon.fluidlogged.mixin.classes.fabric.milk_lib_compat;
 
 import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;

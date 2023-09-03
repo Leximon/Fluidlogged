@@ -4,30 +4,30 @@
   "package": "de.leximon.fluidlogged.mixin.classes",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "forge.world_interaction.IForgeBlockMixin",
+    "forge.world_interaction.removal_and_placement.BucketItemMixin",
+    "network.ChunkHolderMixin",
     "network.ServerChunkCacheMixin",
     "network.ServerLevelMixin",
-    "network.ChunkHolderMixin",
-    "storing_and_access.LevelChunkSectionMixin",
-    "storing_and_access.LevelMixin",
     "storing_and_access.ChunkSerializerMixin",
     "storing_and_access.LevelChunkMixin",
+    "storing_and_access.LevelChunkSectionMixin",
+    "storing_and_access.LevelMixin",
+    "world_interaction.BlockLightEngineMixin",
     "world_interaction.BlockStateBaseMixin",
     "world_interaction.FlowingFluidMixin",
-    "world_interaction.BlockLightEngineMixin",
     "world_interaction.LevelMixin",
-    "world_interaction.MultiPlayerGameModeMixin",
-    "world_interaction.removal_and_placement.BucketItemMixin",
-    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin",
     "world_interaction.removal_and_placement.BlockItemMixin",
-    "world_interaction.removal_and_placement.extra.DoorBlockMixin",
-    "world_interaction.removal_and_placement.extra.BedBlockMixin"
+    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin",
+    "world_interaction.removal_and_placement.extra.BedBlockMixin",
+    "world_interaction.removal_and_placement.extra.DoorBlockMixin"
   ],
   "client": [
-    "network.ClientLevelMixin",
     "LiquidBlockRendererMixin",
     "RebuildTaskMixin",
+    "RenderChunkMixin",
     "RenderChunkRegionMixin",
-    "RenderChunkMixin"
+    "network.ClientLevelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
