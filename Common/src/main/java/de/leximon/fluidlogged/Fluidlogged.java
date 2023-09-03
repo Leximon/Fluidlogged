@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,6 +41,18 @@ public class Fluidlogged {
             return true;
 
         return Config.isFluidloggable(blockState);
+    }
+
+    public static boolean isFluidloggable(BlockState blockState) {
+        if (blockState.getBlock() instanceof LiquidBlockContainer)
+            return true;
+        return Config.isFluidloggable(blockState);
+    }
+
+    public static boolean isFluidpassable(BlockState blockState) {
+        if (!Config.isFluidPassageEnabled())
+            return false;
+        return Config.isFluidpassable(blockState);
     }
 
     @ApiStatus.Internal

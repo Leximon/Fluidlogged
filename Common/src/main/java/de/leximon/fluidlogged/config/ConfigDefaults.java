@@ -11,4 +11,9 @@ public class ConfigDefaults {
             "#minecraft:doors"
     );
 
+    public static final boolean FLUID_PASSAGE_ENABLED = true;
+    public static final List<String> FLUIDPASSABLE_BLOCKS = ImmutableList.of(
+            "#minecraft:fences"
+    );
+
 }
