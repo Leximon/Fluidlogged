@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import de.leximon.fluidlogged.config.controller.BlockPredicateController;
 import de.leximon.fluidlogged.platform.services.Services;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.ListOption;
@@ -109,7 +110,7 @@ public class Config {
                         .group(ListOption.<String>createBuilder()
                                 .name(Component.translatable("fluidlogged.config.general.fluidloggable_blocks"))
                                 .binding(ConfigDefaults.FLUIDLOGGABLE_BLOCKS, fluidloggableBlocks::getBlocks, fluidloggableBlocks::setBlocks)
-                                .controller(StringControllerBuilder::create)
+                                .customController(BlockPredicateController::new)
                                 .initial("")
                                 .build()
                         )
@@ -129,7 +130,7 @@ public class Config {
                         .group(ListOption.<String>createBuilder()
                                 .name(Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks"))
                                 .binding(ConfigDefaults.FLUIDPASSABLE_BLOCKS, fluidPermeableBlocks::getBlocks, fluidPermeableBlocks::setBlocks)
-                                .controller(StringControllerBuilder::create)
+                                .customController(BlockPredicateController::new)
                                 .initial("")
                                 .build()
                         )

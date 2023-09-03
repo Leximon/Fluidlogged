@@ -34,7 +34,7 @@ import net.minecraftforge.registries.RegisterEvent;
 
 import java.util.Optional;
 
-@Mod("fluidlogged")
+@Mod(Fluidlogged.MOD_ID)
 public class FluidloggedForge {
 
     public static final String PROTOCOL_VERSION = "1";
