@@ -1,7 +1,6 @@
 package de.leximon.fluidlogged.mixin.classes.world_interaction;
 
 import de.leximon.fluidlogged.Fluidlogged;
-import de.leximon.fluidlogged.config.Config;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -54,12 +53,12 @@ public class FlowingFluidMixin {
 
     @Inject(method = "canSpreadTo", at = @At("RETURN"), cancellable = true)
     private void injectCanSpreadTo(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Direction direction, BlockPos blockPos2, BlockState blockState2, FluidState fluidState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(cir.getReturnValue() || Fluidlogged.isFluidpassable(blockState2));
+        cir.setReturnValue(cir.getReturnValue() || Fluidlogged.isFluidPermeable(blockState2));
     }
 
     @Inject(method = "spreadTo", at = @At(value = "JUMP", opcode = Opcodes.IFEQ, shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
     private void injectSpreadTo(LevelAccessor level, BlockPos blockPos, BlockState blockState, Direction direction, FluidState fluidState, CallbackInfo ci) {
-        if (Fluidlogged.isFluidpassable(blockState) || fluidState.isSource())
+        if (Fluidlogged.isFluidPermeable(blockState) || fluidState.isSource())
             ((LevelExtension) level).setFluid(blockPos, fluidState, Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
         ci.cancel();
     }

@@ -31,9 +31,9 @@ public class Config {
     private static List<String> fluidloggableBlocks = ConfigDefaults.FLUIDLOGGABLE_BLOCKS;
     private static List<BlockPredicateEntry> fluidloggableBlockPredicates = ImmutableList.of();
 
-    private static boolean fluidPassageEnabled = ConfigDefaults.FLUID_PASSAGE_ENABLED;
-    private static List<String> fluidpassableBlocks = ConfigDefaults.FLUIDPASSABLE_BLOCKS;
-    private static List<BlockPredicateEntry> fluidpassableBlockPredicates = ImmutableList.of();
+    private static boolean fluidPermeabilityEnabled = ConfigDefaults.FLUID_PASSAGE_ENABLED;
+    private static List<String> fluidPermeableBlocks = ConfigDefaults.FLUIDPASSABLE_BLOCKS;
+    private static List<BlockPredicateEntry> fluidPermeableBlockPredicates = ImmutableList.of();
 
 
     public static void setFluidloggableBlocks(List<String> blocks) {
@@ -44,13 +44,13 @@ public class Config {
                 .toList();
     }
 
-    public static void setFluidPassageEnabled(boolean fluidPassageEnabled) {
-        Config.fluidPassageEnabled = fluidPassageEnabled;
+    public static void setFluidPermeabilityEnabled(boolean fluidPermeabilityEnabled) {
+        Config.fluidPermeabilityEnabled = fluidPermeabilityEnabled;
     }
 
-    public static void setFluidpassableBlocks(List<String> blocks) {
-        fluidpassableBlocks = blocks;
-        fluidpassableBlockPredicates = blocks.stream()
+    public static void setFluidPermeableBlocks(List<String> blocks) {
+        fluidPermeableBlocks = blocks;
+        fluidPermeableBlockPredicates = blocks.stream()
                 .map(BlockPredicateEntry::ofBlockOrTag)
                 .filter(Objects::nonNull)
                 .toList();
@@ -64,12 +64,12 @@ public class Config {
         return false;
     }
 
-    public static boolean isFluidPassageEnabled() {
-        return fluidPassageEnabled;
+    public static boolean isFluidPermeabilityEnabled() {
+        return fluidPermeabilityEnabled;
     }
 
-    public static boolean isFluidpassable(BlockState block) {
-        for (BlockPredicateEntry predicate : fluidpassableBlockPredicates)
+    public static boolean isFluidPermeable(BlockState block) {
+        for (BlockPredicateEntry predicate : fluidPermeableBlockPredicates)
             if (predicate.check(block))
                 return true;
         return false;
@@ -84,9 +84,9 @@ public class Config {
         obj.add("fluidloggable_blocks", GSON.toJsonTree(fluidloggableBlocks));
 
         JsonObject fluidPassage = new JsonObject();
-        fluidPassage.addProperty("enabled", fluidPassageEnabled);
-        fluidPassage.add("fluidpassable_blocks", GSON.toJsonTree(fluidpassableBlocks));
-        obj.add("fluid_passage", fluidPassage);
+        fluidPassage.addProperty("enabled", fluidPermeabilityEnabled);
+        fluidPassage.add("fluid_permeable_blocks", GSON.toJsonTree(fluidPermeableBlocks));
+        obj.add("fluid_permeability", fluidPassage);
 
         try (FileWriter writer = new FileWriter(file)) {
             GSON.toJson(obj, writer);
@@ -109,16 +109,16 @@ public class Config {
                 setFluidloggableBlocks(fluidloggableBlocks);
             }
 
-            if (obj.has("fluid_passage")) {
-                JsonObject fluidPassage = obj.getAsJsonObject("fluid_passage");
+            if (obj.has("fluid_permeability")) {
+                JsonObject fluidPassage = obj.getAsJsonObject("fluid_permeability");
 
                 if (fluidPassage.has("enabled"))
-                    setFluidPassageEnabled(fluidPassage.get("enabled").getAsBoolean());
+                    setFluidPermeabilityEnabled(fluidPassage.get("enabled").getAsBoolean());
 
-                if (fluidPassage.has("fluidpassable_blocks")) {
-                    JsonElement element = fluidPassage.get("fluidpassable_blocks");
+                if (fluidPassage.has("fluid_permeable_blocks")) {
+                    JsonElement element = fluidPassage.get("fluid_permeable_blocks");
                     List<String> fluidpassableBlocks = GSON.fromJson(element, new TypeToken<>() {});
-                    setFluidpassableBlocks(fluidpassableBlocks);
+                    setFluidPermeableBlocks(fluidpassableBlocks);
                 }
             }
         } catch (IOException e) {
@@ -142,16 +142,19 @@ public class Config {
                         .build()
                 )
                 .category(ConfigCategory.createBuilder()
-                        .name(Component.translatable("fluidlogged.config.fluid_passage"))
+                        .name(Component.translatable("fluidlogged.config.fluid_permeability"))
                         .option(Option.<Boolean>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.fluid_passage.enabled"))
-                                .controller(BooleanControllerBuilder::create)
-                                .binding(ConfigDefaults.FLUID_PASSAGE_ENABLED, () -> fluidPassageEnabled, Config::setFluidPassageEnabled)
+                                .name(Component.translatable("fluidlogged.config.fluid_permeability.enabled"))
+                                .controller(o -> BooleanControllerBuilder.create(o)
+                                        .coloured(true)
+                                        .yesNoFormatter()
+                                )
+                                .binding(ConfigDefaults.FLUID_PASSAGE_ENABLED, () -> fluidPermeabilityEnabled, Config::setFluidPermeabilityEnabled)
                                 .build()
                         )
                         .group(ListOption.<String>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.fluid_passage.fluidpassable_blocks"))
-                                .binding(ConfigDefaults.FLUIDPASSABLE_BLOCKS, () -> fluidpassableBlocks, Config::setFluidpassableBlocks)
+                                .name(Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks"))
+                                .binding(ConfigDefaults.FLUIDPASSABLE_BLOCKS, () -> fluidPermeableBlocks, Config::setFluidPermeableBlocks)
                                 .controller(StringControllerBuilder::create)
                                 .initial("")
                                 .build()

@@ -49,10 +49,10 @@ public class Fluidlogged {
         return Config.isFluidloggable(blockState);
     }
 
-    public static boolean isFluidpassable(BlockState blockState) {
-        if (!Config.isFluidPassageEnabled())
+    public static boolean isFluidPermeable(BlockState blockState) {
+        if (!Config.isFluidPermeabilityEnabled())
             return false;
-        return Config.isFluidpassable(blockState);
+        return Config.isFluidPermeable(blockState);
     }
 
     @ApiStatus.Internal

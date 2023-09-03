@@ -2,7 +2,7 @@
   "fluidlogged.config": "Fluidlogged Config",
   "fluidlogged.config.general": "General",
   "fluidlogged.config.general.fluidloggable_blocks": "Additional Fluidloggable Blocks",
-  "fluidlogged.config.fluid_passage": "Fluid Passage",
-  "fluidlogged.config.fluid_passage.enabled": "Enabled",
-  "fluidlogged.config.fluid_passage.fluidpassable_blocks": "Fluidpassable Blocks"
+  "fluidlogged.config.fluid_permeability": "Fluid Permeability",
+  "fluidlogged.config.fluid_permeability.enabled": "Enabled",
+  "fluidlogged.config.fluid_permeability.fluid_permeable_blocks": "Fluid Permeable Blocks"
 }
