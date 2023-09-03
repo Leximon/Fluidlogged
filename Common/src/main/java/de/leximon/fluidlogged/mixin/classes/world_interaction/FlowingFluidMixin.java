@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -91,8 +92,10 @@ public class FlowingFluidMixin {
     ) {
         BlockState prevBlock = level.getBlockState(blockPos2);
 
-        if (!Fluidlogged.isFluidloggable(prevBlock))
+        if (!Fluidlogged.isFluidloggable(prevBlock)) {
+            ((LevelExtension) level).setFluid(blockPos, Fluids.EMPTY.defaultFluidState(), flags);
             return instance.setBlock(blockPos, blockState, flags);
+        }
 
         ((LevelExtension) level).setFluid(blockPos, fluidState, flags);
         return false;
