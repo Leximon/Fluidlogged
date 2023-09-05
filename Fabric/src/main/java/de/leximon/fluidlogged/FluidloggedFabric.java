@@ -35,6 +35,7 @@ public class FluidloggedFabric implements ModInitializer {
 			if (success)
 				Config.invalidateCaches();
 		});
+
 	}
 
 }

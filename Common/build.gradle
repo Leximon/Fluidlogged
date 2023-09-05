@@ -10,6 +10,8 @@ dependencies {
 
     modCompileOnly "org.ow2.asm:asm:${project.asm_version}"
     modCompileOnly "org.ow2.asm:asm-tree:${project.asm_version}"
+    modCompileOnly "org.ow2.asm:asm-util:${project.asm_version}"
+
     modCompileOnly("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}") {
         exclude(group: "com.terraformersmc")
     }
