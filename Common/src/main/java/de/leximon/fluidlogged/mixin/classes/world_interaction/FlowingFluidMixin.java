@@ -40,9 +40,8 @@ public abstract class FlowingFluidMixin {
         return level.getFluidState(fluidloggedBlockPos);
     }
 
-    @SuppressWarnings("UnresolvedMixinReference")
     @Redirect(
-            method = { "method_15755", "lambda$getSlopeDistance$1" },
+            method = { "method_15755", "*(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;S)Lcom/mojang/datafixers/util/Pair;" },
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;"
@@ -53,9 +52,8 @@ public abstract class FlowingFluidMixin {
         return level.getFluidState(pos);
     }
 
-    @SuppressWarnings("UnresolvedMixinReference")
     @Redirect(
-            method = { "method_15734", "lambda$getSpread$3" },
+            method = { "method_15734", "*(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;S)Lcom/mojang/datafixers/util/Pair;" },
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;"
