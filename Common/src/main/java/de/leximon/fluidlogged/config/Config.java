@@ -5,13 +5,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.config.controller.BlockPredicateController;
 import de.leximon.fluidlogged.platform.services.Services;
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.ListOption;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
@@ -121,6 +120,9 @@ public class Config {
                         .name(Component.translatable("fluidlogged.config.general"))
                         .group(ListOption.<String>createBuilder()
                                 .name(Component.translatable("fluidlogged.config.general.fluidloggable_blocks"))
+                                .description(OptionDescription.of(
+                                        Component.translatable("fluidlogged.config.general.fluidloggable_blocks.desc")
+                                ))
                                 .binding(ConfigDefaults.FLUIDLOGGABLE_BLOCKS, fluidloggableBlocks::getBlocks, fluidloggableBlocks::setBlocks)
                                 .customController(BlockPredicateController::new)
                                 .initial("")
@@ -132,6 +134,11 @@ public class Config {
                         .name(Component.translatable("fluidlogged.config.fluid_permeability"))
                         .option(Option.<Boolean>createBuilder()
                                 .name(Component.translatable("fluidlogged.config.fluid_permeability.enabled"))
+                                .description(OptionDescription.createBuilder()
+                                        .text(Component.translatable("fluidlogged.config.fluid_permeability.enabled.desc"))
+                                        .image(Fluidlogged.id("textures/fluid_permeability_example.png"), 520, 293)
+                                        .build()
+                                )
                                 .controller(option -> BooleanControllerBuilder.create(option)
                                         .coloured(true)
                                         .yesNoFormatter()
@@ -141,6 +148,12 @@ public class Config {
                         )
                         .group(ListOption.<String>createBuilder()
                                 .name(Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks"))
+                                .description(OptionDescription.of(
+                                        Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc"),
+                                        Component.empty(),
+                                        Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc.note")
+                                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+                                ))
                                 .binding(ConfigDefaults.FLUID_PERMEABLE_BLOCKS, fluidPermeableBlocks::getBlocks, fluidPermeableBlocks::setBlocks)
                                 .customController(BlockPredicateController::new)
                                 .initial("")
@@ -148,6 +161,12 @@ public class Config {
                         )
                         .group(ListOption.<String>createBuilder()
                                 .name(Component.translatable("fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks"))
+                                .description(OptionDescription.of(
+                                        Component.translatable("fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks.desc"),
+                                        Component.empty(),
+                                        Component.translatable("fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks.desc.note")
+                                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+                                ))
                                 .binding(ConfigDefaults.FLUID_PERMEABLE_BLOCKS, shapeIndependentFluidPermeableBlocks::getBlocks, shapeIndependentFluidPermeableBlocks::setBlocks)
                                 .customController(BlockPredicateController::new)
                                 .initial("")
