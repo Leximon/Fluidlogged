@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FlowingFluid.class)
-public class FlowingFluidMixin {
+public abstract class FlowingFluidMixin {
 
     @Unique
     private BlockPos fluidloggedBlockPos;
@@ -65,13 +65,6 @@ public class FlowingFluidMixin {
         return level.getFluidState(pos);
     }
 
-
-
-    @Inject(method = "canSpreadTo", at = @At("RETURN"), cancellable = true)
-    private void injectCanSpreadTo(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Direction direction, BlockPos blockPos2, BlockState blockState2, FluidState fluidState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(cir.getReturnValue() || Fluidlogged.isFluidPermeable(blockState2));
-    }
-
     @Inject(method = "spreadTo", at = @At(value = "JUMP", opcode = Opcodes.IFEQ, shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
     private void injectSpreadTo(LevelAccessor level, BlockPos blockPos, BlockState blockState, Direction direction, FluidState fluidState, CallbackInfo ci) {
         if (Fluidlogged.isFluidPermeable(blockState) || fluidState.isSource())
@@ -94,7 +87,7 @@ public class FlowingFluidMixin {
     @Inject(method = "canHoldFluid", at = @At("HEAD"), cancellable = true)
     private void redirectBypassLiquidBlockContainerCheck2(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
         if (Fluidlogged.canPlaceFluid(blockGetter, blockPos, blockState, fluid))
-            cir.setReturnValue(true);
+            cir.setReturnValue(Fluidlogged.isFluidPermeable(blockState));
     }
 
     @Redirect(
