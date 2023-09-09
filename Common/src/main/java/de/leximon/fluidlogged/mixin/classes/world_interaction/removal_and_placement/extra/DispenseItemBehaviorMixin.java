@@ -13,9 +13,8 @@ import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -23,7 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "net/minecraft/core/dispenser/DispenseItemBehavior$17", priority = 950)
 public abstract class DispenseItemBehaviorMixin extends DefaultDispenseItemBehavior {
 
-    @Shadow @Final private DefaultDispenseItemBehavior defaultDispenseItemBehavior;
+    @Unique // forge doesn't like this as shadow for what ever reason
+    private final DefaultDispenseItemBehavior fluidlogged$defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
 
     @Inject(
             method = "execute",
@@ -57,7 +57,7 @@ public abstract class DispenseItemBehaviorMixin extends DefaultDispenseItemBehav
         }
 
         if (blockSource.<DispenserBlockEntity>getEntity().addItem(new ItemStack(returnItem)) < 0)
-            this.defaultDispenseItemBehavior.dispense(blockSource, new ItemStack(returnItem));
+            this.fluidlogged$defaultDispenseItemBehavior.dispense(blockSource, new ItemStack(returnItem));
 
         cir.setReturnValue(itemStack);
     }
