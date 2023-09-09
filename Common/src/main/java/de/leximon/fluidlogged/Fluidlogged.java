@@ -52,7 +52,13 @@ public class Fluidlogged {
     public static boolean isFluidPermeable(BlockState blockState) {
         if (!Config.isFluidPermeabilityEnabled())
             return false;
-        return Config.isFluidPermeable(blockState);
+        return Config.isFluidPermeable(blockState) || Config.isShapeIndependentFluidPermeable(blockState);
+    }
+
+    public static boolean isShapeIndependentFluidPermeable(BlockState blockState) {
+        if (!Config.isFluidPermeabilityEnabled())
+            return false;
+        return Config.isShapeIndependentFluidPermeable(blockState);
     }
 
     @ApiStatus.Internal

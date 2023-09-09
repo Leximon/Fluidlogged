@@ -16,7 +16,7 @@ public class BlockPredicateList {
     private final Object2BooleanMap<Block> predicateResultCache = new Object2BooleanOpenHashMap<>();
 
     public BlockPredicateList(List<String> defaults) {
-        this.blocks = defaults;
+        setBlocks(defaults);
     }
 
     public void setBlocks(List<String> blocks) {

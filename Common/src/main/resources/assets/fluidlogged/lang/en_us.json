@@ -4,5 +4,6 @@
   "fluidlogged.config.general.fluidloggable_blocks": "Additional Fluidloggable Blocks",
   "fluidlogged.config.fluid_permeability": "Fluid Permeability",
   "fluidlogged.config.fluid_permeability.enabled": "Enabled",
-  "fluidlogged.config.fluid_permeability.fluid_permeable_blocks": "Fluid Permeable Blocks"
+  "fluidlogged.config.fluid_permeability.fluid_permeable_blocks": "Fluid Permeable Blocks",
+  "fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks": "Fluid Permeable Blocks (Shape Independent)"
 }

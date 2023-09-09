@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(FlowingFluid.class)
 public abstract class FlowingFluidMixin {
@@ -107,5 +108,30 @@ public abstract class FlowingFluidMixin {
 
         ((LevelExtension) level).setFluid(blockPos, fluidState, flags);
         return false;
+    }
+
+    @Inject(
+            method = "isSolidFace",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/BlockGetter;getFluidState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;"
+            ),
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            cancellable = true
+    )
+    private void injectShapeIndependentFluidPermeableCheck(BlockGetter blockGetter, BlockPos blockPos, Direction direction, CallbackInfoReturnable<Boolean> cir, BlockState blockState) {
+        if (Fluidlogged.isShapeIndependentFluidPermeable(blockState))
+            cir.setReturnValue(false);
+    }
+
+    @Inject(
+            method = "canPassThroughWall",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void injectShapeIndependentFluidPermeableCheck2(Direction direction, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, BlockPos blockPos2, BlockState blockState2, CallbackInfoReturnable<Boolean> cir) {
+        if (Fluidlogged.isShapeIndependentFluidPermeable(blockState)
+                || Fluidlogged.isShapeIndependentFluidPermeable(blockState2))
+            cir.setReturnValue(true);
     }
 }
