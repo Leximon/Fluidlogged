@@ -28,7 +28,8 @@
     "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin",
     "world_interaction.removal_and_placement.extra.BedBlockMixin",
     "world_interaction.removal_and_placement.extra.DoorBlockMixin",
-    "world_interaction.removal_and_placement.extra.DispenseItemBehaviorMixin"
+    "world_interaction.removal_and_placement.extra.DispenseItemBehaviorMixin",
+    "world_interaction.removal_and_placement.extra.PistonBaseBlockMixin"
   ],
   "client": [
     "LiquidBlockRendererMixin",
