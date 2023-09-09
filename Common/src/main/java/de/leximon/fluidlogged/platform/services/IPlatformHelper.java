@@ -1,5 +1,6 @@
 package de.leximon.fluidlogged.platform.services;
 
+import de.leximon.fluidlogged.config.ConfigDefaults;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
@@ -18,6 +19,8 @@ public interface IPlatformHelper {
     default File getConfigFile() {
         return getConfigPath().toFile();
     }
+
+    ConfigDefaults getConfigDefaults();
 
     void broadcastFluidUpdatePacket(List<ServerPlayer> players, BlockPos pos, FluidState state);
 

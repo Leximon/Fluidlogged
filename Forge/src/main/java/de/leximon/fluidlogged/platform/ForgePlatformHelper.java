@@ -2,6 +2,8 @@ package de.leximon.fluidlogged.platform;
 
 import de.leximon.fluidlogged.FluidloggedForge;
 import de.leximon.fluidlogged.config.Config;
+import de.leximon.fluidlogged.config.ConfigDefaults;
+import de.leximon.fluidlogged.config.ForgeConfigDefaults;
 import de.leximon.fluidlogged.network.forge.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket;
 import de.leximon.fluidlogged.platform.services.IPlatformHelper;
@@ -24,10 +26,16 @@ public class ForgePlatformHelper implements IPlatformHelper {
             (distributor, supplier) -> packet -> supplier.get().forEach(player -> player.connection.send(packet)),
             NetworkDirection.PLAY_TO_CLIENT
     );
+    private static final ConfigDefaults CONFIG_DEFAULTS = new ForgeConfigDefaults();
 
     @Override
     public Path getConfigPath() {
         return Path.of("config", Config.CONFIG_FILE_NAME);
+    }
+
+    @Override
+    public ConfigDefaults getConfigDefaults() {
+        return CONFIG_DEFAULTS;
     }
 
     @Override

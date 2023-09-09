@@ -1,6 +1,8 @@
 package de.leximon.fluidlogged.platform;
 
 import de.leximon.fluidlogged.config.Config;
+import de.leximon.fluidlogged.config.ConfigDefaults;
+import de.leximon.fluidlogged.config.FabricConfigDefaults;
 import de.leximon.fluidlogged.network.fabric.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.fabric.ClientboundSectionFluidsUpdatePacket;
 import de.leximon.fluidlogged.platform.services.IPlatformHelper;
@@ -19,10 +21,17 @@ import java.util.List;
 public class FabricPlatformHelper implements IPlatformHelper {
 
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve(Config.CONFIG_FILE_NAME);
+    private static final ConfigDefaults CONFIG_DEFAULTS = new FabricConfigDefaults();
+
 
     @Override
     public Path getConfigPath() {
         return CONFIG_PATH;
+    }
+
+    @Override
+    public ConfigDefaults getConfigDefaults() {
+        return CONFIG_DEFAULTS;
     }
 
     @Override

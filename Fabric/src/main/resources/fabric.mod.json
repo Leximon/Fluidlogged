@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Fluidlogged",
-  "description": "Allows waterlogging with any fluid",
+  "description": "Allows \"fluidlogging\" for any block by storing fluids separately in each chunk. Fluids can now also pass through blocks!",
   "authors": [
     "Leximon"
   ],

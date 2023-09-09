@@ -24,12 +24,13 @@ public class Config {
     private static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .create();
+    private static final ConfigDefaults CONFIG_DEFAULTS = Services.PLATFORM.getConfigDefaults();
 
-    private static final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(ConfigDefaults.FLUIDLOGGABLE_BLOCKS);
+    private static final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(CONFIG_DEFAULTS.fluidloggableBlocks());
 
-    private static boolean fluidPermeabilityEnabled = ConfigDefaults.FLUID_PERMEABILITY_ENABLED;
-    private static final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(ConfigDefaults.FLUID_PERMEABLE_BLOCKS);
-    private static final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(ConfigDefaults.SHAPE_INDEPENDENT_FLUID_PERMEABLE_BLOCKS);
+    private static boolean fluidPermeabilityEnabled = CONFIG_DEFAULTS.fluidPermeabilityEnabled();
+    private static final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(CONFIG_DEFAULTS.fluidPermeableBlocks());
+    private static final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(CONFIG_DEFAULTS.shapeIndependentFluidPermeableBlocks());
 
 
 
@@ -125,7 +126,7 @@ public class Config {
                                 .description(OptionDescription.of(
                                         Component.translatable("fluidlogged.config.general.fluidloggable_blocks.desc")
                                 ))
-                                .binding(ConfigDefaults.FLUIDLOGGABLE_BLOCKS, fluidloggableBlocks::getBlocks, fluidloggableBlocks::setBlocks)
+                                .binding(CONFIG_DEFAULTS.fluidloggableBlocks(), fluidloggableBlocks::getBlocks, fluidloggableBlocks::setBlocks)
                                 .customController(BlockPredicateController::new)
                                 .initial("")
                                 .build()
@@ -145,7 +146,7 @@ public class Config {
                                         .coloured(true)
                                         .yesNoFormatter()
                                 )
-                                .binding(ConfigDefaults.FLUID_PERMEABILITY_ENABLED, () -> fluidPermeabilityEnabled, value -> fluidPermeabilityEnabled = value)
+                                .binding(CONFIG_DEFAULTS.fluidPermeabilityEnabled(), () -> fluidPermeabilityEnabled, value -> fluidPermeabilityEnabled = value)
                                 .build()
                         )
                         .group(ListOption.<String>createBuilder()
@@ -156,7 +157,7 @@ public class Config {
                                         Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc.note")
                                                 .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
                                 ))
-                                .binding(ConfigDefaults.FLUID_PERMEABLE_BLOCKS, fluidPermeableBlocks::getBlocks, fluidPermeableBlocks::setBlocks)
+                                .binding(CONFIG_DEFAULTS.fluidPermeableBlocks(), fluidPermeableBlocks::getBlocks, fluidPermeableBlocks::setBlocks)
                                 .customController(BlockPredicateController::new)
                                 .initial("")
                                 .build()
@@ -169,7 +170,7 @@ public class Config {
                                         Component.translatable("fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks.desc.note")
                                                 .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
                                 ))
-                                .binding(ConfigDefaults.FLUID_PERMEABLE_BLOCKS, shapeIndependentFluidPermeableBlocks::getBlocks, shapeIndependentFluidPermeableBlocks::setBlocks)
+                                .binding(CONFIG_DEFAULTS.shapeIndependentFluidPermeableBlocks(), shapeIndependentFluidPermeableBlocks::getBlocks, shapeIndependentFluidPermeableBlocks::setBlocks)
                                 .customController(BlockPredicateController::new)
                                 .initial("")
                                 .build()
