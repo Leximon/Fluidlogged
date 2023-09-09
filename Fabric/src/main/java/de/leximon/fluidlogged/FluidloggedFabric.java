@@ -30,10 +30,10 @@ public class FluidloggedFabric implements ModInitializer {
 			SetFluidCommand.register(dispatcher, buildContext);
 		});
 
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> Config.invalidateCaches());
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> Config.compile());
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
 			if (success)
-				Config.invalidateCaches();
+				Config.compile();
 		});
 
 	}

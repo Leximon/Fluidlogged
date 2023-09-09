@@ -87,6 +87,7 @@ public class ConfigDefaults {
             "minecraft:mangrove_propagule",
             "minecraft:moss_carpet",
             "minecraft:decorated_pot",
+            "minecraft:cake",
             "minecraft:player_head",
             "minecraft:player_wall_head",
             "minecraft:creeper_head",

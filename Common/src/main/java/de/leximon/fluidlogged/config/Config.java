@@ -49,10 +49,10 @@ public class Config {
         return shapeIndependentFluidPermeableBlocks.contains(block);
     }
 
-    public static void invalidateCaches() {
-        fluidloggableBlocks.invalidateCache();
-        fluidPermeableBlocks.invalidateCache();
-        shapeIndependentFluidPermeableBlocks.invalidateCache();
+    public static void compile() {
+        fluidloggableBlocks.compile();
+        fluidPermeableBlocks.compile();
+        shapeIndependentFluidPermeableBlocks.compile();
     }
 
     public static void save() {
