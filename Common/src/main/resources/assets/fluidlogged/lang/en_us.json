@@ -7,7 +7,7 @@
   "fluidlogged.config.fluid_permeability.enabled": "Enabled",
   "fluidlogged.config.fluid_permeability.enabled.desc": "Enables or disables fluid permeability that allows fluids to pass through blocks.",
   "fluidlogged.config.fluid_permeability.fluid_permeable_blocks": "Fluid Permeable Blocks",
-  "fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc": "The list of blocks that allow fluids to pass through them unless a side is solid.",
+  "fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc": "The list of blocks that allow fluids to pass through them unless a side is solid. Blocks that usually break by flowing fluids won't do that if added to this list.",
   "fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc.note": "Note: The block must be fluidloggable in order to work.",
   "fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks": "Fluid Permeable Blocks (Shape Independent)",
   "fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks.desc": "The list of blocks that allow fluids to pass through them no matter the shape of the block.",

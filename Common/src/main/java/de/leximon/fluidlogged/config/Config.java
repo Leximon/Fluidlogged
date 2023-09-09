@@ -77,8 +77,10 @@ public class Config {
 
     public static void load() {
         File file = Services.PLATFORM.getConfigFile();
-        if (!file.exists())
+        if (!file.exists()) {
+            save();
             return;
+        }
 
         try (FileReader reader = new FileReader(file)) {
             JsonObject obj = GSON.fromJson(reader, JsonObject.class);
