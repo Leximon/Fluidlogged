@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
@@ -157,8 +158,15 @@ public abstract class BucketItemMixin extends Item {
         FluidState contentFluidState = ((FlowingFluid) content).getSource(false);
 
         // try to place the fluid via blockState first then via Fluidlogged
-        if (!(blockState.getBlock() instanceof LiquidBlockContainer container && container.placeLiquid(level, blockPos, blockState, contentFluidState)))
+        if (blockState.getBlock() instanceof LiquidBlockContainer container && container.placeLiquid(level, blockPos, blockState, contentFluidState)) {
+            ((LevelExtension) level).setFluid(blockPos, Fluids.EMPTY.defaultFluidState(), Block.UPDATE_ALL);
+        } else {
+            if (blockState.hasProperty(BlockStateProperties.WATERLOGGED) && blockState.getValue(BlockStateProperties.WATERLOGGED)) {
+                BlockState newBlockState = blockState.setValue(BlockStateProperties.WATERLOGGED, false);
+                level.setBlock(blockPos, newBlockState, Block.UPDATE_ALL);
+            }
             ((LevelExtension) level).setFluid(blockPos, contentFluidState, Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
+        }
 
         playEmptySound(player, level, blockPos);
         cir.setReturnValue(true);
