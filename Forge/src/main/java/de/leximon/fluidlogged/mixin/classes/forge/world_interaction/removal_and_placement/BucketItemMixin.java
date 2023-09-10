@@ -28,20 +28,21 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(BucketItem.class)
 public abstract class BucketItemMixin extends Item {
 
-    @Shadow @Final private Fluid content;
-
     @Shadow protected abstract void playEmptySound(@Nullable Player player, LevelAccessor levelAccessor, BlockPos blockPos);
+
+    @Shadow public abstract Fluid getFluid();
 
     public BucketItemMixin(Properties p_41383_) {
         super(p_41383_);
@@ -54,7 +55,8 @@ public abstract class BucketItemMixin extends Item {
     @Overwrite(remap = false)
     protected boolean canBlockContainFluid(Level worldIn, BlockPos posIn, BlockState blockstate)
     {
-        return Fluidlogged.canPlaceFluid(worldIn, posIn, blockstate, this.content);
+        Fluid content = getFluid();
+        return Fluidlogged.canPlaceFluid(worldIn, posIn, blockstate, content);
     }
 
     @Inject(
@@ -111,10 +113,11 @@ public abstract class BucketItemMixin extends Item {
             remap = false
     )
     private boolean modifyCanPlaceFluid(boolean bl2, @Nullable Player player, Level level, BlockPos blockPos, @Nullable BlockHitResult blockHitResult) {
+        Fluid content = getFluid();
         BlockState blockState = level.getBlockState(blockPos);
-        boolean replace = blockState.canBeReplaced(this.content);
+        boolean replace = blockState.canBeReplaced(content);
 
-        return blockState.isAir() || replace || Fluidlogged.canPlaceFluid(level, blockPos, blockState, this.content);
+        return blockState.isAir() || replace || Fluidlogged.canPlaceFluid(level, blockPos, blockState, content);
     }
 
 
@@ -146,8 +149,9 @@ public abstract class BucketItemMixin extends Item {
             cancellable = true
     )
     private void injectPlaceFluid(Player player, Level level, BlockPos blockPos, BlockHitResult p_150719_, ItemStack itemContainer, CallbackInfoReturnable<Boolean> cir) {
+        Fluid content = getFluid();
         BlockState blockState = level.getBlockState(blockPos);
-        if (!Fluidlogged.canPlaceFluid(level, blockPos, blockState, this.content))
+        if (!Fluidlogged.canPlaceFluid(level, blockPos, blockState, content))
             return;
 
         FluidState contentFluidState = ((FlowingFluid) content).getSource(false);

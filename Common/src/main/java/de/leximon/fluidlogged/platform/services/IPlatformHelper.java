@@ -3,6 +3,7 @@ package de.leximon.fluidlogged.platform.services;
 import de.leximon.fluidlogged.config.ConfigDefaults;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.IdMapper;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -21,6 +22,8 @@ public interface IPlatformHelper {
     }
 
     ConfigDefaults getConfigDefaults();
+
+    IdMapper<FluidState> getFluidStateIdMapper();
 
     void broadcastFluidUpdatePacket(List<ServerPlayer> players, BlockPos pos, FluidState state);
 

@@ -2,6 +2,7 @@ package de.leximon.fluidlogged;
 
 import de.leximon.fluidlogged.config.Config;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
+import de.leximon.fluidlogged.platform.services.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -30,7 +31,7 @@ public class Fluidlogged {
         if (fluidState == null) {
             return 0;
         } else {
-            int i = Fluid.FLUID_STATE_REGISTRY.getId(fluidState);
+            int i = Services.PLATFORM.getFluidStateIdMapper().getId(fluidState);
             return i == -1 ? 0 : i;
         }
     }

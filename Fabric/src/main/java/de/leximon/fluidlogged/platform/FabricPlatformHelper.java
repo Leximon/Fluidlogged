@@ -10,9 +10,11 @@ import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.IdMapper;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.chunk.LevelChunkSection;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 
 import java.nio.file.Path;
@@ -32,6 +34,11 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public ConfigDefaults getConfigDefaults() {
         return CONFIG_DEFAULTS;
+    }
+
+    @Override
+    public IdMapper<FluidState> getFluidStateIdMapper() {
+        return Fluid.FLUID_STATE_REGISTRY;
     }
 
     @Override

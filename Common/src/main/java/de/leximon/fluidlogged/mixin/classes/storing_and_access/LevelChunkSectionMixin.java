@@ -1,6 +1,7 @@
 package de.leximon.fluidlogged.mixin.classes.storing_and_access;
 
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
+import de.leximon.fluidlogged.platform.services.Services;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minecraft.core.Registry;
@@ -86,7 +87,7 @@ public class LevelChunkSectionMixin implements LevelChunkSectionExtension {
 
         for (Short2ObjectMap.Entry<FluidState> entry : this.fluidStates.short2ObjectEntrySet()) {
             buf.writeShort(entry.getShortKey());
-            buf.writeInt(Fluid.FLUID_STATE_REGISTRY.getId(entry.getValue()));
+            buf.writeInt(Services.PLATFORM.getFluidStateIdMapper().getId(entry.getValue()));
         }
     }
 
@@ -98,7 +99,7 @@ public class LevelChunkSectionMixin implements LevelChunkSectionExtension {
 
         for (short i = 0; i < size; i++) {
             short pos = buf.readShort();
-            FluidState fluidState = Fluid.FLUID_STATE_REGISTRY.byId(buf.readInt());
+            FluidState fluidState = Services.PLATFORM.getFluidStateIdMapper().byId(buf.readInt());
 
             this.fluidStates.put(pos, fluidState);
         }

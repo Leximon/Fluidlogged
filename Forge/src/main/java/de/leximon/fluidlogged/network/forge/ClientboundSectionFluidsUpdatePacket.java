@@ -1,12 +1,12 @@
 package de.leximon.fluidlogged.network.forge;
 
 import de.leximon.fluidlogged.Fluidlogged;
+import de.leximon.fluidlogged.FluidloggedForge;
 import de.leximon.fluidlogged.network.ClientPacketHandler;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -66,7 +66,7 @@ public class ClientboundSectionFluidsUpdatePacket {
         for(int j = 0; j < length; ++j) {
             long idAndPos = buf.readVarLong();
             positions[j] = (short)((int) (idAndPos & 0xFFF));
-            states[j] = Fluid.FLUID_STATE_REGISTRY.byId((int) (idAndPos >>> 12));
+            states[j] = FluidloggedForge.fluidStateIdMapper.byId((int) (idAndPos >>> 12));
         }
 
         return new ClientboundSectionFluidsUpdatePacket(sectionPos, positions, states);

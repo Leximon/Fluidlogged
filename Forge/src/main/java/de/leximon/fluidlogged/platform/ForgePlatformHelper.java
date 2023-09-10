@@ -9,11 +9,11 @@ import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket
 import de.leximon.fluidlogged.platform.services.IPlatformHelper;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.IdMapper;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 
@@ -36,6 +36,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public ConfigDefaults getConfigDefaults() {
         return CONFIG_DEFAULTS;
+    }
+
+    @Override
+    public IdMapper<FluidState> getFluidStateIdMapper() {
+        return FluidloggedForge.fluidStateIdMapper;
     }
 
     @Override

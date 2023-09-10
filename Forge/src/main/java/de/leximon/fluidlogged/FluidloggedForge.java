@@ -11,6 +11,9 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
+import net.minecraft.core.IdMapper;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ConfigScreenHandler;
@@ -22,46 +25,58 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.*;
 
 import java.util.Optional;
 
 @Mod(Fluidlogged.MOD_ID)
 public class FluidloggedForge {
 
-    public static final String PROTOCOL_VERSION = "1";
+    private static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, "fluidlogged");
 
+    public static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel PACKET_CHANNEL = NetworkRegistry.newSimpleChannel(
             Fluidlogged.id("channel"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
     );
-
-    private static final DeferredRegister<ArgumentTypeInfo<?, ?>> ARGUMENT_TYPES = DeferredRegister.create(ForgeRegistries.COMMAND_ARGUMENT_TYPES, "fluidlogged");
-
+    public static IdMapper<FluidState> fluidStateIdMapper;
 
     public FluidloggedForge() {
         Fluidlogged.Internal.initialize();
         registerPackets();
         registerArguments();
+
         MinecraftForge.EVENT_BUS.register(new EventHandler());
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::setupClient);
 
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void setupClient(){
+    private void setupClient() {
         // Register the configuration GUI factory
         ModLoadingContext.get().registerExtensionPoint(
                 ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> Config.createConfigScreen(parent))
         );
+    }
+
+    private void loadComplete(FMLLoadCompleteEvent event) {
+        IdMapper<FluidState> idMapper = new IdMapper<>();
+        for (Fluid fluid : ForgeRegistries.FLUIDS) {
+            for(FluidState fluidstate : fluid.getStateDefinition().getPossibleStates()) {
+                idMapper.add(fluidstate);
+            }
+        }
+        fluidStateIdMapper = idMapper;
     }
 
     private void registerArguments() {
