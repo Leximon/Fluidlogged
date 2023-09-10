@@ -11,7 +11,6 @@ public class FabricConfigDefaults implements ConfigDefaults {
             "minecraft:grindstone",
             "minecraft:lectern",
             "minecraft:brewing_stand",
-            "minecraft:anvil",
             "minecraft:enchanting_table",
             "minecraft:bell",
             "minecraft:composter",
@@ -52,7 +51,8 @@ public class FabricConfigDefaults implements ConfigDefaults {
             "#minecraft:wool_carpets",
             "#minecraft:banners",
             "#minecraft:flower_pots",
-            "#minecraft:candle_cakes"
+            "#minecraft:candle_cakes",
+            "#minecraft:anvil"
     );
 
     public static final boolean FLUID_PERMEABILITY_ENABLED = true;
@@ -61,7 +61,6 @@ public class FabricConfigDefaults implements ConfigDefaults {
             "minecraft:grindstone",
             "minecraft:lectern",
             "minecraft:brewing_stand",
-            "minecraft:anvil",
             "minecraft:bell",
             "minecraft:lantern",
             "minecraft:soul_lantern",
@@ -89,6 +88,7 @@ public class FabricConfigDefaults implements ConfigDefaults {
             "minecraft:moss_carpet",
             "minecraft:decorated_pot",
             "minecraft:cake",
+            "minecraft:lever",
             "minecraft:player_head",
             "minecraft:player_wall_head",
             "minecraft:creeper_head",
@@ -117,6 +117,7 @@ public class FabricConfigDefaults implements ConfigDefaults {
             "#minecraft:campfires",
             "#minecraft:candles",
             "#minecraft:candle_cakes",
+            "#minecraft:anvil",
             "#c:chests",
             "#c:clusters"
     );
