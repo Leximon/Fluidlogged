@@ -22,17 +22,6 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Gradle Build Fabric
-        uses: gradle/gradle-build-action@v2.4.2
-        with:
-          arguments: Fabric:build
-
-      - name: Capture Build Artifacts Fabric
-        uses: actions/upload-artifact@v3
-        with:
-          name: Artifacts Fabric
-          path: fabric/build/libs/*.jar
-
       - name: Gradle Build Forge
         uses: gradle/gradle-build-action@v2.4.2
         with:
@@ -42,4 +31,15 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts Forge
-          path: forge/build/libs/*.jar
+          path: Forge/build/libs/*.jar
+
+      - name: Gradle Build Fabric
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: Fabric:build
+
+      - name: Capture Build Artifacts Fabric
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts Fabric
+          path: Fabric/build/libs/*.jar
