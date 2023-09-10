@@ -87,6 +87,7 @@ modrinth {
 	projectId = "BnXpPaut"
 	versionNumber = mod_version
 	versionName = "Fluidlogged ${mod_version} Fabric"
+	versionType = mod_version_type
 	changelog = file("CHANGELOG.md").getText("UTF-8")
 	uploadFile = remapJar
 	gameVersions = slurper.parseText(mod_game_versions)
@@ -102,7 +103,7 @@ curseforge {
 	apiKey = System.getenv("CURSEFORGE_TOKEN") ?: ""
 	project {
 		id = "620894"
-		releaseType = "release"
+		releaseType = mod_version_type
 		changelogType = "markdown"
 		changelog = file("CHANGELOG.md")
 
