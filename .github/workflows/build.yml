@@ -36,7 +36,7 @@ jobs:
       - name: Gradle Build Forge
         uses: gradle/gradle-build-action@v2.4.2
         with:
-          arguments: Forge:build
+          arguments: Forge:jar
 
       - name: Capture Build Artifacts Forge
         uses: actions/upload-artifact@v3
