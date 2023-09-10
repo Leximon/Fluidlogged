@@ -63,7 +63,7 @@ processResources {
 		expand "version": mod_version
 	}
 
-	filesMatching("${mod_id}.mixins.json") {
+	filesMatching("${mod_id}.fabric.mixins.json") {
 		expand "refmap_target": "${archivesBaseName}-"
 	}
 }
