@@ -82,12 +82,14 @@ public abstract class FlowingFluidMixin {
             Object reference, Class<LiquidBlockContainer> clazz,
             LevelAccessor levelAccessor, BlockPos blockPos, BlockState blockState, Direction direction, FluidState fluidState
     ) {
-        return Fluidlogged.canPlaceFluid(levelAccessor, blockPos, blockState, fluidState.getType());
+        return Fluidlogged.canPlaceFluid(levelAccessor, blockPos, blockState, fluidState.getType())
+                && levelAccessor.getFluidState(blockPos).isEmpty();
     }
 
     @Inject(method = "canHoldFluid", at = @At("HEAD"), cancellable = true)
     private void redirectBypassLiquidBlockContainerCheck2(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
-        if (Fluidlogged.canPlaceFluid(blockGetter, blockPos, blockState, fluid))
+        if (Fluidlogged.canPlaceFluid(blockGetter, blockPos, blockState, fluid)
+                && blockGetter.getFluidState(blockPos).isEmpty())
             cir.setReturnValue(Fluidlogged.isFluidPermeable(blockState));
     }
 
