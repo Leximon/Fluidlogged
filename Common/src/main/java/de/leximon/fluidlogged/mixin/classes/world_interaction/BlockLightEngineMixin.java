@@ -38,7 +38,18 @@ public abstract class BlockLightEngineMixin extends LightEngine<BlockLightSectio
         int j = SectionPos.blockToSectionCoord(mutablePos.getZ());
         LightChunk lightChunk = this.getChunk(i, j);
 
-        fluidloggedFluidState = lightChunk == null ? Fluids.EMPTY.defaultFluidState() : lightChunk.getFluidState(mutablePos);
+        if (lightChunk == null) {
+            fluidloggedFluidState = Fluids.EMPTY.defaultFluidState();
+            return;
+        }
+
+        FluidState fluidState = lightChunk.getFluidState(mutablePos);
+        if (fluidState == null) { // fixes a crash with the create mod, not ideal, but it works without any problems
+            fluidloggedFluidState = Fluids.EMPTY.defaultFluidState();
+            return;
+        }
+
+        fluidloggedFluidState = fluidState;
     }
 
 
