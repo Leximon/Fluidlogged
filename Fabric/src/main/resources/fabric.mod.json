@@ -43,7 +43,7 @@
     "fabric": "*",
     "yet_another_config_lib_v3": "*"
   },
-  "conflicts": {
+  "breaks": {
     "sodium": "<0.5.0"
   },
   "suggests": {
