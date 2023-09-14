@@ -117,6 +117,7 @@ modrinth {
     gameVersions = slurper.parseText(mod_game_versions)
     loaders = ["forge"]
     dependencies = [
+            new ModDependency("1eAoo2KR", "required") // Yet Another Config Lib
     ]
 }
 
@@ -134,6 +135,9 @@ curseforge {
         gameVersions.each { addGameVersion it }
         addGameVersion "Java 17"
         addGameVersion "Forge"
+        relations {
+            requiredDependency "yacl" // Yet Another Config Lib
+        }
 
         mainArtifact(jar) {
             displayName = "[${gameVersions[0]}] Fluidlogged ${mod_version} Forge"
