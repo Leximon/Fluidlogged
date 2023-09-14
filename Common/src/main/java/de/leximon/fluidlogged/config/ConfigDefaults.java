@@ -6,8 +6,6 @@ public interface ConfigDefaults {
 
     List<String> fluidloggableBlocks();
 
-    boolean fluidPermeabilityEnabled();
-
     List<String> fluidPermeableBlocks();
 
     List<String> shapeIndependentFluidPermeableBlocks();

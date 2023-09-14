@@ -55,8 +55,6 @@ public class FabricConfigDefaults implements ConfigDefaults {
             "#minecraft:anvil"
     );
 
-    public static final boolean FLUID_PERMEABILITY_ENABLED = true;
-
     public static final ImmutableList<String> FLUID_PERMEABLE_BLOCKS = ImmutableList.of(
             "minecraft:grindstone",
             "minecraft:lectern",
@@ -131,11 +129,6 @@ public class FabricConfigDefaults implements ConfigDefaults {
     @Override
     public List<String> fluidloggableBlocks() {
         return FLUIDLOGGABLE_BLOCKS;
-    }
-
-    @Override
-    public boolean fluidPermeabilityEnabled() {
-        return FLUID_PERMEABILITY_ENABLED;
     }
 
     @Override

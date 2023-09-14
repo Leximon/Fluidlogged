@@ -1,19 +1,18 @@
 package de.leximon.fluidlogged.config;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import de.leximon.fluidlogged.Fluidlogged;
-import de.leximon.fluidlogged.config.controller.BlockPredicateController;
 import de.leximon.fluidlogged.platform.services.Services;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.io.*;
@@ -22,16 +21,40 @@ import java.util.List;
 public class Config {
 
     public static final String CONFIG_FILE_NAME = "fluidlogged.json";
-    private static final Gson GSON = new GsonBuilder()
+    public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .create();
     private static final ConfigDefaults CONFIG_DEFAULTS = Services.PLATFORM.getConfigDefaults();
 
-    private static final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(CONFIG_DEFAULTS.fluidloggableBlocks());
+    private static final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(
+            CONFIG_DEFAULTS::fluidloggableBlocks, false,
+            Component.translatable("fluidlogged.config.fluidloggable_blocks"),
+            ImmutableList.of(
+                    Component.translatable("fluidlogged.config.fluidloggable_blocks.desc")
+            )
+    );
 
-    private static boolean fluidPermeabilityEnabled = CONFIG_DEFAULTS.fluidPermeabilityEnabled();
-    private static final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(CONFIG_DEFAULTS.fluidPermeableBlocks());
-    private static final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(CONFIG_DEFAULTS.shapeIndependentFluidPermeableBlocks());
+    private static boolean fluidPermeabilityEnabled = true;
+    private static final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(
+            CONFIG_DEFAULTS::fluidPermeableBlocks, false,
+            Component.translatable("fluidlogged.config.fluid_permeable_blocks"),
+            ImmutableList.of(
+                    Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc"),
+                    Component.empty(),
+                    Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc.note")
+                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+            )
+    );
+    private static final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(
+            CONFIG_DEFAULTS::shapeIndependentFluidPermeableBlocks, true,
+            Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks"),
+            ImmutableList.of(
+                    Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc"),
+                    Component.empty(),
+                    Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc.note")
+                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+            )
+    );
 
 
 
@@ -62,13 +85,10 @@ public class Config {
 
         JsonObject obj = new JsonObject();
 
-        obj.add("fluidloggable_blocks", GSON.toJsonTree(fluidloggableBlocks.getBlocks()));
-
-        JsonObject fluidPassage = new JsonObject();
-        fluidPassage.addProperty("enabled", fluidPermeabilityEnabled);
-        fluidPassage.add("fluid_permeable_blocks", GSON.toJsonTree(fluidPermeableBlocks.getBlocks()));
-        fluidPassage.add("shape_independent_fluid_permeable_blocks", GSON.toJsonTree(shapeIndependentFluidPermeableBlocks.getBlocks()));
-        obj.add("fluid_permeability", fluidPassage);
+        obj.addProperty("fluid_permeability_enabled", fluidPermeabilityEnabled);
+        obj.add("fluidloggable_blocks", fluidloggableBlocks.toJson());
+        obj.add("fluid_permeable_blocks", fluidPermeableBlocks.toJson());
+        obj.add("shape_independent_fluid_permeable_blocks", shapeIndependentFluidPermeableBlocks.toJson());
 
         try (FileWriter writer = new FileWriter(file)) {
             GSON.toJson(obj, writer);
@@ -87,30 +107,17 @@ public class Config {
         try (FileReader reader = new FileReader(file)) {
             JsonObject obj = GSON.fromJson(reader, JsonObject.class);
 
-            if (obj.has("fluidloggable_blocks")) {
-                JsonElement element = obj.get("fluidloggable_blocks");
-                List<String> blocks = GSON.fromJson(element, new TypeToken<>() {});
-                fluidloggableBlocks.setBlocks(blocks);
-            }
+            if (obj.has("fluid_permeability_enabled"))
+                fluidPermeabilityEnabled = obj.get("fluid_permeability_enabled").getAsBoolean();
 
-            if (obj.has("fluid_permeability")) {
-                JsonObject fluidPassage = obj.getAsJsonObject("fluid_permeability");
+            if (obj.has("fluidloggable_blocks") && obj.get("fluidloggable_blocks").isJsonObject())
+                fluidloggableBlocks.fromJson(obj.getAsJsonObject("fluidloggable_blocks"));
 
-                if (fluidPassage.has("enabled"))
-                    fluidPermeabilityEnabled = fluidPassage.get("enabled").getAsBoolean();
+            if (obj.has("fluid_permeable_blocks"))
+                fluidPermeableBlocks.fromJson(obj.getAsJsonObject("fluid_permeable_blocks"));
 
-                if (fluidPassage.has("fluid_permeable_blocks")) {
-                    JsonElement element = fluidPassage.get("fluid_permeable_blocks");
-                    List<String> blocks = GSON.fromJson(element, new TypeToken<>() {});
-                    fluidPermeableBlocks.setBlocks(blocks);
-                }
-
-                if (fluidPassage.has("shape_independent_fluid_permeable_blocks")) {
-                    JsonElement element = fluidPassage.get("shape_independent_fluid_permeable_blocks");
-                    List<String> blocks = GSON.fromJson(element, new TypeToken<>() {});
-                    shapeIndependentFluidPermeableBlocks.setBlocks(blocks);
-                }
-            }
+            if (obj.has("shape_independent_fluid_permeable_blocks"))
+                shapeIndependentFluidPermeableBlocks.fromJson(obj.getAsJsonObject("shape_independent_fluid_permeable_blocks"));
         } catch (IOException e) {
             throw new RuntimeException("Failed to load config " + CONFIG_FILE_NAME, e);
         }
@@ -122,24 +129,10 @@ public class Config {
                 .title(Component.translatable("fluidlogged.config"))
                 .category(ConfigCategory.createBuilder()
                         .name(Component.translatable("fluidlogged.config.general"))
-                        .group(ListOption.<String>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.general.fluidloggable_blocks"))
-                                .description(OptionDescription.of(
-                                        Component.translatable("fluidlogged.config.general.fluidloggable_blocks.desc")
-                                ))
-                                .binding(CONFIG_DEFAULTS.fluidloggableBlocks(), fluidloggableBlocks::getBlocks, fluidloggableBlocks::setBlocks)
-                                .customController(BlockPredicateController::new)
-                                .initial("")
-                                .build()
-                        )
-                        .build()
-                )
-                .category(ConfigCategory.createBuilder()
-                        .name(Component.translatable("fluidlogged.config.fluid_permeability"))
                         .option(Option.<Boolean>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.fluid_permeability.enabled"))
+                                .name(Component.translatable("fluidlogged.config.general.enable_fluid_permeability"))
                                 .description(OptionDescription.createBuilder()
-                                        .text(Component.translatable("fluidlogged.config.fluid_permeability.enabled.desc"))
+                                        .text(Component.translatable("fluidlogged.config.general.enable_fluid_permeability.desc"))
                                         .image(Fluidlogged.id("textures/fluid_permeability_example.png"), 520, 293)
                                         .build()
                                 )
@@ -147,37 +140,14 @@ public class Config {
                                         .coloured(true)
                                         .yesNoFormatter()
                                 )
-                                .binding(CONFIG_DEFAULTS.fluidPermeabilityEnabled(), () -> fluidPermeabilityEnabled, value -> fluidPermeabilityEnabled = value)
-                                .build()
-                        )
-                        .group(ListOption.<String>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks"))
-                                .description(OptionDescription.of(
-                                        Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc"),
-                                        Component.empty(),
-                                        Component.translatable("fluidlogged.config.fluid_permeability.fluid_permeable_blocks.desc.note")
-                                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
-                                ))
-                                .binding(CONFIG_DEFAULTS.fluidPermeableBlocks(), fluidPermeableBlocks::getBlocks, fluidPermeableBlocks::setBlocks)
-                                .customController(BlockPredicateController::new)
-                                .initial("")
-                                .build()
-                        )
-                        .group(ListOption.<String>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks"))
-                                .description(OptionDescription.of(
-                                        Component.translatable("fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks.desc"),
-                                        Component.empty(),
-                                        Component.translatable("fluidlogged.config.fluid_permeability.shape_independent_fluid_permeable_blocks.desc.note")
-                                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
-                                ))
-                                .binding(CONFIG_DEFAULTS.shapeIndependentFluidPermeableBlocks(), shapeIndependentFluidPermeableBlocks::getBlocks, shapeIndependentFluidPermeableBlocks::setBlocks)
-                                .customController(BlockPredicateController::new)
-                                .initial("")
+                                .binding(true, () -> fluidPermeabilityEnabled, value -> fluidPermeabilityEnabled = value)
                                 .build()
                         )
                         .build()
                 )
+                .category(fluidloggableBlocks.createCategory())
+                .category(fluidPermeableBlocks.createCategory())
+                .category(shapeIndependentFluidPermeableBlocks.createCategory())
                 .save(Config::save)
                 .build()
                 .generateScreen(parent);
