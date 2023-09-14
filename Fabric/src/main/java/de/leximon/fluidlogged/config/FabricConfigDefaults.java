@@ -69,6 +69,7 @@ public class FabricConfigDefaults implements ConfigDefaults {
             "minecraft:sculk_vein",
             "minecraft:dragon_egg",
             "minecraft:hopper",
+            "minecraft:piston_head",
             "minecraft:sniffer_egg",
             "minecraft:turtle_egg",
             "minecraft:sea_pickle",
