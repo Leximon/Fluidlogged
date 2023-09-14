@@ -1,7 +1,7 @@
-package de.leximon.fluidlogged.mixin.classes.fabric.sodium_compat;
+package de.leximon.fluidlogged.mixin.classes.compat_sodium;
 
-import de.leximon.fluidlogged.mixin.extensions.sodium_compat.ClonedChunkSectionExtension;
-import de.leximon.fluidlogged.mixin.extensions.sodium_compat.WorldSliceExtension;
+import de.leximon.fluidlogged.mixin.extensions.compat_sodium.ClonedChunkSectionExtension;
+import de.leximon.fluidlogged.mixin.extensions.compat_sodium.WorldSliceExtension;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
 import me.jellysquid.mods.sodium.client.world.cloned.ChunkRenderContext;
 import me.jellysquid.mods.sodium.client.world.cloned.ClonedChunkSection;
@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 
@@ -33,35 +34,45 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
     @Shadow public abstract BlockState getBlockState(int x, int y, int z);
 
     @Unique
-    private Int2ReferenceMap<FluidState>[] fluidArrays;
+    private Int2ReferenceMap<FluidState>[] fluidlogged$fluidArrays;
 
     @SuppressWarnings("unchecked")
     @Inject(method = "<init>", at = @At("RETURN"), remap = false)
     private void injectInit(ClientLevel world, CallbackInfo ci) {
-        this.fluidArrays = new Int2ReferenceMap[SECTION_ARRAY_SIZE];
+        this.fluidlogged$fluidArrays = new Int2ReferenceMap[SECTION_ARRAY_SIZE];
     }
 
     @Inject(method = "copySectionData", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD, remap = false)
     private void injectUnpackFluidData(ChunkRenderContext context, int sectionIndex, CallbackInfo ci, ClonedChunkSection section) {
         ClonedChunkSectionExtension sectionExt = ((ClonedChunkSectionExtension) section);
 
-        this.fluidArrays[sectionIndex] = sectionExt.getFluidlogged$fluidData();
+        this.fluidlogged$fluidArrays[sectionIndex] = sectionExt.getFluidlogged$fluidData();
     }
 
     @Inject(
             method = "reset",
             at = @At(value = "FIELD", target = "Lme/jellysquid/mods/sodium/client/world/WorldSlice;blockEntityArrays:[Lit/unimi/dsi/fastutil/ints/Int2ReferenceMap;"),
-            locals = LocalCapture.CAPTURE_FAILHARD
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            remap = false
     )
     private void injectReset(CallbackInfo ci, int sectionIndex) {
-        this.fluidArrays[sectionIndex] = null;
+        this.fluidlogged$fluidArrays[sectionIndex] = null;
     }
 
 
-    @SuppressWarnings("OverwriteAuthorRequired")
-    @Overwrite
-    public FluidState getFluidState(BlockPos pos) {
-        return fluidlogged$getFluidState(pos.getX(), pos.getY(), pos.getZ());
+    @SuppressWarnings("UnresolvedMixinReference")
+    @Inject(
+            method = {
+                    "getFluidState",
+                    "m_6425_", // mappings cannot be found when building on forge
+                    "method_8316" // because remap needs to be set to false the intermediary mapping must be passed right into it to let it work on fabric
+            },
+            remap = false,
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void injectGetFluidState(BlockPos pos, CallbackInfoReturnable<FluidState> cir) {
+        cir.setReturnValue(fluidlogged$getFluidState(pos.getX(), pos.getY(), pos.getZ()));
     }
 
     @Override
@@ -74,7 +85,7 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
         int relY = y - this.originY;
         int relZ = z - this.originZ;
 
-        Int2ReferenceMap<FluidState> fluids = this.fluidArrays[getLocalSectionIndex(relX >> 4, relY >> 4, relZ >> 4)];
+        Int2ReferenceMap<FluidState> fluids = this.fluidlogged$fluidArrays[getLocalSectionIndex(relX >> 4, relY >> 4, relZ >> 4)];
         if (fluids == null)
             return Fluids.EMPTY.defaultFluidState();
 

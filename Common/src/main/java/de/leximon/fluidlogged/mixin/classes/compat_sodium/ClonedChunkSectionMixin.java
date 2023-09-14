@@ -1,7 +1,7 @@
-package de.leximon.fluidlogged.mixin.classes.fabric.sodium_compat;
+package de.leximon.fluidlogged.mixin.classes.compat_sodium;
 
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
-import de.leximon.fluidlogged.mixin.extensions.sodium_compat.ClonedChunkSectionExtension;
+import de.leximon.fluidlogged.mixin.extensions.compat_sodium.ClonedChunkSectionExtension;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceMap;
 import it.unimi.dsi.fastutil.ints.Int2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;

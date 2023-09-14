@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.fabric.lithium_compat;
+package de.leximon.fluidlogged.mixin.classes.fabric.compat_lithium;
 
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
 import me.jellysquid.mods.lithium.common.block.BlockStateFlags;

@@ -16,6 +16,9 @@ dependencies {
         exclude(group: "com.terraformersmc")
     }
 
+
+    modCompileOnly "maven.modrinth:rubidium:${project.rubidium_version}" // compatibility for sodium and rubidium
+
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
 }
 

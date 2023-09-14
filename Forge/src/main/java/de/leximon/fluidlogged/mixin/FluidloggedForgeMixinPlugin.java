@@ -1,7 +1,7 @@
 package de.leximon.fluidlogged.mixin;
 
-import de.leximon.fluidlogged.FluidloggedFabric;
-import net.fabricmc.loader.api.FabricLoader;
+import de.leximon.fluidlogged.FluidloggedForge;
+import net.minecraftforge.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -9,11 +9,9 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
-public class FluidloggedFabricMixinPlugin implements IMixinConfigPlugin {
+public class FluidloggedForgeMixinPlugin implements IMixinConfigPlugin {
 
-    private static final boolean SODIUM_LOADED = isModLoaded("sodium");
-    private static final boolean LITHIUM_LOADED = isModLoaded("lithium");
-    private static final boolean MILK_LIB_LOADED = isModLoaded("milk");
+    public static final boolean RUBIDIUM_LOADED = isModLoaded("rubidium") || isModLoaded("embeddium");
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -27,11 +25,7 @@ public class FluidloggedFabricMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat_sodium"))
-            return false;
-        if (!LITHIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.fabric.compat_lithium"))
-            return false;
-        if (!MILK_LIB_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.fabric.compat_milk_lib"))
+        if (!RUBIDIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat_sodium"))
             return false;
         return true;
     }
@@ -57,6 +51,6 @@ public class FluidloggedFabricMixinPlugin implements IMixinConfigPlugin {
     }
 
     private static boolean isModLoaded(String name) {
-        return FabricLoader.getInstance().isModLoaded(name);
+        return FMLLoader.getLoadingModList().getModFileById("rubidium") != null;
     }
 }
