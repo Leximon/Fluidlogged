@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.compat_sodium;
+package de.leximon.fluidlogged.mixin.classes.fabric.compat_sodium;
 
 import de.leximon.fluidlogged.mixin.extensions.LevelChunkSectionExtension;
 import de.leximon.fluidlogged.mixin.extensions.compat_sodium.ClonedChunkSectionExtension;

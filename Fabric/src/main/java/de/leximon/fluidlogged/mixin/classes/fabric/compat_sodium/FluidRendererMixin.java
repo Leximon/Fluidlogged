@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.compat_sodium;
+package de.leximon.fluidlogged.mixin.classes.fabric.compat_sodium;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

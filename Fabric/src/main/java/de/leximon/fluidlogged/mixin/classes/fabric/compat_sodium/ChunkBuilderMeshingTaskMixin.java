@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.compat_sodium;
+package de.leximon.fluidlogged.mixin.classes.fabric.compat_sodium;
 
 import de.leximon.fluidlogged.mixin.extensions.compat_sodium.WorldSliceExtension;
 import me.jellysquid.mods.sodium.client.world.WorldSlice;
@@ -21,10 +21,9 @@ public class ChunkBuilderMeshingTaskMixin {
                     value = "INVOKE",
                     target = "Lme/jellysquid/mods/sodium/client/world/WorldSlice;getBlockState(III)Lnet/minecraft/world/level/block/state/BlockState;",
                     ordinal = 0
-            ),
-            remap = false
+            )
     )
-    private BlockState redirectCaptureFluidState(WorldSlice instance, int x, int y, int z) {
+    private BlockState redirectCaptureFluidStateFabric(WorldSlice instance, int x, int y, int z) {
         fluidlogged$fluidState = ((WorldSliceExtension) (Object) instance).fluidlogged$getFluidState(x, y, z);
         return instance.getBlockState(x, y, z);
     }
@@ -58,8 +57,7 @@ public class ChunkBuilderMeshingTaskMixin {
                     value = "INVOKE",
                     target = "Lme/jellysquid/mods/sodium/client/render/chunk/compile/pipeline/FluidRenderer;render(Lme/jellysquid/mods/sodium/client/world/WorldSlice;Lnet/minecraft/world/level/material/FluidState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildBuffers;)V"
             ),
-            index = 1,
-            remap = false
+            index = 1
     )
     private FluidState modifyPassedFluidState(FluidState fluidState) {
         return fluidState.isEmpty() ? fluidlogged$fluidState : fluidState;

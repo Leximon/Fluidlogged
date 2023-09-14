@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.compat_sodium;
+package de.leximon.fluidlogged.mixin.classes.fabric.compat_sodium;
 
 import de.leximon.fluidlogged.mixin.extensions.compat_sodium.ClonedChunkSectionExtension;
 import de.leximon.fluidlogged.mixin.extensions.compat_sodium.WorldSliceExtension;
@@ -60,19 +60,10 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
     }
 
 
-    @SuppressWarnings("UnresolvedMixinReference")
-    @Inject(
-            method = {
-                    "getFluidState",
-                    "m_6425_", // mappings cannot be found when building on forge
-                    "method_8316" // because remap needs to be set to false the intermediary mapping must be passed right into it to let it work on fabric
-            },
-            remap = false,
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    private void injectGetFluidState(BlockPos pos, CallbackInfoReturnable<FluidState> cir) {
-        cir.setReturnValue(fluidlogged$getFluidState(pos.getX(), pos.getY(), pos.getZ()));
+    @SuppressWarnings("OverwriteAuthorRequired") // fabric version doesn't want to compile because the reason is an unknown tag
+    @Overwrite
+    public FluidState getFluidState(BlockPos pos) {
+        return fluidlogged$getFluidState(pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override

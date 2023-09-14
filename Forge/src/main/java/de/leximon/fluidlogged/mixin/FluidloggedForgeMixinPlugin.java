@@ -25,7 +25,7 @@ public class FluidloggedForgeMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!RUBIDIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat_sodium"))
+        if (!RUBIDIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.forge.compat_rubidium"))
             return false;
         return true;
     }

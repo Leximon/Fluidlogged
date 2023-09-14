@@ -27,7 +27,7 @@ public class FluidloggedFabricMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat_sodium"))
+        if (!SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.fabric.compat_sodium"))
             return false;
         if (!LITHIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.fabric.compat_lithium"))
             return false;
