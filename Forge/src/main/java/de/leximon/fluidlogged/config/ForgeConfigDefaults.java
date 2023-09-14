@@ -23,6 +23,7 @@ public class ForgeConfigDefaults implements ConfigDefaults {
             "minecraft:end_portal_frame",
             "minecraft:daylight_detector",
             "minecraft:hopper",
+            "minecraft:piston_head",
             "minecraft:barrier",
             "minecraft:end_rod",
             "minecraft:end_portal",
