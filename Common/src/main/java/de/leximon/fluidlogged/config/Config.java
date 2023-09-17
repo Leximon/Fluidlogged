@@ -3,9 +3,7 @@ package de.leximon.fluidlogged.config;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.platform.services.Services;
 import dev.isxander.yacl3.api.*;
@@ -15,8 +13,10 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.io.*;
-import java.util.List;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Config {
 
@@ -143,6 +143,17 @@ public class Config {
                                 .binding(true, () -> fluidPermeabilityEnabled, value -> fluidPermeabilityEnabled = value)
                                 .build()
                         )
+                        .group(OptionGroup.createBuilder()
+                                .name(Component.literal("Quick Presets"))
+                                .option(ButtonOption.createBuilder()
+                                        .name(Component.literal("Redstone Components"))
+                                        .text(Component.literal("add/remove"))
+                                        .action((screen, option) -> {
+
+                                        })
+                                        .build()
+                                )
+                                .build())
                         .build()
                 )
                 .category(fluidloggableBlocks.createCategory())

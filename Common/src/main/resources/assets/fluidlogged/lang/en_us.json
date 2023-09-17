@@ -15,5 +15,14 @@
   "fluidlogged.config.blacklist": "Blacklist",
   "fluidlogged.config.blacklist_just_for_fun": "Blacklist (Just For Fun)",
   "fluidlogged.config.blacklist.desc": "Toggles whether the block list should be treated as a blacklist.",
-  "fluidlogged.config.blocks": "Blocks"
+  "fluidlogged.config.blocks": "Blocks",
+  "argument.fluid.id.invalid": "Unknown fluid type '%s'",
+  "argument.fluid.property.unknown": "Fluid %s does not have property '%s'",
+  "argument.fluid.property.duplicate": "Property '%s' can only be set once for fluid %s",
+  "argument.fluid.property.invalid": "Fluid %s does not accept '%s' for %s property",
+  "argument.fluid.property.novalue": "Expected value for property '%s' on fluid %s",
+  "argument.fluid.property.unclosed": "Expected closing ] for fluid state properties",
+  "arguments.fluid.tag.unknown": "Unknown fluid tag '%s'",
+  "commands.setfluid.success": "Changed the fluid at %s, %s, %s",
+  "commands.setfluid.failed": "Could not set the fluid"
 }

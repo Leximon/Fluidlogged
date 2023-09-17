@@ -9,7 +9,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.material.Fluid;
 
@@ -41,7 +40,7 @@ public class FluidStateArgument implements ArgumentType<FluidInput> {
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> commandContext, SuggestionsBuilder suggestionsBuilder) {
-        return FluidStateParser.fillSuggestions(this.fluids, suggestionsBuilder, false);
+        return FluidStateParser.fillSuggestions(this.fluids, suggestionsBuilder);
     }
 
     @Override

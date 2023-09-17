@@ -6,13 +6,10 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.mojang.datafixers.util.Either;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -31,36 +28,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class FluidStateParser {
-    public static final SimpleCommandExceptionType ERROR_NO_TAGS_ALLOWED = new SimpleCommandExceptionType(Component.translatable("argument.block.tag.disallowed"));
-    public static final DynamicCommandExceptionType ERROR_UNKNOWN_BLOCK = new DynamicCommandExceptionType((object) -> {
-        return Component.translatable("argument.block.id.invalid", object);
-    });
-    public static final Dynamic2CommandExceptionType ERROR_UNKNOWN_PROPERTY = new Dynamic2CommandExceptionType((object, object2) -> {
-        return Component.translatable("argument.block.property.unknown", object, object2);
-    });
-    public static final Dynamic2CommandExceptionType ERROR_DUPLICATE_PROPERTY = new Dynamic2CommandExceptionType((object, object2) -> {
-        return Component.translatable("argument.block.property.duplicate", object2, object);
-    });
-    public static final Dynamic3CommandExceptionType ERROR_INVALID_VALUE = new Dynamic3CommandExceptionType((object, object2, object3) -> {
-        return Component.translatable("argument.block.property.invalid", object, object3, object2);
-    });
-    public static final Dynamic2CommandExceptionType ERROR_EXPECTED_VALUE = new Dynamic2CommandExceptionType((object, object2) -> {
-        return Component.translatable("argument.block.property.novalue", object, object2);
-    });
-    public static final SimpleCommandExceptionType ERROR_EXPECTED_END_OF_PROPERTIES = new SimpleCommandExceptionType(Component.translatable("argument.block.property.unclosed"));
-    public static final DynamicCommandExceptionType ERROR_UNKNOWN_TAG = new DynamicCommandExceptionType((object) -> {
-        return Component.translatable("arguments.block.tag.unknown", object);
-    });
-    private static final char SYNTAX_START_PROPERTIES = '[';
-    private static final char SYNTAX_START_NBT = '{';
-    private static final char SYNTAX_END_PROPERTIES = ']';
-    private static final char SYNTAX_EQUALS = '=';
-    private static final char SYNTAX_PROPERTY_SEPARATOR = ',';
-    private static final char SYNTAX_TAG = '#';
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_BLOCK = new DynamicCommandExceptionType((arg1) -> Component.translatable("argument.fluid.id.invalid", arg1));
+    public static final Dynamic2CommandExceptionType ERROR_UNKNOWN_PROPERTY = new Dynamic2CommandExceptionType((arg1, arg2) -> Component.translatable("argument.fluid.property.unknown", arg1, arg2));
+    public static final Dynamic2CommandExceptionType ERROR_DUPLICATE_PROPERTY = new Dynamic2CommandExceptionType((arg1, arg2) -> Component.translatable("argument.fluid.property.duplicate", arg2, arg1));
+    public static final Dynamic3CommandExceptionType ERROR_INVALID_VALUE = new Dynamic3CommandExceptionType((arg1, arg2, arg3) -> Component.translatable("argument.fluid.property.invalid", arg1, arg3, arg2));
+    public static final Dynamic2CommandExceptionType ERROR_EXPECTED_VALUE = new Dynamic2CommandExceptionType((arg1, arg2) -> Component.translatable("argument.fluid.property.novalue", arg1, arg2));
+    public static final SimpleCommandExceptionType ERROR_EXPECTED_END_OF_PROPERTIES = new SimpleCommandExceptionType(Component.translatable("argument.fluid.property.unclosed"));
+    public static final DynamicCommandExceptionType ERROR_UNKNOWN_TAG = new DynamicCommandExceptionType((object) -> Component.translatable("arguments.fluid.tag.unknown", object));
+
     private static final Function<SuggestionsBuilder, CompletableFuture<Suggestions>> SUGGEST_NOTHING = SuggestionsBuilder::buildFuture;
     private final HolderLookup<Fluid> fluids;
     private final StringReader reader;
-    private final boolean forTesting;
     private final Map<Property<?>, Comparable<?>> properties = Maps.newHashMap();
     private final Map<String, String> vagueProperties = Maps.newHashMap();
     private ResourceLocation id = new ResourceLocation("");
@@ -71,18 +49,17 @@ public class FluidStateParser {
     private HolderSet<Fluid> tag;
     private Function<SuggestionsBuilder, CompletableFuture<Suggestions>> suggestions;
 
-    private FluidStateParser(HolderLookup<Fluid> holderLookup, StringReader stringReader, boolean forTesting) {
+    private FluidStateParser(HolderLookup<Fluid> holderLookup, StringReader stringReader) {
         this.suggestions = SUGGEST_NOTHING;
         this.fluids = holderLookup;
         this.reader = stringReader;
-        this.forTesting = forTesting;
     }
 
     public static FluidResult parseForFluid(HolderLookup<Fluid> holderLookup, StringReader stringReader) throws CommandSyntaxException {
         int i = stringReader.getCursor();
 
         try {
-            FluidStateParser parser = new FluidStateParser(holderLookup, stringReader, false);
+            FluidStateParser parser = new FluidStateParser(holderLookup, stringReader);
             parser.parse();
             return new FluidResult(parser.state, parser.properties);
         } catch (CommandSyntaxException var5) {
@@ -91,10 +68,10 @@ public class FluidStateParser {
         }
     }
 
-    public static CompletableFuture<Suggestions> fillSuggestions(HolderLookup<Fluid> holderLookup, SuggestionsBuilder suggestionsBuilder, boolean forTesting) {
+    public static CompletableFuture<Suggestions> fillSuggestions(HolderLookup<Fluid> holderLookup, SuggestionsBuilder suggestionsBuilder) {
         StringReader stringReader = new StringReader(suggestionsBuilder.getInput());
         stringReader.setCursor(suggestionsBuilder.getStart());
-        FluidStateParser FluidStateParser = new FluidStateParser(holderLookup, stringReader, forTesting);
+        FluidStateParser FluidStateParser = new FluidStateParser(holderLookup, stringReader);
 
         try {
             FluidStateParser.parse();
@@ -104,11 +81,7 @@ public class FluidStateParser {
     }
 
     private void parse() throws CommandSyntaxException {
-        if (this.forTesting) {
-            this.suggestions = this::suggestFluidIdOrTag;
-        } else {
-            this.suggestions = this::suggestItem;
-        }
+        this.suggestions = this::suggestItem;
 
         if (this.reader.canRead() && this.reader.peek() == '#') {
             this.readTag();
@@ -269,18 +242,14 @@ public class FluidStateParser {
     }
 
     private void readTag() throws CommandSyntaxException {
-        if (!this.forTesting) {
-            throw ERROR_NO_TAGS_ALLOWED.createWithContext(this.reader);
-        } else {
-            int i = this.reader.getCursor();
-            this.reader.expect('#');
-            this.suggestions = this::suggestTag;
-            ResourceLocation resourceLocation = ResourceLocation.read(this.reader);
-            this.tag = this.fluids.get(TagKey.create(Registries.FLUID, resourceLocation)).orElseThrow(() -> {
-                this.reader.setCursor(i);
-                return ERROR_UNKNOWN_TAG.createWithContext(this.reader, resourceLocation.toString());
-            });
-        }
+        int i = this.reader.getCursor();
+        this.reader.expect('#');
+        this.suggestions = this::suggestTag;
+        ResourceLocation resourceLocation = ResourceLocation.read(this.reader);
+        this.tag = this.fluids.get(TagKey.create(Registries.FLUID, resourceLocation)).orElseThrow(() -> {
+            this.reader.setCursor(i);
+            return ERROR_UNKNOWN_TAG.createWithContext(this.reader, resourceLocation.toString());
+        });
     }
 
     private void readProperties() throws CommandSyntaxException {
