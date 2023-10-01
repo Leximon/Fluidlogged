@@ -7,7 +7,6 @@ import net.minecraft.world.level.material.FluidState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(targets = "me/jellysquid/mods/sodium/client/render/chunk/compile/tasks/ChunkBuilderMeshingTask")
@@ -51,15 +50,16 @@ public class ChunkBuilderMeshingTaskMixin {
         return fluidlogged$fluidState.isEmpty();
     }
 
-    @ModifyArg(
+    @Redirect(
             method = "execute(Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildContext;Lme/jellysquid/mods/sodium/client/util/task/CancellationToken;)Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildOutput;",
             at = @At(
                     value = "INVOKE",
-                    target = "Lme/jellysquid/mods/sodium/client/render/chunk/compile/pipeline/FluidRenderer;render(Lme/jellysquid/mods/sodium/client/world/WorldSlice;Lnet/minecraft/world/level/material/FluidState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;Lme/jellysquid/mods/sodium/client/render/chunk/compile/ChunkBuildBuffers;)V"
-            ),
-            index = 1
+                    target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;",
+                    ordinal = 0
+            )
     )
-    private FluidState modifyPassedFluidState(FluidState fluidState) {
+    private FluidState modifyPassedFluidState(BlockState instance) {
+        FluidState fluidState = instance.getFluidState();
         return fluidState.isEmpty() ? fluidlogged$fluidState : fluidState;
     }
 
