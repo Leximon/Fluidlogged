@@ -28,13 +28,13 @@ public record ClientboundFluidUpdatePacket(
     }
 
     public void apply(LocalPlayer localPlayer, PacketSender packetSender) {
-        ClientPacketHandler.handleFluidUpdate(pos, state);
+        ClientPacketHandler.handleFluidUpdate(this.pos, this.state);
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        buf.writeBlockPos(pos);
-        buf.writeId(Fluid.FLUID_STATE_REGISTRY, state);
+        buf.writeBlockPos(this.pos);
+        buf.writeId(Fluid.FLUID_STATE_REGISTRY, this.state);
     }
 
     public static ClientboundFluidUpdatePacket read(FriendlyByteBuf buf) {

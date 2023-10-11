@@ -68,7 +68,7 @@ public abstract class LevelChunkMixin extends ChunkAccess implements LevelChunkE
             profilerFiller.pop();
         }
 
-        unsaved = true;
+        this.unsaved = true;
         return prevFluidState;
     }
 }

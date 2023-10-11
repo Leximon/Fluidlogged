@@ -17,13 +17,13 @@ public record ClientboundFluidUpdatePacket(
 ) {
 
     public void apply(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleFluidUpdate(pos, state)));
+        context.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleFluidUpdate(this.pos, this.state)));
         context.get().setPacketHandled(true);
     }
 
     public void write(FriendlyByteBuf buf) {
-        buf.writeBlockPos(pos);
-        buf.writeId(FluidloggedForge.fluidStateIdMapper, state);
+        buf.writeBlockPos(this.pos);
+        buf.writeId(FluidloggedForge.fluidStateIdMapper, this.state);
     }
 
     public static ClientboundFluidUpdatePacket read(FriendlyByteBuf buf) {

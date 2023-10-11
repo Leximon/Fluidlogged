@@ -7,7 +7,6 @@ import net.minecraft.world.level.material.FluidState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Group;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -26,7 +25,7 @@ public class ChunkBuilderMeshingTaskMixin {
             remap = false // forge can't find mappings
     )
     private BlockState redirectCaptureFluidStateForge(WorldSlice instance, int x, int y, int z) {
-        fluidlogged$fluidState = ((WorldSliceExtension) (Object) instance).fluidlogged$getFluidState(x, y, z);
+        this.fluidlogged$fluidState = ((WorldSliceExtension) (Object) instance).fluidlogged$getFluidState(x, y, z);
         return instance.getBlockState(x, y, z);
     }
 
@@ -39,7 +38,7 @@ public class ChunkBuilderMeshingTaskMixin {
             )
     )
     private boolean redirectIsAir(BlockState instance) {
-        return instance.isAir() && fluidlogged$fluidState.isEmpty();
+        return instance.isAir() && this.fluidlogged$fluidState.isEmpty();
     }
 
     @Redirect(
@@ -50,7 +49,7 @@ public class ChunkBuilderMeshingTaskMixin {
             )
     )
     private boolean redirectIsEmpty(FluidState instance) {
-        return fluidlogged$fluidState.isEmpty();
+        return this.fluidlogged$fluidState.isEmpty();
     }
 
     @ModifyArg(
@@ -63,7 +62,7 @@ public class ChunkBuilderMeshingTaskMixin {
             remap = false
     )
     private FluidState modifyPassedFluidState(FluidState fluidState) {
-        return fluidState.isEmpty() ? fluidlogged$fluidState : fluidState;
+        return fluidState.isEmpty() ? this.fluidlogged$fluidState : fluidState;
     }
 
 }

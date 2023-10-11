@@ -38,12 +38,12 @@ public abstract class ClientLevelMixin extends Level implements ClientLevelExten
 
     @Override
     public void fluidlogged$setBlocksDirty(int x1, int y1, int z1, int x2, int y2, int z2) {
-        levelRenderer.setBlocksDirty(x1, y1, z1, x2, y2, z2);
+        this.levelRenderer.setBlocksDirty(x1, y1, z1, x2, y2, z2);
     }
 
     @Override
     public void sendFluidUpdated(BlockPos blockPos, int flags) {
         // some parameters are not used by the method itself, pass null instead
-        levelRenderer.blockChanged(null, blockPos, null, null, flags);
+        this.levelRenderer.blockChanged(null, blockPos, null, null, flags);
     }
 }

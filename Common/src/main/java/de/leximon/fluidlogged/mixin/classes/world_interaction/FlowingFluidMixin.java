@@ -37,7 +37,7 @@ public abstract class FlowingFluidMixin {
 
     @Redirect(method = "getNewLiquid", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;"))
     private FluidState redirectFluidBehavior(BlockState instance, Level level, BlockPos blockPos, BlockState blockState) {
-        return level.getFluidState(fluidloggedBlockPos);
+        return level.getFluidState(this.fluidloggedBlockPos);
     }
 
     @SuppressWarnings("UnresolvedMixinReference")

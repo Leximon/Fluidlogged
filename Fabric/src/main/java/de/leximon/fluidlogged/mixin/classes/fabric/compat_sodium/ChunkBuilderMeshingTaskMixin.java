@@ -23,7 +23,7 @@ public class ChunkBuilderMeshingTaskMixin {
             )
     )
     private BlockState redirectCaptureFluidStateFabric(WorldSlice instance, int x, int y, int z) {
-        fluidlogged$fluidState = ((WorldSliceExtension) (Object) instance).fluidlogged$getFluidState(x, y, z);
+        this.fluidlogged$fluidState = ((WorldSliceExtension) (Object) instance).fluidlogged$getFluidState(x, y, z);
         return instance.getBlockState(x, y, z);
     }
 
@@ -36,7 +36,7 @@ public class ChunkBuilderMeshingTaskMixin {
             )
     )
     private boolean redirectIsAir(BlockState instance) {
-        return instance.isAir() && fluidlogged$fluidState.isEmpty();
+        return instance.isAir() && this.fluidlogged$fluidState.isEmpty();
     }
 
     @Redirect(
@@ -47,7 +47,7 @@ public class ChunkBuilderMeshingTaskMixin {
             )
     )
     private boolean redirectIsEmpty(FluidState instance) {
-        return fluidlogged$fluidState.isEmpty();
+        return this.fluidlogged$fluidState.isEmpty();
     }
 
     @Redirect(
@@ -60,7 +60,7 @@ public class ChunkBuilderMeshingTaskMixin {
     )
     private FluidState modifyPassedFluidState(BlockState instance) {
         FluidState fluidState = instance.getFluidState();
-        return fluidState.isEmpty() ? fluidlogged$fluidState : fluidState;
+        return fluidState.isEmpty() ? this.fluidlogged$fluidState : fluidState;
     }
 
 }

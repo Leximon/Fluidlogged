@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +30,7 @@ public class RebuildTaskMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getFluidState()Lnet/minecraft/world/level/material/FluidState;")
     )
     private FluidState redirectGetFluidState(BlockState instance) {
-        return fluidloggedRenderChunkRegion.getFluidState(fluidloggedBlockPos);
+        return this.fluidloggedRenderChunkRegion.getFluidState(this.fluidloggedBlockPos);
     }
 
 }

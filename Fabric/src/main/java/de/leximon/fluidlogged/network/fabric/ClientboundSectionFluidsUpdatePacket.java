@@ -54,7 +54,7 @@ public class ClientboundSectionFluidsUpdatePacket implements FabricPacket {
     }
 
     public void apply(LocalPlayer localPlayer, PacketSender packetSender) {
-        ClientPacketHandler.handleSectionFluidsUpdate(sectionPos, positions, states);
+        ClientPacketHandler.handleSectionFluidsUpdate(this.sectionPos, this.positions, this.states);
     }
 
     @Override

@@ -7,7 +7,6 @@ import dev.isxander.yacl3.gui.controllers.string.IStringController;
 import dev.isxander.yacl3.gui.controllers.string.StringControllerElement;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.FurnaceScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -37,44 +36,44 @@ public class BlockPredicateControllerElement extends StringControllerElement {
 
         Dimension<Integer> dimension = getDimension();
 
-        switch (previewState) {
+        switch (this.previewState) {
             case VALID_BLOCK -> {
-                if (blockPreview != null)
-                    graphics.renderFakeItem(blockPreview, dimension.x() + 8, dimension.y() + 2);
+                if (this.blockPreview != null)
+                    graphics.renderFakeItem(this.blockPreview, dimension.x() + 8, dimension.y() + 2);
             }
             case VALID_TAG -> {
                 graphics.blit(TAG_ICON_LOCATION, dimension.x() + 8, dimension.y() + 2, 0, 0, 16, 16, 16, 16);
             }
             case INVALID -> {
-                graphics.drawString(textRenderer, Component.literal("?"), dimension.x() + 13, dimension.y() + 6, getValueColor());
+                graphics.drawString(this.textRenderer, Component.literal("?"), dimension.x() + 13, dimension.y() + 6, getValueColor());
             }
         }
     }
 
     @Override
     protected int getValueColor() {
-        return previewState == PreviewState.INVALID ? ChatFormatting.RED.getColor() : super.getValueColor();
+        return this.previewState == PreviewState.INVALID ? ChatFormatting.RED.getColor() : super.getValueColor();
     }
 
     private void updateItemPreview() {
-        if (inputField.startsWith("#")) {
-            previewState = PreviewState.VALID_TAG;
+        if (this.inputField.startsWith("#")) {
+            this.previewState = PreviewState.VALID_TAG;
             return;
         }
 
-        ResourceLocation id = ResourceLocation.tryParse(inputField);
+        ResourceLocation id = ResourceLocation.tryParse(this.inputField);
         Optional<Block> blockOpt = Optional.empty();
         if (id != null)
             blockOpt = BuiltInRegistries.BLOCK.getOptional(id);
 
         if (blockOpt.isEmpty()) {
-            previewState = PreviewState.INVALID;
+            this.previewState = PreviewState.INVALID;
             return;
         }
 
         Block block = blockOpt.get();
-        previewState = PreviewState.VALID_BLOCK;
-        blockPreview = block.getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, block.defaultBlockState());
+        this.previewState = PreviewState.VALID_BLOCK;
+        this.blockPreview = block.getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, block.defaultBlockState());
     }
 
     @Override

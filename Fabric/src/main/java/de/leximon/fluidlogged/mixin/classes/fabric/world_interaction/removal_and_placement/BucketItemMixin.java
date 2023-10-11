@@ -70,8 +70,8 @@ public abstract class BucketItemMixin extends Item {
             Level level, Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir,
             ItemStack itemStack, BlockHitResult blockHitResult, BlockPos blockPos, Direction direction, BlockPos blockPos2, BlockState blockState
     ) {
-        fluidlogged$blockPos = blockPos;
-        fluidlogged$blockState = blockState;
+        this.fluidlogged$blockPos = blockPos;
+        this.fluidlogged$blockState = blockState;
     }
 
     @Redirect(
@@ -178,7 +178,7 @@ public abstract class BucketItemMixin extends Item {
     )
     private void injectPlaceFluid(Player player, Level level, BlockPos blockPos, BlockHitResult blockHitResult, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockState = level.getBlockState(blockPos);
-        FluidState contentFluidState = ((FlowingFluid) content).getSource(false);
+        FluidState contentFluidState = ((FlowingFluid) this.content).getSource(false);
 
         // try to place the fluid via blockState first then via Fluidlogged
         if (blockState.getBlock() instanceof LiquidBlockContainer container && container.placeLiquid(level, blockPos, blockState, contentFluidState)) {

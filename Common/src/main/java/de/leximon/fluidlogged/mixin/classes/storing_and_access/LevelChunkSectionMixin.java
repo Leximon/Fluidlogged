@@ -8,7 +8,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.spongepowered.asm.mixin.Mixin;
@@ -72,7 +71,7 @@ public class LevelChunkSectionMixin implements LevelChunkSectionExtension {
     private void injectHasOnlyAir(CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValue())
             return;
-        cir.setReturnValue(fluidStates.isEmpty());
+        cir.setReturnValue(this.fluidStates.isEmpty());
     }
 
     @Inject(method = "getSerializedSize", at = @At("RETURN"), cancellable = true)

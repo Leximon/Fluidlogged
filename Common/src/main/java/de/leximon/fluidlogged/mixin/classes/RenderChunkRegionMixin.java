@@ -27,7 +27,7 @@ public class RenderChunkRegionMixin {
     public FluidState getFluidState(BlockPos blockPos) {
         int i = SectionPos.blockToSectionCoord(blockPos.getX()) - this.centerX;
         int j = SectionPos.blockToSectionCoord(blockPos.getZ()) - this.centerZ;
-        return ((RenderChunkExtension) chunks[i][j]).getFluidState(blockPos);
+        return ((RenderChunkExtension) this.chunks[i][j]).getFluidState(blockPos);
     }
 
 }

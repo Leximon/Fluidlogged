@@ -45,7 +45,7 @@ public class ClientboundSectionFluidsUpdatePacket {
     }
 
     public void apply(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleSectionFluidsUpdate(sectionPos, positions, states)));
+        context.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleSectionFluidsUpdate(this.sectionPos, this.positions, this.states)));
         context.get().setPacketHandled(true);
     }
 
