@@ -1,11 +1,13 @@
 package de.leximon.fluidlogged.platform.services;
 
 import de.leximon.fluidlogged.config.ConfigDefaults;
+import de.leximon.fluidlogged.content.EmbeddedBlockEntity;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
 
@@ -28,4 +30,6 @@ public interface IPlatformHelper {
     void broadcastFluidUpdatePacket(List<ServerPlayer> players, BlockPos pos, FluidState state);
 
     void broadcastSectionFluidsUpdatePacket(List<ServerPlayer> players, SectionPos sectionPos, ShortSet changedFluids, LevelChunkSection levelChunkSection);
+
+    BlockEntityType<EmbeddedBlockEntity> blockEntityCoatedBlock();
 }

@@ -4,6 +4,7 @@ import de.leximon.fluidlogged.FluidloggedForge;
 import de.leximon.fluidlogged.config.Config;
 import de.leximon.fluidlogged.config.ConfigDefaults;
 import de.leximon.fluidlogged.config.ForgeConfigDefaults;
+import de.leximon.fluidlogged.content.EmbeddedBlockEntity;
 import de.leximon.fluidlogged.network.forge.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket;
 import de.leximon.fluidlogged.platform.services.IPlatformHelper;
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.network.NetworkDirection;
@@ -51,6 +53,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public void broadcastSectionFluidsUpdatePacket(List<ServerPlayer> players, SectionPos sectionPos, ShortSet changedFluids, LevelChunkSection levelChunkSection) {
         FluidloggedForge.PACKET_CHANNEL.send(PLAYER_LIST_DISTRIBUTOR.with(() -> players), new ClientboundSectionFluidsUpdatePacket(sectionPos, changedFluids, levelChunkSection));
+    }
+
+    @Override
+    public BlockEntityType<EmbeddedBlockEntity> blockEntityCoatedBlock() {
+        return null;
     }
 
 }
