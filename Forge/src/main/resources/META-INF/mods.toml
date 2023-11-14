@@ -29,7 +29,7 @@ issueTrackerURL="https://github.com/Leximon/Fluidlogged/issues"
 
 [[dependencies.fluidlogged]]
     modId="yet_another_config_lib_v3"
-    mandatory=true
+    mandatory=false
     versionRange = "[3.1.1+1.20,)"
     ordering="NONE"
     side="CLIENT"

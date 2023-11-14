@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import de.leximon.fluidlogged.commands.SetFluidCommand;
 import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
 import de.leximon.fluidlogged.config.Config;
+import de.leximon.fluidlogged.config.YaclMissingScreen;
 import de.leximon.fluidlogged.network.forge.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket;
 import net.minecraft.commands.CommandBuildContext;
@@ -28,8 +29,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
-import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -68,7 +67,11 @@ public class FluidloggedForge {
         // Register the configuration GUI factory
         ModLoadingContext.get().registerExtensionPoint(
                 ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> Config.createConfigScreen(parent))
+                () -> new ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> {
+                    if(!ModList.get().isLoaded("yet_another_config_lib_v3")) // we could cache this value but it's not worth it
+                        return new YaclMissingScreen(parent);
+                    return Config.createConfigScreen(parent);
+                })
         );
     }
 
