@@ -3,74 +3,70 @@ package de.leximon.fluidlogged.config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import de.leximon.fluidlogged.config.controller.BlockPredicateController;
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.ListOption;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import com.mojang.datafixers.util.Either;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
+@Setter
+@Getter
 public class BlockPredicateList {
 
-    private final Supplier<List<String>> defaultBlocks;
-    private final boolean justForFunBlacklist;
-    private final Component categoryName;
-    private final List<Component> description;
-
-    private List<String> blocks;
+    private final Config config;
+    private Function<Addon, List<Either<Block, TagKey<Block>>>> addonBlockSupplier;
+    private List<String> entries = Collections.emptyList();
     private boolean blacklist = false;
 
-    private final HashSet<Block> compiledBlocks = new HashSet<>();
+    private final HashSet<Block> effectiveBlocks = new HashSet<>();
 
-    public BlockPredicateList(
-            Supplier<List<String>> defaultBlocks,
-            boolean justForFunBlacklist,
-            Component categoryName,
-            List<Component> description
-    ) {
-        this.defaultBlocks = defaultBlocks;
-        this.justForFunBlacklist = justForFunBlacklist;
-        this.categoryName = categoryName;
-        this.description = description;
-
-        setBlocks(defaultBlocks.get());
-    }
-
-    public void setBlocks(List<String> blocks) {
-        this.blocks = blocks;
+    public BlockPredicateList(Config config, Function<Addon, List<Either<Block, TagKey<Block>>>> addonBlockSupplier) {
+        this.config = config;
+        this.addonBlockSupplier = addonBlockSupplier;
         compile();
     }
 
-    public List<String> getBlocks() {
-        return this.blocks;
+    public void setEntries(List<String> entries) {
+        this.entries = entries;
+        compile();
     }
 
     public void compile() {
-        this.compiledBlocks.clear();
+        this.effectiveBlocks.clear();
 
-        for (String id : this.blocks) {
+        for (Addon enabledAddon : this.config.getEnabledAddons()) {
+            List<Either<Block, TagKey<Block>>> blockOrTags = this.addonBlockSupplier.apply(enabledAddon);
+            blockOrTags.forEach(blockOrTag -> blockOrTag
+                    .ifLeft(this.effectiveBlocks::add)
+                    .ifRight(tag -> {
+                        Iterable<Holder<Block>> blockHolders = BuiltInRegistries.BLOCK.getTagOrEmpty(tag);
+                        for (Holder<Block> blockHolder : blockHolders)
+                            this.effectiveBlocks.add(blockHolder.value());
+                    })
+            );
+        }
+
+        for (String id : this.entries) {
             if (!id.startsWith("#"))
-                compileSingleBlock(id);
+                parseBlockEntry(id);
             else
-                compileBlockTag(id.substring(1));
+                parseBlockTagEntry(id.substring(1));
         }
     }
 
-    private void compileSingleBlock(String id) {
+    private void parseBlockEntry(String id) {
         ResourceLocation location = ResourceLocation.tryParse(id);
         if (location == null)
             return;
@@ -79,10 +75,10 @@ public class BlockPredicateList {
         if (blockOpt.isEmpty())
             return;
 
-        this.compiledBlocks.add(blockOpt.get());
+        this.effectiveBlocks.add(blockOpt.get());
     }
 
-    private void compileBlockTag(String id) {
+    private void parseBlockTagEntry(String id) {
         ResourceLocation location = ResourceLocation.tryParse(id);
         if (location == null)
             return;
@@ -91,7 +87,7 @@ public class BlockPredicateList {
 
         Iterable<Holder<Block>> blockHolders = BuiltInRegistries.BLOCK.getTagOrEmpty(blockTag);
         for (Holder<Block> blockHolder : blockHolders)
-            this.compiledBlocks.add(blockHolder.value());
+            this.effectiveBlocks.add(blockHolder.value());
     }
 
     public boolean contains(BlockState blockState) {
@@ -100,39 +96,13 @@ public class BlockPredicateList {
         if (block instanceof LiquidBlock || blockState.isAir())
             return false;
 
-        return this.compiledBlocks.contains(block) ^ this.blacklist;
-    }
-
-    public ConfigCategory createCategory() {
-        return ConfigCategory.createBuilder()
-                .name(this.categoryName)
-                .option(Option.<Boolean>createBuilder()
-                        .name(Component.translatable(this.justForFunBlacklist ? "fluidlogged.config.blacklist_just_for_fun" : "fluidlogged.config.blacklist"))
-                        .description(OptionDescription.of(
-                                Component.translatable("fluidlogged.config.blacklist.desc")
-                        ))
-                        .controller(option -> BooleanControllerBuilder.create(option)
-                                .coloured(true)
-                                .yesNoFormatter()
-                        )
-                        .binding(false, () -> this.blacklist, value -> this.blacklist = value)
-                        .build()
-                )
-                .group(ListOption.<String>createBuilder()
-                        .name(Component.translatable("fluidlogged.config.blocks"))
-                        .description(OptionDescription.of(this.description.toArray(Component[]::new)))
-                        .binding(this.defaultBlocks.get(), this::getBlocks, this::setBlocks)
-                        .customController(BlockPredicateController::new)
-                        .initial("")
-                        .build()
-                )
-                .build();
+        return this.effectiveBlocks.contains(block) ^ this.blacklist;
     }
 
     public JsonObject toJson() {
         JsonObject obj = new JsonObject();
         obj.addProperty("blacklist", this.blacklist);
-        obj.add("blocks", Config.GSON.toJsonTree(this.blocks));
+        obj.add("blocks", Config.GSON.toJsonTree(this.entries));
         return obj;
     }
 
@@ -140,7 +110,7 @@ public class BlockPredicateList {
         if (obj.has("blocks")) {
             JsonElement element = obj.get("blocks");
             List<String> blocks = Config.GSON.fromJson(element, new TypeToken<>() {});
-            setBlocks(blocks);
+            setEntries(blocks);
         }
 
         if (obj.has("blacklist"))

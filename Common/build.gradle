@@ -11,6 +11,7 @@ dependencies {
     modCompileOnly "org.ow2.asm:asm:${project.asm_version}"
     modCompileOnly "org.ow2.asm:asm-tree:${project.asm_version}"
     modCompileOnly "org.ow2.asm:asm-util:${project.asm_version}"
+    modCompileOnly "org.checkerframework:checker-qual:3.12.0"
 
     modCompileOnly("dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}") {
         exclude(group: "com.terraformersmc")
@@ -19,7 +20,9 @@ dependencies {
 
     modCompileOnly "maven.modrinth:rubidium:${project.rubidium_version}" // compatibility for sodium and rubidium
 
-    compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
+    compileOnly "org.spongepowered:mixin:0.8.5"
+    compileOnly "org.projectlombok:lombok:${project.lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
 }
 
 loom {

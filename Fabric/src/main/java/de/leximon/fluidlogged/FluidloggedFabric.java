@@ -2,12 +2,10 @@ package de.leximon.fluidlogged;
 
 import de.leximon.fluidlogged.commands.SetFluidCommand;
 import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
-import de.leximon.fluidlogged.config.Config;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 
 
@@ -27,12 +25,11 @@ public class FluidloggedFabric implements ModInitializer {
 			SetFluidCommand.register(dispatcher, buildContext);
 		});
 
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> Config.compile());
+		ServerLifecycleEvents.SERVER_STARTED.register(server -> Fluidlogged.CONFIG.compile());
 		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
 			if (success)
-				Config.compile();
+				Fluidlogged.CONFIG.compile();
 		});
-
 	}
 
 }

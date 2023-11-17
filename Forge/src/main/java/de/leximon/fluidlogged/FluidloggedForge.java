@@ -3,7 +3,6 @@ package de.leximon.fluidlogged;
 import com.mojang.brigadier.CommandDispatcher;
 import de.leximon.fluidlogged.commands.SetFluidCommand;
 import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
-import de.leximon.fluidlogged.config.Config;
 import de.leximon.fluidlogged.network.forge.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket;
 import net.minecraft.commands.CommandBuildContext;
@@ -23,17 +22,15 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
-import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 
@@ -68,7 +65,7 @@ public class FluidloggedForge {
         // Register the configuration GUI factory
         ModLoadingContext.get().registerExtensionPoint(
                 ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> Config.createConfigScreen(parent))
+                () -> new ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> Fluidlogged.CONFIG.createConfigScreen(parent))
         );
     }
 
@@ -115,12 +112,12 @@ public class FluidloggedForge {
 
         @SubscribeEvent
         public void serverStart(ServerStartedEvent event) {
-            Config.compile();
+            Fluidlogged.CONFIG.compile();
         }
 
         @SubscribeEvent
         public void dataPackReload(AddReloadListenerEvent event) {
-            Config.compile();
+            Fluidlogged.CONFIG.compile();
         }
 
     }
