@@ -13,5 +13,4 @@ public class FluidloggedFabricModMenu implements ModMenuApi {
             return YaclMissingScreen::create;
         return ConfigScreen::create;
     }
-
 }

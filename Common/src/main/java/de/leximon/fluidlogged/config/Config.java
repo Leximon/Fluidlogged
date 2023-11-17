@@ -130,6 +130,5 @@ public class Config {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load config " + CONFIG_FILE_NAME, e);
         }
-
     }
 }
