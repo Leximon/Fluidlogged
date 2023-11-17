@@ -3,18 +3,11 @@ package de.leximon.fluidlogged.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.api.FluidloggedRegistries;
-import de.leximon.fluidlogged.config.controller.BlockPredicateController;
 import de.leximon.fluidlogged.platform.services.Services;
-import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import lombok.Getter;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -25,7 +18,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +32,10 @@ public class Config {
 
     private final Object2BooleanMap<ResourceLocation> addons = new Object2BooleanOpenHashMap<>();
 
-    private final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(this, Addon::fluidloggableBlocks);
-    private boolean fluidPermeabilityEnabled = true;
-    private final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(this, Addon::fluidPermeableBlocks);
-    private final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(this, Addon::shapeIndependentFluidPermeableBlocks);
+    final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(this, Addon::fluidloggableBlocks);
+    boolean fluidPermeabilityEnabled = true;
+    final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(this, Addon::fluidPermeableBlocks);
+    final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(this, Addon::shapeIndependentFluidPermeableBlocks);
 
     public boolean isFluidloggable(BlockState block) {
         return this.fluidloggableBlocks.contains(block);
@@ -138,93 +130,5 @@ public class Config {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load config " + CONFIG_FILE_NAME, e);
         }
-
-    }
-
-    public Screen createConfigScreen(Screen parent) {
-        return YetAnotherConfigLib.createBuilder()
-                .title(Component.translatable("fluidlogged.config"))
-                .category(ConfigCategory.createBuilder()
-                        .name(Component.translatable("fluidlogged.config.general"))
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.general.enable_fluid_permeability"))
-                                .description(OptionDescription.createBuilder()
-                                        .text(Component.translatable("fluidlogged.config.general.enable_fluid_permeability.desc"))
-                                        .image(Fluidlogged.id("textures/fluid_permeability_example.png"), 520, 293)
-                                        .build()
-                                )
-                                .controller(option -> BooleanControllerBuilder.create(option)
-                                        .coloured(true)
-                                        .yesNoFormatter()
-                                )
-                                .binding(true, () -> this.fluidPermeabilityEnabled, value -> this.fluidPermeabilityEnabled = value)
-                                .build()
-                        )
-                        .group(OptionGroup.createBuilder()
-                                .name(Component.literal("Quick Presets"))
-                                .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Redstone Components"))
-                                        .text(Component.literal("add/remove"))
-                                        .action((screen, option) -> {
-
-                                        })
-                                        .build()
-                                )
-                                .build())
-                        .build()
-                )
-                .category(createBlockListCategory(
-                        this.fluidloggableBlocks,
-                        false,
-                        Component.translatable("fluidlogged.config.fluidloggable_blocks"),
-                        Component.translatable("fluidlogged.config.fluidloggable_blocks.desc")
-                ))
-                .category(createBlockListCategory(
-                        this.fluidPermeableBlocks,
-                        false,
-                        Component.translatable("fluidlogged.config.fluid_permeable_blocks"),
-                        Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc"),
-                        Component.empty(),
-                        Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc.note")
-                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
-                ))
-                .category(createBlockListCategory(
-                        this.shapeIndependentFluidPermeableBlocks,
-                        true,
-                        Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks"),
-                        Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc"),
-                        Component.empty(),
-                        Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc.note")
-                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
-                ))
-                .save(this::save)
-                .build()
-                .generateScreen(parent);
-    }
-
-    private ConfigCategory createBlockListCategory(BlockPredicateList list, boolean justForFunBlackList, Component name, Component... description) {
-        return ConfigCategory.createBuilder()
-                .name(name)
-                .option(Option.<Boolean>createBuilder()
-                        .name(Component.translatable(justForFunBlackList ? "fluidlogged.config.blacklist_just_for_fun" : "fluidlogged.config.blacklist"))
-                        .description(OptionDescription.of(
-                                Component.translatable("fluidlogged.config.blacklist.desc")
-                        ))
-                        .controller(option -> BooleanControllerBuilder.create(option)
-                                .coloured(true)
-                                .yesNoFormatter()
-                        )
-                        .binding(false, list::isBlacklist, list::setBlacklist)
-                        .build()
-                )
-                .group(ListOption.<String>createBuilder()
-                        .name(Component.translatable("fluidlogged.config.blocks"))
-                        .description(OptionDescription.of(description))
-                        .binding(Collections.emptyList(), list::getEntries, list::setEntries)
-                        .customController(BlockPredicateController::new)
-                        .initial("")
-                        .build()
-                )
-                .build();
     }
 }

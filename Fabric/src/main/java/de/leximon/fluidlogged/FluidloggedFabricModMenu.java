@@ -2,11 +2,15 @@ package de.leximon.fluidlogged;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
+import de.leximon.fluidlogged.config.ConfigScreen;
+import de.leximon.fluidlogged.config.YaclMissingScreen;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class FluidloggedFabricModMenu implements ModMenuApi {
 
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return Fluidlogged.CONFIG::createConfigScreen;
+        if(!FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) // we could cache this value but it's not worth either
+            return YaclMissingScreen::create;
+        return ConfigScreen::create;
     }
-
 }
