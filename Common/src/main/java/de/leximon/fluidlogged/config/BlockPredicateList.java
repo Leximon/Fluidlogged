@@ -26,13 +26,13 @@ import java.util.function.Supplier;
 
 public class BlockPredicateList {
 
-    private final Supplier<List<String>> defaultBlocks;
-    private final boolean justForFunBlacklist;
-    private final Component categoryName;
-    private final List<Component> description;
+    final Supplier<List<String>> defaultBlocks;
+    final boolean justForFunBlacklist;
+    final Component categoryName;
+    final List<Component> description;
 
     private List<String> blocks;
-    private boolean blacklist = false;
+    boolean blacklist = false;
 
     private final HashSet<Block> compiledBlocks = new HashSet<>();
 
@@ -101,32 +101,6 @@ public class BlockPredicateList {
             return false;
 
         return this.compiledBlocks.contains(block) ^ this.blacklist;
-    }
-
-    public ConfigCategory createCategory() {
-        return ConfigCategory.createBuilder()
-                .name(this.categoryName)
-                .option(Option.<Boolean>createBuilder()
-                        .name(Component.translatable(this.justForFunBlacklist ? "fluidlogged.config.blacklist_just_for_fun" : "fluidlogged.config.blacklist"))
-                        .description(OptionDescription.of(
-                                Component.translatable("fluidlogged.config.blacklist.desc")
-                        ))
-                        .controller(option -> BooleanControllerBuilder.create(option)
-                                .coloured(true)
-                                .yesNoFormatter()
-                        )
-                        .binding(false, () -> this.blacklist, value -> this.blacklist = value)
-                        .build()
-                )
-                .group(ListOption.<String>createBuilder()
-                        .name(Component.translatable("fluidlogged.config.blocks"))
-                        .description(OptionDescription.of(this.description.toArray(Component[]::new)))
-                        .binding(this.defaultBlocks.get(), this::getBlocks, this::setBlocks)
-                        .customController(BlockPredicateController::new)
-                        .initial("")
-                        .build()
-                )
-                .build();
     }
 
     public JsonObject toJson() {

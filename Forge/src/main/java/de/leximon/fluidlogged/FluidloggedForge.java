@@ -5,6 +5,7 @@ import de.leximon.fluidlogged.commands.SetFluidCommand;
 import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
 import de.leximon.fluidlogged.config.Config;
 import de.leximon.fluidlogged.config.YaclMissingScreen;
+import de.leximon.fluidlogged.config.ConfigScreen;
 import de.leximon.fluidlogged.network.forge.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket;
 import net.minecraft.commands.CommandBuildContext;
@@ -69,8 +70,8 @@ public class FluidloggedForge {
                 ConfigScreenHandler.ConfigScreenFactory.class,
                 () -> new ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> {
                     if(!ModList.get().isLoaded("yet_another_config_lib_v3")) // we could cache this value but it's not worth it
-                        return new YaclMissingScreen(parent);
-                    return Config.createConfigScreen(parent);
+                        return YaclMissingScreen.create(parent);
+                    return ConfigScreen.create(parent);
                 })
         );
     }

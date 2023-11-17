@@ -4,12 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.platform.services.Services;
-import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -26,7 +22,7 @@ public class Config {
             .create();
     private static final ConfigDefaults CONFIG_DEFAULTS = Services.PLATFORM.getConfigDefaults();
 
-    private static final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(
+    static final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(
             CONFIG_DEFAULTS::fluidloggableBlocks, false,
             Component.translatable("fluidlogged.config.fluidloggable_blocks"),
             ImmutableList.of(
@@ -34,8 +30,8 @@ public class Config {
             )
     );
 
-    private static boolean fluidPermeabilityEnabled = true;
-    private static final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(
+    static boolean fluidPermeabilityEnabled = true;
+    static final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(
             CONFIG_DEFAULTS::fluidPermeableBlocks, false,
             Component.translatable("fluidlogged.config.fluid_permeable_blocks"),
             ImmutableList.of(
@@ -45,7 +41,7 @@ public class Config {
                             .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
             )
     );
-    private static final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(
+    static final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(
             CONFIG_DEFAULTS::shapeIndependentFluidPermeableBlocks, true,
             Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks"),
             ImmutableList.of(
@@ -121,46 +117,5 @@ public class Config {
         } catch (IOException e) {
             throw new RuntimeException("Failed to load config " + CONFIG_FILE_NAME, e);
         }
-
-    }
-
-    public static Screen createConfigScreen(Screen parent) {
-        return YetAnotherConfigLib.createBuilder()
-                .title(Component.translatable("fluidlogged.config"))
-                .category(ConfigCategory.createBuilder()
-                        .name(Component.translatable("fluidlogged.config.general"))
-                        .option(Option.<Boolean>createBuilder()
-                                .name(Component.translatable("fluidlogged.config.general.enable_fluid_permeability"))
-                                .description(OptionDescription.createBuilder()
-                                        .text(Component.translatable("fluidlogged.config.general.enable_fluid_permeability.desc"))
-                                        .image(Fluidlogged.id("textures/fluid_permeability_example.png"), 520, 293)
-                                        .build()
-                                )
-                                .controller(option -> BooleanControllerBuilder.create(option)
-                                        .coloured(true)
-                                        .yesNoFormatter()
-                                )
-                                .binding(true, () -> fluidPermeabilityEnabled, value -> fluidPermeabilityEnabled = value)
-                                .build()
-                        )
-                        .group(OptionGroup.createBuilder()
-                                .name(Component.literal("Quick Presets"))
-                                .option(ButtonOption.createBuilder()
-                                        .name(Component.literal("Redstone Components"))
-                                        .text(Component.literal("add/remove"))
-                                        .action((screen, option) -> {
-
-                                        })
-                                        .build()
-                                )
-                                .build())
-                        .build()
-                )
-                .category(fluidloggableBlocks.createCategory())
-                .category(fluidPermeableBlocks.createCategory())
-                .category(shapeIndependentFluidPermeableBlocks.createCategory())
-                .save(Config::save)
-                .build()
-                .generateScreen(parent);
     }
 }

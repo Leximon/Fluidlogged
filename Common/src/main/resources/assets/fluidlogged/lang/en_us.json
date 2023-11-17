@@ -2,6 +2,7 @@
   "fluidlogged.config": "Fluidlogged Config",
   "fluidlogged.config.yacl_missing": "YACL is missing!",
   "fluidlogged.config.yacl_missing.desc": "Fluidlogged uses Yet Another Config Library (YACL) to generate its config GUI. Please install YACL to use the config GUI. Alternatively, you can edit the config file manually at: \n%s",
+  "fluidlogged.config.yacl_missing.open_config": "Open Config File",
   "fluidlogged.config.general": "General",
   "fluidlogged.config.general.enable_fluid_permeability": "Enable Fluid Permeability",
   "fluidlogged.config.general.enable_fluid_permeability.desc": "Enables or disables fluid permeability that allows fluids to pass through blocks.",
