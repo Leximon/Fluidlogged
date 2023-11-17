@@ -69,7 +69,9 @@ dependencies {
     compileOnly project(":Common")
 
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    compileOnly "org.projectlombok:lombok:${project.lombok_version}"
+    annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
 }
 
 tasks.withType(Javadoc).all { enabled = false } // workaround for now to publish it

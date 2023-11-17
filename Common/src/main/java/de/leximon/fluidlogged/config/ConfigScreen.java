@@ -4,9 +4,12 @@ import de.leximon.fluidlogged.Fluidlogged;
 import de.leximon.fluidlogged.config.controller.BlockPredicateController;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Collections;
 
 @ApiStatus.Internal
 public class ConfigScreen {
@@ -26,7 +29,7 @@ public class ConfigScreen {
                                         .coloured(true)
                                         .yesNoFormatter()
                                 )
-                                .binding(true, Config::isFluidPermeabilityEnabled, value -> Config.fluidPermeabilityEnabled = value)
+                                .binding(true, () -> Fluidlogged.CONFIG.fluidPermeabilityEnabled, value -> Fluidlogged.CONFIG.fluidPermeabilityEnabled = value)
                                 .build()
                         )
                         .group(OptionGroup.createBuilder()
@@ -42,19 +45,40 @@ public class ConfigScreen {
                                 .build())
                         .build()
                 )
-                .category(createCategoryFrom(Config.fluidloggableBlocks))
-                .category(createCategoryFrom(Config.fluidPermeableBlocks))
-                .category(createCategoryFrom(Config.shapeIndependentFluidPermeableBlocks))
-                .save(Config::save)
+                .category(createBlockListCategory(
+                        Fluidlogged.CONFIG.fluidloggableBlocks,
+                        false,
+                        Component.translatable("fluidlogged.config.fluidloggable_blocks"),
+                        Component.translatable("fluidlogged.config.fluidloggable_blocks.desc")
+                ))
+                .category(createBlockListCategory(
+                        Fluidlogged.CONFIG.fluidPermeableBlocks,
+                        false,
+                        Component.translatable("fluidlogged.config.fluid_permeable_blocks"),
+                        Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc"),
+                        Component.empty(),
+                        Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc.note")
+                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+                ))
+                .category(createBlockListCategory(
+                        Fluidlogged.CONFIG.shapeIndependentFluidPermeableBlocks,
+                        true,
+                        Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks"),
+                        Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc"),
+                        Component.empty(),
+                        Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc.note")
+                                .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+                ))
+                .save(Fluidlogged.CONFIG::save)
                 .build()
                 .generateScreen(parent);
     }
 
-    public static ConfigCategory createCategoryFrom(BlockPredicateList list) {
+    private static ConfigCategory createBlockListCategory(BlockPredicateList list, boolean justForFunBlackList, Component name, Component... description) {
         return ConfigCategory.createBuilder()
-                .name(list.categoryName)
+                .name(name)
                 .option(Option.<Boolean>createBuilder()
-                        .name(Component.translatable(list.justForFunBlacklist ? "fluidlogged.config.blacklist_just_for_fun" : "fluidlogged.config.blacklist"))
+                        .name(Component.translatable(justForFunBlackList ? "fluidlogged.config.blacklist_just_for_fun" : "fluidlogged.config.blacklist"))
                         .description(OptionDescription.of(
                                 Component.translatable("fluidlogged.config.blacklist.desc")
                         ))
@@ -62,13 +86,13 @@ public class ConfigScreen {
                                 .coloured(true)
                                 .yesNoFormatter()
                         )
-                        .binding(false, () -> list.blacklist, value -> list.blacklist = value)
+                        .binding(false, list::isBlacklist, list::setBlacklist)
                         .build()
                 )
                 .group(ListOption.<String>createBuilder()
                         .name(Component.translatable("fluidlogged.config.blocks"))
-                        .description(OptionDescription.of(list.description.toArray(Component[]::new)))
-                        .binding(list.defaultBlocks.get(), list::getBlocks, list::setBlocks)
+                        .description(OptionDescription.of(description))
+                        .binding(Collections.emptyList(), list::getEntries, list::setEntries)
                         .customController(BlockPredicateController::new)
                         .initial("")
                         .build()

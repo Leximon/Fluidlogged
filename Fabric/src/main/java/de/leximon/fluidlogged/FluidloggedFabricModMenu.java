@@ -2,8 +2,8 @@ package de.leximon.fluidlogged;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import de.leximon.fluidlogged.config.YaclMissingScreen;
 import de.leximon.fluidlogged.config.ConfigScreen;
+import de.leximon.fluidlogged.config.YaclMissingScreen;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class FluidloggedFabricModMenu implements ModMenuApi {

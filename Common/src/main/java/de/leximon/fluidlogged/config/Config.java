@@ -1,90 +1,94 @@
 package de.leximon.fluidlogged.config;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import de.leximon.fluidlogged.api.FluidloggedRegistries;
 import de.leximon.fluidlogged.platform.services.Services;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
+import lombok.Getter;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.framework.qual.DefaultQualifier;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+@Getter
+@DefaultQualifier(NonNull.class)
 public class Config {
 
     public static final String CONFIG_FILE_NAME = "fluidlogged.json";
     public static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .create();
-    private static final ConfigDefaults CONFIG_DEFAULTS = Services.PLATFORM.getConfigDefaults();
 
-    static final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(
-            CONFIG_DEFAULTS::fluidloggableBlocks, false,
-            Component.translatable("fluidlogged.config.fluidloggable_blocks"),
-            ImmutableList.of(
-                    Component.translatable("fluidlogged.config.fluidloggable_blocks.desc")
-            )
-    );
+    private final Object2BooleanMap<ResourceLocation> addons = new Object2BooleanOpenHashMap<>();
 
-    static boolean fluidPermeabilityEnabled = true;
-    static final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(
-            CONFIG_DEFAULTS::fluidPermeableBlocks, false,
-            Component.translatable("fluidlogged.config.fluid_permeable_blocks"),
-            ImmutableList.of(
-                    Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc"),
-                    Component.empty(),
-                    Component.translatable("fluidlogged.config.fluid_permeable_blocks.desc.note")
-                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
-            )
-    );
-    static final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(
-            CONFIG_DEFAULTS::shapeIndependentFluidPermeableBlocks, true,
-            Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks"),
-            ImmutableList.of(
-                    Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc"),
-                    Component.empty(),
-                    Component.translatable("fluidlogged.config.shape_independent_fluid_permeable_blocks.desc.note")
-                            .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
-            )
-    );
+    final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(this, Addon::fluidloggableBlocks);
+    boolean fluidPermeabilityEnabled = true;
+    final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(this, Addon::fluidPermeableBlocks);
+    final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(this, Addon::shapeIndependentFluidPermeableBlocks);
 
-
-
-    public static boolean isFluidloggable(BlockState block) {
-        return fluidloggableBlocks.contains(block);
+    public boolean isFluidloggable(BlockState block) {
+        return this.fluidloggableBlocks.contains(block);
     }
 
-    public static boolean isFluidPermeabilityEnabled() {
-        return fluidPermeabilityEnabled;
+    public boolean isFluidPermeable(BlockState block) {
+        return this.fluidPermeableBlocks.contains(block);
     }
 
-    public static boolean isFluidPermeable(BlockState block) {
-        return fluidPermeableBlocks.contains(block);
+    public boolean isShapeIndependentFluidPermeable(BlockState block) {
+        return this.shapeIndependentFluidPermeableBlocks.contains(block);
     }
 
-    public static boolean isShapeIndependentFluidPermeable(BlockState block) {
-        return shapeIndependentFluidPermeableBlocks.contains(block);
+    public List<Addon> getEnabledAddons() {
+        List<Addon> enabledAddons = new ArrayList<>(this.addons.size());
+
+        for (Map.Entry<ResourceLocation, Addon> addonEntry : FluidloggedRegistries.ADDONS.entrySet()) {
+            ResourceLocation addonId = addonEntry.getKey();
+            Addon addon = addonEntry.getValue();
+
+            boolean enabled = this.addons.getBoolean(addonId) || (!this.addons.containsKey(addonId) && addon.enabledByDefault());
+            if (!enabled)
+                continue;
+
+            enabledAddons.add(addon);
+        }
+
+        return enabledAddons;
     }
 
-    public static void compile() {
-        fluidloggableBlocks.compile();
-        fluidPermeableBlocks.compile();
-        shapeIndependentFluidPermeableBlocks.compile();
+    public void compile() {
+        this.fluidloggableBlocks.compile();
+        this.fluidPermeableBlocks.compile();
+        this.shapeIndependentFluidPermeableBlocks.compile();
     }
 
-    public static void save() {
+    public void save() {
         File file = Services.PLATFORM.getConfigFile();
 
         JsonObject obj = new JsonObject();
 
-        obj.addProperty("fluid_permeability_enabled", fluidPermeabilityEnabled);
-        obj.add("fluidloggable_blocks", fluidloggableBlocks.toJson());
-        obj.add("fluid_permeable_blocks", fluidPermeableBlocks.toJson());
-        obj.add("shape_independent_fluid_permeable_blocks", shapeIndependentFluidPermeableBlocks.toJson());
+        JsonObject addonsObj = new JsonObject();
+        for (Object2BooleanMap.Entry<ResourceLocation> entry : this.addons.object2BooleanEntrySet()) {
+            String id = entry.getKey().toString();
+            boolean enabled = entry.getBooleanValue();
+            addonsObj.addProperty(id, enabled);
+        }
+        obj.add("addons", addonsObj);
+
+        obj.addProperty("fluid_permeability_enabled", this.fluidPermeabilityEnabled);
+        obj.add("fluidloggable_blocks", this.fluidloggableBlocks.toJson());
+        obj.add("fluid_permeable_blocks", this.fluidPermeableBlocks.toJson());
+        obj.add("shape_independent_fluid_permeable_blocks", this.shapeIndependentFluidPermeableBlocks.toJson());
 
         try (FileWriter writer = new FileWriter(file)) {
             GSON.toJson(obj, writer);
@@ -93,7 +97,7 @@ public class Config {
         }
     }
 
-    public static void load() {
+    public void load() {
         File file = Services.PLATFORM.getConfigFile();
         if (!file.exists()) {
             save();
@@ -103,19 +107,29 @@ public class Config {
         try (FileReader reader = new FileReader(file)) {
             JsonObject obj = GSON.fromJson(reader, JsonObject.class);
 
+            if (obj.has("addons")) {
+                JsonObject addonsObj = obj.getAsJsonObject("addons");
+                for (String id : addonsObj.keySet()) {
+                    ResourceLocation addonId = new ResourceLocation(id);
+                    boolean enabled = addonsObj.get(id).getAsBoolean();
+                    this.addons.put(addonId, enabled);
+                }
+            }
+
             if (obj.has("fluid_permeability_enabled"))
-                fluidPermeabilityEnabled = obj.get("fluid_permeability_enabled").getAsBoolean();
+                this.fluidPermeabilityEnabled = obj.get("fluid_permeability_enabled").getAsBoolean();
 
             if (obj.has("fluidloggable_blocks") && obj.get("fluidloggable_blocks").isJsonObject())
-                fluidloggableBlocks.fromJson(obj.getAsJsonObject("fluidloggable_blocks"));
+                this.fluidloggableBlocks.fromJson(obj.getAsJsonObject("fluidloggable_blocks"));
 
             if (obj.has("fluid_permeable_blocks"))
-                fluidPermeableBlocks.fromJson(obj.getAsJsonObject("fluid_permeable_blocks"));
+                this.fluidPermeableBlocks.fromJson(obj.getAsJsonObject("fluid_permeable_blocks"));
 
             if (obj.has("shape_independent_fluid_permeable_blocks"))
-                shapeIndependentFluidPermeableBlocks.fromJson(obj.getAsJsonObject("shape_independent_fluid_permeable_blocks"));
+                this.shapeIndependentFluidPermeableBlocks.fromJson(obj.getAsJsonObject("shape_independent_fluid_permeable_blocks"));
         } catch (IOException e) {
             throw new RuntimeException("Failed to load config " + CONFIG_FILE_NAME, e);
         }
+
     }
 }

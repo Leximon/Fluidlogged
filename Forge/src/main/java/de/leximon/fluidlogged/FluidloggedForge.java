@@ -3,9 +3,8 @@ package de.leximon.fluidlogged;
 import com.mojang.brigadier.CommandDispatcher;
 import de.leximon.fluidlogged.commands.SetFluidCommand;
 import de.leximon.fluidlogged.commands.arguments.FluidStateArgument;
-import de.leximon.fluidlogged.config.Config;
-import de.leximon.fluidlogged.config.YaclMissingScreen;
 import de.leximon.fluidlogged.config.ConfigScreen;
+import de.leximon.fluidlogged.config.YaclMissingScreen;
 import de.leximon.fluidlogged.network.forge.ClientboundFluidUpdatePacket;
 import de.leximon.fluidlogged.network.forge.ClientboundSectionFluidsUpdatePacket;
 import net.minecraft.commands.CommandBuildContext;
@@ -33,7 +32,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Optional;
 
@@ -119,12 +119,12 @@ public class FluidloggedForge {
 
         @SubscribeEvent
         public void serverStart(ServerStartedEvent event) {
-            Config.compile();
+            Fluidlogged.CONFIG.compile();
         }
 
         @SubscribeEvent
         public void dataPackReload(AddReloadListenerEvent event) {
-            Config.compile();
+            Fluidlogged.CONFIG.compile();
         }
 
     }

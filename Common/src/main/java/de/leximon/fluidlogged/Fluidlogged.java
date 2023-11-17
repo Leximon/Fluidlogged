@@ -1,13 +1,17 @@
 package de.leximon.fluidlogged;
 
+import de.leximon.fluidlogged.api.FluidloggedRegistries;
+import de.leximon.fluidlogged.config.Addon;
 import de.leximon.fluidlogged.config.Config;
 import de.leximon.fluidlogged.mixin.extensions.LevelExtension;
 import de.leximon.fluidlogged.platform.services.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,6 +26,8 @@ public class Fluidlogged {
     public static final String MOD_ID = "fluidlogged";
 
     public static final int UPDATE_SCHEDULE_FLUID_TICK = 0x80;
+
+    public static final Config CONFIG = new Config();
 
     public static ResourceLocation id(String path) {
         return new ResourceLocation(MOD_ID, path);
@@ -40,33 +46,90 @@ public class Fluidlogged {
         if (blockState.getBlock() instanceof LiquidBlockContainer container
                 && container.canPlaceLiquid(blockGetter, blockPos, blockState, fluid))
             return true;
-
-        return Config.isFluidloggable(blockState);
+        return CONFIG.isFluidloggable(blockState);
     }
 
     public static boolean isFluidloggable(BlockState blockState) {
         if (blockState.getBlock() instanceof LiquidBlockContainer)
             return true;
-        return Config.isFluidloggable(blockState);
+        return CONFIG.isFluidloggable(blockState);
     }
 
     public static boolean isFluidPermeable(BlockState blockState) {
-        if (!Config.isFluidPermeabilityEnabled())
+        if (!CONFIG.isFluidPermeabilityEnabled())
             return false;
-        return Config.isFluidPermeable(blockState) || Config.isShapeIndependentFluidPermeable(blockState);
+        return CONFIG.isFluidPermeable(blockState) || CONFIG.isShapeIndependentFluidPermeable(blockState);
     }
 
     public static boolean isShapeIndependentFluidPermeable(BlockState blockState) {
-        if (!Config.isFluidPermeabilityEnabled())
+        if (!CONFIG.isFluidPermeabilityEnabled())
             return false;
-        return Config.isShapeIndependentFluidPermeable(blockState);
+        return CONFIG.isShapeIndependentFluidPermeable(blockState);
     }
 
     @ApiStatus.Internal
     public static class Internal {
 
         public static void initialize() {
-            Config.load();
+            FluidloggedRegistries.register(
+                    FluidloggedRegistries.ADDONS, id("mod_defaults"),
+                    Addon.builder()
+                            .enabledByDefault(true)
+                            .fluidloggableBlocks(
+                                    Blocks.STONECUTTER,
+                                    Blocks.GRINDSTONE,
+                                    Blocks.LECTERN,
+                                    Blocks.BREWING_STAND,
+                                    Blocks.ENCHANTING_TABLE,
+                                    Blocks.BELL,
+                                    Blocks.COMPOSTER,
+                                    Blocks.SNIFFER_EGG,
+                                    Blocks.TURTLE_EGG,
+                                    Blocks.CAKE,
+                                    Blocks.LEVER,
+                                    Blocks.VINE,
+                                    Blocks.DRAGON_EGG,
+                                    Blocks.END_PORTAL_FRAME,
+                                    Blocks.DAYLIGHT_DETECTOR,
+                                    Blocks.HOPPER,
+                                    Blocks.PISTON_HEAD,
+                                    Blocks.BARRIER,
+                                    Blocks.END_ROD,
+                                    Blocks.END_PORTAL,
+                                    Blocks.BAMBOO,
+                                    Blocks.AZALEA,
+                                    Blocks.MOSS_CARPET,
+                                    Blocks.PLAYER_HEAD,
+                                    Blocks.PLAYER_WALL_HEAD,
+                                    Blocks.CREEPER_HEAD,
+                                    Blocks.CREEPER_WALL_HEAD,
+                                    Blocks.DRAGON_HEAD,
+                                    Blocks.DRAGON_WALL_HEAD,
+                                    Blocks.PIGLIN_HEAD,
+                                    Blocks.PIGLIN_WALL_HEAD,
+                                    Blocks.SKELETON_SKULL,
+                                    Blocks.SKELETON_WALL_SKULL,
+                                    Blocks.WITHER_SKELETON_SKULL,
+                                    Blocks.WITHER_SKELETON_WALL_SKULL,
+                                    Blocks.ZOMBIE_HEAD,
+                                    Blocks.ZOMBIE_WALL_HEAD
+                            )
+                            .fluidloggableBlockTags(
+                                    BlockTags.FENCE_GATES,
+                                    BlockTags.DOORS,
+                                    BlockTags.BEDS,
+                                    BlockTags.PRESSURE_PLATES,
+                                    BlockTags.BUTTONS,
+                                    BlockTags.WOOL_CARPETS,
+                                    BlockTags.BANNERS,
+                                    BlockTags.FLOWER_POTS,
+                                    BlockTags.CANDLE_CAKES,
+                                    BlockTags.ANVIL
+                            )
+                            .build()
+            );
+
+            CONFIG.load();
         }
 
         public static boolean hasDifferentLightEmission(FluidState prevFluidState, FluidState newFluidState) {
