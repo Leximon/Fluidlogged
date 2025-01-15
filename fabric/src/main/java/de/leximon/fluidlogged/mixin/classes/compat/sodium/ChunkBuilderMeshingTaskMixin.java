@@ -13,7 +13,6 @@ import net.minecraft.world.level.material.FluidState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -62,16 +61,21 @@ public class ChunkBuilderMeshingTaskMixin {
         return fluidState.get().isEmpty();
     }
 
-    @ModifyArg(
+    @Inject(
             method = "execute(Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/ChunkBuildContext;Lnet/caffeinemc/mods/sodium/client/util/task/CancellationToken;)Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/ChunkBuildOutput;",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/pipeline/FluidRenderer;render(Lnet/caffeinemc/mods/sodium/client/world/LevelSlice;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/material/FluidState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;Lnet/caffeinemc/mods/sodium/client/render/chunk/translucent_sorting/TranslucentGeometryCollector;Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/ChunkBuildBuffers;)V"
+                    target = "Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/pipeline/BlockRenderCache;getFluidRenderer()Lnet/caffeinemc/mods/sodium/client/render/chunk/compile/pipeline/FluidRenderer;"
             ),
-            index = 2
+            remap = false
     )
-    private FluidState modifyPassedFluidState(FluidState original, @Share("fluidState") LocalRef<FluidState> fluidState) {
-        return original.isEmpty() ? fluidState.get() : original;
+    private void modifyToActualFluidState(
+            ChunkBuildContext buildContext, CancellationToken cancellationToken, CallbackInfoReturnable<ChunkBuildOutput> cir,
+            @Local LocalRef<FluidState> fluidRef,
+            @Share("fluidState") LocalRef<FluidState> actualFluidRef
+    ) {
+        FluidState fluid = fluidRef.get();
+        fluidRef.set(fluid.isEmpty() ? actualFluidRef.get() : fluid);
     }
 
 }
