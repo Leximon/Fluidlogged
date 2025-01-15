@@ -40,7 +40,7 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
     private Int2ReferenceMap<FluidState>[] fluidlogged$fluidArrays;
 
     @SuppressWarnings("unchecked")
-    @Inject(method = "<init>", at = @At("RETURN"), remap = false)
+    @Inject(method = "<init>", at = @At("RETURN"))
     private void injectInit(ClientLevel world, CallbackInfo ci) {
         this.fluidlogged$fluidArrays = new Int2ReferenceMap[SECTION_ARRAY_SIZE];
     }
@@ -53,22 +53,17 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
     }
 
     @Inject(
-      method = "reset",
-      at = @At(value = "FIELD", target = "Lnet/caffeinemc/mods/sodium/client/world/LevelSlice;blockEntityArrays:[Lit/unimi/dsi/fastutil/ints/Int2ReferenceMap;"),
-      remap = false
+            method = "reset",
+            at = @At(value = "FIELD", target = "Lnet/caffeinemc/mods/sodium/client/world/LevelSlice;blockEntityArrays:[Lit/unimi/dsi/fastutil/ints/Int2ReferenceMap;"),
+            remap = false
     )
     private void injectReset(CallbackInfo ci, @Local int sectionIndex) {
         this.fluidlogged$fluidArrays[sectionIndex] = null;
     }
 
 
-    @SuppressWarnings("UnresolvedMixinReference")
     @Inject(
-            method = {
-                    "getFluidState",
-                    "m_6425_" // mappings cannot be found when building on forge
-            },
-            remap = false,
+            method = "getFluidState",
             at = @At("HEAD"),
             cancellable = true
     )
