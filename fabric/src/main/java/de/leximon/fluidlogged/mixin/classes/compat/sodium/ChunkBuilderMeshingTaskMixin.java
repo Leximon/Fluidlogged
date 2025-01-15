@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.neoforge.compat_sodium;
+package de.leximon.fluidlogged.mixin.classes.compat.sodium;
 
 import de.leximon.fluidlogged.mixin.extensions.compat_sodium.WorldSliceExtension;
 import net.caffeinemc.mods.sodium.client.world.LevelSlice;

@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.neoforge.compat_sodium;
+package de.leximon.fluidlogged.mixin.classes.compat.sodium;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import de.leximon.fluidlogged.mixin.extensions.compat_sodium.ClonedChunkSectionExtension;

@@ -43,7 +43,8 @@ neoForge {
 dependencies {
     compileOnly group: 'dev.isxander', name: 'yet-another-config-lib', version: "${yacl_version}-neoforge"
 
-    implementation group: 'maven.modrinth', name: 'sodium', version: "${sodium_version}-neoforge"
+    implementation "maven.modrinth:sodium:${sodium_version}-neoforge"
+    implementation "maven.modrinth:lithium:${lithium_version}-neoforge"
 
     // sodium is compiled against some sinytra fabric apis
     compileOnly("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19")

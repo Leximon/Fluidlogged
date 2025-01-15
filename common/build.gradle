@@ -21,6 +21,8 @@ dependencies {
     compileOnly("dev.isxander:yet-another-config-lib:${yacl_version}-neoforge") {
         exclude group: 'com.terraformersmc'
     }
+    compileOnly "maven.modrinth:sodium:${sodium_version}-neoforge"
+    compileOnly "maven.modrinth:lithium:${lithium_version}-neoforge"
     compileOnly "org.ow2.asm:asm:${asm_version}"
     compileOnly "org.ow2.asm:asm-tree:${asm_version}"
     compileOnly "org.ow2.asm:asm-util:${asm_version}"

@@ -1,4 +1,4 @@
-package de.leximon.fluidlogged.mixin.classes.fabric.compat_sodium;
+package de.leximon.fluidlogged.mixin.classes.compat.sodium;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import de.leximon.fluidlogged.mixin.extensions.compat_sodium.ClonedChunkSectionExtension;
@@ -11,18 +11,21 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(targets = "net/caffeinemc/mods/sodium/client/world/LevelSlice")
 public abstract class WorldSliceMixin implements WorldSliceExtension {
 
     @Shadow @Final private static int SECTION_ARRAY_SIZE;
-
+    
     @Shadow private int originBlockX;
     @Shadow private int originBlockY;
     @Shadow private int originBlockZ;
@@ -41,11 +44,11 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
     private void injectInit(ClientLevel world, CallbackInfo ci) {
         this.fluidlogged$fluidArrays = new Int2ReferenceMap[SECTION_ARRAY_SIZE];
     }
-
+    
     @Inject(method = "copySectionData", at = @At("TAIL"), remap = false)
     private void injectUnpackFluidData(ChunkRenderContext context, int sectionIndex, CallbackInfo ci, @Local ClonedChunkSection section) {
         ClonedChunkSectionExtension sectionExt = ((ClonedChunkSectionExtension) section);
-
+        
         this.fluidlogged$fluidArrays[sectionIndex] = sectionExt.getFluidlogged$fluidData();
     }
 
@@ -59,10 +62,18 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
     }
 
 
-    @SuppressWarnings("OverwriteAuthorRequired") // fabric version doesn't want to compile because the reason is an unknown tag
-    @Overwrite
-    public FluidState getFluidState(BlockPos pos) {
-        return fluidlogged$getFluidState(pos.getX(), pos.getY(), pos.getZ());
+    @SuppressWarnings("UnresolvedMixinReference")
+    @Inject(
+            method = {
+                    "getFluidState",
+                    "m_6425_" // mappings cannot be found when building on forge
+            },
+            remap = false,
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void injectGetFluidState(BlockPos pos, CallbackInfoReturnable<FluidState> cir) {
+        cir.setReturnValue(fluidlogged$getFluidState(pos.getX(), pos.getY(), pos.getZ()));
     }
 
     @Override
@@ -70,7 +81,7 @@ public abstract class WorldSliceMixin implements WorldSliceExtension {
         FluidState fluidState = getBlockState(x, y, z).getFluidState();
         if (!fluidState.isEmpty())
             return fluidState;
-
+        
         int relX = x - this.originBlockX;
         int relY = y - this.originBlockY;
         int relZ = z - this.originBlockZ;

@@ -6,25 +6,26 @@ import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.material.FluidState;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RenderChunkRegion.class)
 public abstract class RenderChunkRegionMixin {
     
     @Shadow protected abstract RenderChunk getChunk(int x, int z);
-    
-    /**
-     * @author Leximon (Fluidlogged)
-     * @reason get chunk specific fluid state
-     */
-    @Overwrite
-    public FluidState getFluidState(BlockPos blockPos) {
+
+    @Inject(
+            method = "getFluidState",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    public void getFluidState(BlockPos blockPos, CallbackInfoReturnable<FluidState> cir) {
         int x = SectionPos.blockToSectionCoord(blockPos.getX());
         int z = SectionPos.blockToSectionCoord(blockPos.getZ());
-        return ((RenderChunkExtension) getChunk(x, z)).getFluidState(blockPos);
+        cir.setReturnValue(((RenderChunkExtension) getChunk(x, z)).getFluidState(blockPos));
     }
 
 }
