@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 public class FluidloggedForgeMixinPlugin implements IMixinConfigPlugin {
-    
+
     private static final boolean SODIUM_LOADED = isModLoaded("sodium");
+    private static final boolean LITHIUM_LOADED = isModLoaded("lithium");
     
     @Override
     public void onLoad(String mixinPackage) {
@@ -24,7 +25,9 @@ public class FluidloggedForgeMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.forge.compat_rubidium"))
+        if (!SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat.sodium"))
+            return false;
+        if (!LITHIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat.lithium"))
             return false;
         return true;
     }
@@ -50,6 +53,6 @@ public class FluidloggedForgeMixinPlugin implements IMixinConfigPlugin {
     }
 
     private static boolean isModLoaded(String name) {
-        return FMLLoader.getLoadingModList().getModFileById("rubidium") != null;
+        return FMLLoader.getLoadingModList().getModFileById(name) != null;
     }
 }

@@ -13,7 +13,6 @@ public class FluidloggedFabricMixinPlugin implements IMixinConfigPlugin {
 
     private static final boolean SODIUM_LOADED = isModLoaded("sodium");
     private static final boolean LITHIUM_LOADED = isModLoaded("lithium");
-    private static final boolean MILK_LIB_LOADED = isModLoaded("milk");
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -27,11 +26,9 @@ public class FluidloggedFabricMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.fabric.compat_sodium"))
+        if (!SODIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat.sodium"))
             return false;
-        if (!LITHIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.fabric.compat_lithium"))
-            return false;
-        if (!MILK_LIB_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.fabric.compat_milk_lib"))
+        if (!LITHIUM_LOADED && mixinClassName.startsWith("de.leximon.fluidlogged.mixin.classes.compat.lithium"))
             return false;
         return true;
     }
