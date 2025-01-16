@@ -1,0 +1,95 @@
+import groovy.json.JsonSlurper
+
+plugins {
+    id 'multiloader-loader'
+    id 'fabric-loom'
+    id 'net.darkhax.curseforgegradle'
+    id 'com.modrinth.minotaur'
+}
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    
+    modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
+	modCompileOnly "dev.isxander:yet-another-config-lib:${yacl_version}-fabric"
+    
+    // For compatibility
+	modImplementation "maven.modrinth:sodium:${sodium_version}-fabric"
+	modImplementation "maven.modrinth:lithium:${lithium_version}-fabric"
+
+    compileOnly "org.checkerframework:checker-qual:3.12.0"
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+}
+
+loom {
+    def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
+    }
+    runs {
+        client {
+            client()
+            setConfigName('Fabric Client')
+            ideConfigGenerated(true)
+            runDir('runs/client')
+        }
+        server {
+            server()
+            setConfigName('Fabric Server')
+            ideConfigGenerated(true)
+            runDir('runs/server')
+        }
+    }
+}
+
+// publishing to mod sites
+modrinth {
+    def slurper = new JsonSlurper()
+
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = "${modrinth_project_id}"
+	versionNumber = "${version}"
+	versionName = "Fluidlogged ${version} Fabric"
+	versionType = "${mod_version_type}"
+	changelog = file("CHANGELOG.md").getText("UTF-8")
+	uploadFile = remapJar
+	gameVersions = slurper.parseText("${mod_game_versions}")
+	loaders = ["fabric"]
+    debugMode = "${debug_publish}".toBoolean()
+	dependencies {
+        // scope.type
+        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+        // The type can be either `project` or `version` (eg. optional.version "sodium", "mc1.19.3-0.4.8")
+		required.project "P7dR8mSH" // Fabric API
+		required.project "1eAoo2KR" // Yet Another Config Lib
+	}
+}
+
+task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    dependsOn(tasks.remapJar)
+    
+    def slurper = new JsonSlurper()
+    apiToken = System.getenv("CURSEFORGE_TOKEN") ?: ""
+    debugMode = "${debug_publish}".toBoolean()
+    
+    def mainFile = upload(curseforge_project_id, tasks.remapJar.archiveFile)
+    mainFile.changelogType = 'markdown'
+    mainFile.changelog = file("CHANGELOG.md").getText("UTF-8")
+    mainFile.releaseType = "${mod_version_type}"
+    mainFile.addRequirement('fabric-api')
+    mainFile.addRequirement('yacl')
+    mainFile.addOptional('modmenu')
+    mainFile.displayName = "Fluidlogged ${version} Fabric"
+    slurper.parseText("${mod_game_versions}").each { version ->
+        mainFile.addGameVersion(version)
+    }
+}

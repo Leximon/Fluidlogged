@@ -1,0 +1,44 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.leximon.fluidlogged.mixin.classes",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "de.leximon.fluidlogged.mixin.FluidloggedFabricMixinPlugin",
+  "mixins": [
+    "removal_and_placement.BucketItemMixin",
+    "compat.sodium.BlockOcclusionCacheMixin",
+    "compat.sodium.ChunkBuilderMeshingTaskMixin",
+    "compat.sodium.ClonedChunkSectionMixin",
+    "compat.sodium.FluidRendererMixin",
+    "compat.sodium.WorldSliceMixin",
+    "compat.lithium.LevelChunkSectionMixin",
+    "network.ChunkHolderMixin",
+    "network.ServerChunkCacheMixin",
+    "network.ServerLevelMixin",
+    "storing_and_access.ChunkSerializerMixin",
+    "storing_and_access.LevelChunkMixin",
+    "storing_and_access.LevelChunkSectionMixin",
+    "storing_and_access.LevelMixin",
+    "world_interaction.BlockLightEngineMixin",
+    "world_interaction.BlockStateBaseMixin",
+    "world_interaction.FlowingFluidMixin",
+    "world_interaction.LevelMixin",
+    "world_interaction.ServerLevelMixin",
+    "world_interaction.removal_and_placement.BlockItemMixin",
+    "world_interaction.removal_and_placement.SimpleWaterloggedBlockMixin",
+    "world_interaction.removal_and_placement.extra.BedBlockMixin",
+    "world_interaction.removal_and_placement.extra.DoorBlockMixin",
+    "world_interaction.removal_and_placement.extra.DispenseItemBehaviorMixin",
+    "world_interaction.removal_and_placement.extra.PistonBaseBlockMixin"
+  ],
+  "client": [
+    "LiquidBlockRendererMixin",
+    "RebuildTaskMixin",
+    "RenderChunkMixin",
+    "RenderChunkRegionMixin",
+    "network.ClientLevelMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

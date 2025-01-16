@@ -1,17 +1,25 @@
 
-/*
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-!/.github
-!/.idea
-!/Common
-!/Fabric
-!/Forge
-!/gradle
-!/.gitignore
-!/build.gradle
-!/gradle.properties
-!/gradlew
-!/gradlew.bat
-!/settings.gradle
-!/LICENSE
-!/README.md
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea/*
+!.idea/scopes
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+runs

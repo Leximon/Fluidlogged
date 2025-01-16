@@ -1,0 +1,102 @@
+import groovy.json.JsonSlurper
+
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev'
+    id 'net.darkhax.curseforgegradle'
+    id 'com.modrinth.minotaur'
+}
+
+neoForge {
+    version = neoforge_version
+    // Automatically enable neoforge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+    runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
+        client {
+            client()
+        }
+        data {
+            data()
+        }
+        server {
+            server()
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    compileOnly group: 'dev.isxander', name: 'yet-another-config-lib', version: "${yacl_version}-neoforge"
+
+    implementation "maven.modrinth:sodium:${sodium_version}-neoforge"
+    implementation "maven.modrinth:lithium:${lithium_version}-neoforge"
+
+    // sodium is compiled against some sinytra fabric apis
+    compileOnly("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19")
+    //compileOnly("org.sinytra.forgified-fabric-api:fabric-renderer-api-v1:4.0.3+63dbf70448")
+    compileOnly("org.sinytra.forgified-fabric-api:fabric-rendering-data-attachment-v1:0.3.48+73761d2e19")
+    compileOnly("org.sinytra.forgified-fabric-api:fabric-block-view-api-v2:1.0.10+9afaaf8c19")
+
+    compileOnly "org.checkerframework:checker-qual:3.12.0"
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+// publishing to mod sites
+modrinth {
+    def slurper = new JsonSlurper()
+
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = "${modrinth_project_id}"
+	versionNumber = "${version}"
+	versionName = "Fluidlogged ${version} NeoForge"
+	versionType = "${mod_version_type}"
+	changelog = file("CHANGELOG.md").getText("UTF-8")
+	uploadFile = jar
+	gameVersions = slurper.parseText("${mod_game_versions}")
+	loaders = ["neoforge"]
+    debugMode = "${debug_publish}".toBoolean()
+	dependencies {
+        // scope.type
+        // The scope can be `required`, `optional`, `incompatible`, or `embedded`
+        // The type can be either `project` or `version` (eg. optional.version "sodium", "mc1.19.3-0.4.8")
+		required.project "1eAoo2KR" // Yet Another Config Lib
+	}
+}
+
+task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
+    dependsOn(tasks.jar)
+    
+    def slurper = new JsonSlurper()
+    apiToken = System.getenv("CURSEFORGE_TOKEN") ?: ""
+    debugMode = "${debug_publish}".toBoolean()
+    
+    def mainFile = upload(curseforge_project_id, tasks.jar.archiveFile)
+    mainFile.changelogType = 'markdown'
+    mainFile.changelog = file("CHANGELOG.md").getText("UTF-8")
+    mainFile.releaseType = "${mod_version_type}"
+    mainFile.addRequirement('yacl')
+    mainFile.displayName = "Fluidlogged ${version} NeoForge"
+    slurper.parseText("${mod_game_versions}").each { version ->
+        mainFile.addGameVersion(version)
+    }
+}
+
+tasks.modrinth.dependsOn(tasks.jar)

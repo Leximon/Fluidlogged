@@ -1,0 +1,52 @@
+{
+    "schemaVersion": 1,
+    "id": "${mod_id}",
+    "version": "${version}",
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contributors": [
+        "MoreThanHidden",
+        "PricelessKoala"
+    ],
+    "contact": {
+        "sources": "https://github.com/Leximon/Fluidlogged",
+        "issues": "https://github.com/Leximon/Fluidlogged/issues"
+    },
+    "license": "${license}",
+    "icon": "${mod_id}.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+          "de.leximon.fluidlogged.FluidloggedFabric"
+        ],
+        "client": [
+          "de.leximon.fluidlogged.FluidloggedFabricClient"
+        ],
+        "modmenu": [
+          "de.leximon.fluidlogged.FluidloggedFabricModMenu"
+        ]
+    },
+    "mixins": [
+        "${mod_id}.fabric.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${fabric_loader_version}",
+        "fabric-api": "*",
+        "minecraft": ">=${minecraft_version}",
+        "java": ">=${java_version}"
+    },
+    "breaks": {
+        "sodium": "<0.5.0"
+    },
+    "suggests": {
+        "modmenu": "*",
+        "yet_another_config_lib_v3": "*"
+    },
+    "custom": {
+        "fluidlogged": "fluidlogged.mod.json"
+    }
+}
+  
