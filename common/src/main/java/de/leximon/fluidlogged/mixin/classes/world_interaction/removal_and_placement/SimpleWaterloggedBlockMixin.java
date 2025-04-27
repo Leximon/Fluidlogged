@@ -23,4 +23,5 @@ public interface SimpleWaterloggedBlockMixin {
     default void canPlaceLiquid(Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(true); // allow any fluid to be placed, can be overridden to prevent this for specific blockStates e.g. SlabBlock
     }
+
 }

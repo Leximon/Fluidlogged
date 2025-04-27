@@ -17,6 +17,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -25,6 +26,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(FlowingFluid.class)
 public abstract class FlowingFluidMixin {
+
+    @Shadow
+    protected abstract boolean canPassThroughWall(Direction direction, BlockGetter level, BlockPos pos, BlockState state, BlockPos spreadPos, BlockState spreadState);
 
     @Unique
     private BlockPos fluidloggedBlockPos;
@@ -68,7 +72,7 @@ public abstract class FlowingFluidMixin {
 
     @Inject(method = "spreadTo", at = @At(value = "JUMP", opcode = Opcodes.IFEQ, shift = At.Shift.AFTER, ordinal = 0), cancellable = true)
     private void injectSpreadTo(LevelAccessor level, BlockPos blockPos, BlockState blockState, Direction direction, FluidState fluidState, CallbackInfo ci) {
-        if (Fluidlogged.isFluidPermeable(blockState) || fluidState.isSource())
+        if (Fluidlogged.isFluidPermeable(blockState) || fluidState.isSource() || Fluidlogged.isFluidNonSourceSupport())
             ((LevelExtension) level).setFluid(blockPos, fluidState, Block.UPDATE_ALL | Fluidlogged.UPDATE_SCHEDULE_FLUID_TICK);
         ci.cancel();
     }
@@ -89,7 +93,7 @@ public abstract class FlowingFluidMixin {
     private void redirectBypassLiquidBlockContainerCheck2(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
         if (Fluidlogged.canPlaceFluid(blockGetter, blockPos, blockState, fluid)) {
             FluidState fluidStateAtPos = blockGetter.getFluidState(blockPos);
-            cir.setReturnValue(Fluidlogged.isFluidPermeable(blockState) && (fluidStateAtPos.getType() == fluid || fluidStateAtPos.isEmpty()));
+            cir.setReturnValue(Fluidlogged.isFluidPermeable(blockState) && (fluidStateAtPos.getType() == fluid || fluidStateAtPos.isEmpty() || Fluidlogged.isFluidNonSourceSupport()));
         }
     }
 
@@ -111,7 +115,6 @@ public abstract class FlowingFluidMixin {
         ((LevelExtension) level).setFluid(blockPos, fluidState, flags);
         return false;
     }
-
     @Inject(
             method = "isSolidFace",
             at = @At(
@@ -134,6 +137,16 @@ public abstract class FlowingFluidMixin {
     private void injectShapeIndependentFluidPermeableCheck2(Direction direction, BlockGetter blockGetter, BlockPos blockPos, BlockState blockState, BlockPos blockPos2, BlockState blockState2, CallbackInfoReturnable<Boolean> cir) {
         if (Fluidlogged.isShapeIndependentFluidPermeable(blockState)
                 || Fluidlogged.isShapeIndependentFluidPermeable(blockState2))
+            cir.setReturnValue(true);
+    }
+
+    @Inject(
+            method = "canSpreadTo",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void injectShapeIndependentFluidPermeableCheck2(BlockGetter level, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos, BlockState toBlockState, FluidState toFluidState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
+        if (Fluidlogged.isFluidNonSourceSupport() && Fluidlogged.isFluidloggable(toBlockState) && canPassThroughWall(direction, level, fromPos, fromBlockState, toPos, toBlockState))
             cir.setReturnValue(true);
     }
 }

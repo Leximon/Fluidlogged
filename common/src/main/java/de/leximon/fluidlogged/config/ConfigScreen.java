@@ -45,6 +45,23 @@ public class ConfigScreen {
                                 .build())
                         .build()
                 )
+                .category(ConfigCategory.createBuilder()
+                        .name(Component.translatable("fluidlogged.config.fluid_non_source"))
+                        .option(Option.<Boolean>createBuilder()
+                                .name(Component.translatable("fluidlogged.config.fluid_non_source"))
+                                .description(OptionDescription.createBuilder()
+                                        .text(Component.translatable("fluidlogged.config.fluid_non_source.desc"))
+                                        .build()
+                                )
+                                .controller(option -> BooleanControllerBuilder.create(option)
+                                        .coloured(true)
+                                        .yesNoFormatter()
+                                )
+                                .binding(true, () -> Fluidlogged.CONFIG.fluidNonSourceSupportEnabled, value -> Fluidlogged.CONFIG.fluidPermeabilityEnabled = value)
+                                .build()
+                        )
+                        .build()
+                )
                 .category(createBlockListCategory(
                         Fluidlogged.CONFIG.fluidloggableBlocks,
                         false,

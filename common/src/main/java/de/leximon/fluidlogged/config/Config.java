@@ -34,11 +34,16 @@ public class Config {
 
     final BlockPredicateList fluidloggableBlocks = new BlockPredicateList(this, Addon::fluidloggableBlocks);
     boolean fluidPermeabilityEnabled = true;
+    boolean fluidNonSourceSupportEnabled = true;
     final BlockPredicateList fluidPermeableBlocks = new BlockPredicateList(this, Addon::fluidPermeableBlocks);
     final BlockPredicateList shapeIndependentFluidPermeableBlocks = new BlockPredicateList(this, Addon::shapeIndependentFluidPermeableBlocks);
 
     public boolean isFluidloggable(BlockState block) {
         return this.fluidloggableBlocks.contains(block);
+    }
+
+    public boolean isFluidNonSourceSupportEnabled() {
+        return this.fluidNonSourceSupportEnabled;
     }
 
     public boolean isFluidPermeable(BlockState block) {
@@ -86,6 +91,7 @@ public class Config {
         obj.add("addons", addonsObj);
 
         obj.addProperty("fluid_permeability_enabled", this.fluidPermeabilityEnabled);
+        obj.addProperty("fluid_non_source_enabled", this.fluidNonSourceSupportEnabled);
         obj.add("fluidloggable_blocks", this.fluidloggableBlocks.toJson());
         obj.add("fluid_permeable_blocks", this.fluidPermeableBlocks.toJson());
         obj.add("shape_independent_fluid_permeable_blocks", this.shapeIndependentFluidPermeableBlocks.toJson());
@@ -118,6 +124,8 @@ public class Config {
 
             if (obj.has("fluid_permeability_enabled"))
                 this.fluidPermeabilityEnabled = obj.get("fluid_permeability_enabled").getAsBoolean();
+            if (obj.has("fluid_non_source_enabled"))
+                this.fluidNonSourceSupportEnabled = obj.get("fluid_non_source_enabled").getAsBoolean();
 
             if (obj.has("fluidloggable_blocks") && obj.get("fluidloggable_blocks").isJsonObject())
                 this.fluidloggableBlocks.fromJson(obj.getAsJsonObject("fluidloggable_blocks"));

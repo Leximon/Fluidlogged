@@ -55,6 +55,10 @@ public class Fluidlogged {
         return CONFIG.isFluidloggable(blockState);
     }
 
+    public static boolean isFluidNonSourceSupport() {
+        return CONFIG.isFluidNonSourceSupportEnabled();
+    }
+
     public static boolean isFluidPermeable(BlockState blockState) {
         if (!CONFIG.isFluidPermeabilityEnabled())
             return false;
