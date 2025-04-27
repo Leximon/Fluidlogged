@@ -137,7 +137,7 @@ public class Fluidlogged {
         }
 
         public static boolean hasDifferentLightEmission(FluidState prevFluidState, FluidState newFluidState) {
-            return prevFluidState.createLegacyBlock().getLightEmission() != newFluidState.createLegacyBlock().getLightEmission();
+            return prevFluidState != null && prevFluidState.createLegacyBlock().getLightEmission() != newFluidState.createLegacyBlock().getLightEmission();
         }
 
         public static BlockState handleBlockRemoval(Level instance, BlockPos blockPos, int flags, int maxUpdateDepth) {
